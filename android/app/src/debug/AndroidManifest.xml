@@ -4,4 +4,8 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Firebase Emulator Suite is exposed to the Android emulator over
+         http://10.0.2.2. Keep this override debug-only so release builds
+         continue to reject cleartext network traffic. -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>

@@ -1,10 +1,77 @@
 # PlantCare AI
 
-PlantCare AI is a Flutter mobile and web application for managing plants and,
-in later milestones, receiving AI-assisted, source-grounded plant-care guidance.
-This repository currently contains the cross-platform foundation, Firebase
-email/password authentication, user-owned Firestore plant data, and a first
-AI-assisted plant-image observation vertical slice.
+PlantCare AI is a Flutter mobile and web application for plant health and care.
+Spark V1 includes Firebase email/password authentication, user-owned plant
+profiles, transient Firebase AI image observation, deterministic metadata
+retrieval over reviewed knowledge, source-grounded diagnosis, manual soil
+checks, deterministic watering and fertilizer guidance, factual care history,
+and best-effort local reminders.
+
+## Spark V1 release scope
+
+The supported plants are tomato, pumpkin, pothos, snake plant, and peace lily.
+New knowledge-dependent work uses reviewed dataset `2026-09-03-v2`, retrieval
+policy `metadata-v1`, watering policy `manual-watering-v1`, and fertilizer
+policy `deterministic-fertilizer-v1`. Existing readable v1 records are retained
+for compatibility; new grounded diagnoses, soil checks, and fertilizer
+assessments require v2 evidence.
+
+The in-app **Privacy & Safety** page records the release disclosure: selected
+images are sent to Firebase AI for analysis but are not saved by PlantCare AI;
+structured user records are stored in Firestore; AI output is uncertain and
+informational; local reminders are best-effort; web reminders work only while
+the app is open; and account deletion and full data export are not V1 features.
+
+## Source-grounded diagnosis (temporary Spark implementation)
+
+A signed-in user can generate a diagnosis from a saved structured observation.
+The app runs deterministic `metadata-v1` retrieval first and calls Firebase AI
+Logic only when at least one curated chunk meets the existing relevance
+threshold and every referenced source record is valid. The request contains a
+minimal plant profile, the saved observation, resolved canonical plant key,
+paraphrased chunk text and cautions, trusted IDs, dataset version, and retrieval
+algorithm version. It contains no image, email, UID, local path, token, raw
+Firestore map, or unrelated plant data.
+
+Firebase AI Logic uses the Gemini Developer API and the explicit stable model
+`gemini-3.5-flash-lite`. The version 1 schema supports `healthy_appearance`,
+`insufficient_evidence`, and `possible_issues_found`, with at most three
+possible issues, three recommended actions, and three avoid actions. Every issue and action must cite
+supplied chunk IDs. The decoder rejects unknown fields and enums, oversized
+content, markup, URLs, unknown evidence IDs, invalid state/array combinations,
+and non-cautious summaries or issue reasoning. Trusted source titles,
+publishers, and links are resolved from Firestore, never supplied by Gemini.
+
+Validated diagnoses are immutable at:
+
+```text
+users/{uid}/plants/{plantId}/observations/{observationId}/diagnoses/{diagnosisId}
+```
+
+Only structured output and grounding metadata are stored. Prompts, raw
+responses, chunk content, images, URLs, and credentials are never stored. The
+repository derives `uid` from Firebase Authentication. Rules permit owner-only
+create, read, and delete, deny updates, validate a strict field allowlist and
+bounds, require both parent documents, and require a server timestamp. Rules
+cannot prove a client record actually came from Gemini: these diagnoses are
+client-originated records, not trusted backend attestations.
+
+If generation succeeds but persistence fails, the validated diagnosis stays
+visible and “Retry save” writes the same object without calling Gemini again.
+Insufficient retrieval evidence never calls Gemini and never substitutes
+general-care content. Safety constraints prohibit dosage, restricted-chemical,
+medical, food-safety, and unsupported treatment advice.
+
+Before live use, manually verify Firebase Console still enforces App Check for
+Firebase AI Logic and Firebase AI Logic authenticated-users mode. The client
+cannot verify those console settings. Also sign in, open a saved observation,
+inspect retrieved evidence, generate and reopen a diagnosis, verify source
+links, and inspect Firestore to confirm no prompt, response, image, or token was
+persisted.
+
+This is a temporary client-side grounded-generation slice compatible with the
+Spark plan. It is not final server-side vector RAG: there are no embeddings,
+vector search, Cloud Functions, Storage, or image persistence.
 
 ## Supported platforms
 
@@ -480,7 +547,7 @@ singular/plural handling avoid obvious substring false positives. Match reasons
 are displayed, but keyword or category relevance is never treated as proof of
 disease.
 
-The production dataset is `2026-09-03-v1` with schema version 1. Retrieval makes
+The production dataset is `2026-09-03-v2` with schema version 1. Retrieval makes
 no Gemini request and persists no result, so it remains Spark-compatible. It is
 metadata and keyword retrieval, not vector RAG: there are no embeddings,
 semantic similarity, or server-side vector queries. Every result preserves its
@@ -489,24 +556,262 @@ relevant references, not a confirmed diagnosis.” A future, separately approved
 milestone can move retrieval to a trusted backend and add vector search while
 preserving structured evidence and attribution.
 
-## Run and verify
+### Deterministic fertilizer guidance
+
+Dataset `2026-09-03-v2` is the active reviewed production release. It contains
+15 trusted sources and 50 reviewed chunks, including nine fertilizer chunks.
+New retrieval, diagnosis, watering, and fertilizer work uses v2; persisted v1
+observations, diagnoses, soil checks, and metadata remain readable and are not
+rewritten.
+
+The evidence audit covers all five supported plants:
+
+| Plant | Supported claim | Broad category supported | Timing or limit | Safety evidence |
+| --- | --- | --- | --- | --- |
+| Tomato | Soil-test-guided fertilizer may be considered when first fruit enlarges | Vegetable or tomato | Fruit enlargement; no fixed interval | Excess nitrogen can delay fruiting; do not fertilize a stressed plant |
+| Pumpkin | Soil-test-guided fertilizer may be considered once runners develop | General garden or compost amendment | Runner development; no fixed interval | Wait during stress and avoid treating symptoms with fertilizer |
+| Pothos | Routine fertilizer is limited to active indoor growth | Balanced houseplant | No more often than every other month; not during winter dormancy | Wait while unhealthy and at least 2–4 weeks after repotting |
+| Snake plant | Fertility needs are minimal during active spring or summer growth | Balanced houseplant or compost amendment | Seasonal only; no defensible repeat interval | Wait while unhealthy and at least 2–4 weeks after repotting |
+| Peace lily | Fertility needs are low and limited to healthy active growth | Balanced houseplant | Active growth only; no plant-specific repeat interval | Overfertilizing can burn tips and roots; wait after repotting |
+
+Pure Dart policy `deterministic-fertilizer-v1`, record schema 1, uses structured
+constants and audited chunk IDs; it never parses knowledge prose or calls
+Gemini. Assessments ask for `active_growth`, `slow_or_dormant`,
+`stressed_or_unhealthy`, `recently_repotted`, or `unknown` and may return
+`consider_fertilizing`, `wait`, `avoid_while_stressed`,
+`more_information_needed`, `insufficient_evidence`, or `unsupported_plant`.
+Stressed plants must avoid routine fertilizer, dormant plants must wait,
+recently repotted houseplants must wait, and unknown activity must request more
+information. The latest user-entered fertilizer care log is history only;
+missing or old history is not proof of need.
+
+Only audited broad categories can be displayed: `balanced_houseplant`,
+`vegetable_or_tomato`, `flowering_or_fruiting`, `general_garden`, or
+`compost_or_organic_amendment`. The UI never recommends brands, exact dosage,
+mixing instructions, application quantities, or diagnosis-based fertilizer.
+It tells users to follow the product label and not treat disease with
+fertilizer.
+
+Immutable assessments are stored at
+`users/{uid}/plants/{plantId}/fertilizerAssessments/{assessmentId}`. The UID is
+derived from Firebase Authentication. Before saving, all evidence chunks and
+trusted sources must exist, match the plant, and use v2. Security Rules enforce
+owner access, exact shape, bounds, version fields, timestamps, and denied
+updates, but cannot prove the official client policy created a record.
+
+Validate and dry-run the candidate without network access or writes:
+
+```sh
+cd tools/knowledge_ingestion
+npm run validate
+npm run dry-run
+```
+
+Fertilizer recommendations remain deterministic; the separate reminder feature
+can use a saved `suggestedReviewAt` only after the user reviews and confirms it.
+
+### Manual soil checks and deterministic watering guidance
+
+Plant details offers a manual finger test. Check about 2–3 cm below the
+surface, not only the top layer, and choose `very_dry`, `dry`,
+`slightly_moist`, `moist`, or `wet`. This qualitative observation is never
+converted to a made-up percentage. Large pots and ground plants should be
+checked in more than one spot when practical.
+
+Pure Dart policy `manual-watering-v1` produces schema version 1 records:
+
+| Preference | Very dry | Dry | Slightly moist | Moist | Wet |
+| --- | --- | --- | --- | --- | --- |
+| Consistently moist (tomato, pumpkin, peace lily) | water now | water now | check again | wait | wait |
+| Surface may dry (pothos) | water now | water now | check again | wait | wait |
+| More complete drying (snake plant) | water now | check again | check again | wait | wait |
+
+An environment outside the reviewed policy returns `inconsistent_input`; an
+unresolved plant returns `unsupported_plant`. Suggested times are reminders to
+check again, never fixed watering schedules. Guidance does not specify a water
+volume, use AI, infer moisture from leaves, or recommend fertilizer. Outdoor
+results explicitly note that recent and expected rainfall are not considered;
+no weather service or sensor data is used.
+
+Every plant policy names its reviewed watering/soil chunk IDs. Before saving,
+the client reloads those chunks and confirms plant identity, dataset
+`2026-09-03-v2`, and complete trusted source records. Records are stored at
+`users/{uid}/plants/{plantId}/soilChecks/{soilCheckId}` with server creation
+time, immutable input snapshots, deterministic result, evidence IDs, and an
+optional next-check time. There is no numeric moisture field and no derived
+moisture value on the plant document.
+
+Security Rules allow only the owner to create, read, and delete a bounded,
+versioned record and deny updates. Rules validate ownership and shape, but
+cannot prove that a client ran the official deterministic engine. These remain
+client-originated records rather than trusted backend attestations.
+
+### Watering and fertilizer care history
+
+Authenticated users can record factual actions at
+`users/{uid}/plants/{plantId}/careLogs/{careLogId}`. The single immutable
+collection uses a discriminated `type` (`watering` or `fertilizing`), schema
+version 1, source `user_entered`, a user-selected Firestore `occurredAt`, and a
+server timestamp `createdAt`. Incorrect entries are deleted and recreated; the
+app and Security Rules deny updates.
+
+Watering records require `wateringMethod` (`top`, `bottom`, `soak`, `drip`, or
+`other`) and may contain a positive `amountMl` no greater than 100,000.
+Fertilizing records require `fertilizerForm` (`liquid`, `granular`,
+`slow_release`, `compost`, `organic_other`, or `other`) and may contain a
+trimmed product name and application note. Type-specific fields are exclusive:
+a watering record never stores fertilizer fields and a fertilizing record
+never stores watering fields. Common optional notes and application notes are
+limited to 500 characters; product names are limited to 120. Optional strings
+are omitted when blank and cannot be whitespace-padded when stored.
+
+The selected action time may be at most five minutes ahead of the server and
+no more than 365 days before creation. Dates are persisted as timestamps and
+formatted only for display. Plant Details calculates the latest watering and
+fertilizing actions from care logs by `occurredAt`, breaking equal-time ties by
+document ID. A soil-check recommendation is never counted as performed
+watering. Ordering by a single `occurredAt` field uses Firestore's automatic
+single-field index, so this feature adds no speculative composite index.
+
+Care history is user-entered and not independently verified. It does not
+recommend watering, fertilizer, a product, or an amount, and it does not
+confirm that a fertilizer is safe or suitable. Security Rules enforce owner
+access, parent-plant existence, exact conditional fields, bounds, timestamp
+rules, and immutability, but cannot prove the action occurred. Fertilizer
+guidance remains separate from factual history. Weather and sensor inputs are
+deferred.
+
+### Spark V1 local care reminders
+
+Authenticated users can create `soil_check` and `fertilizer_review` reminders
+at `users/{uid}/plants/{plantId}/reminders/{reminderId}`. Schema version 1
+stores a UTC `dueAt`, status (`active`, `completed`, or `cancelled`), bounded
+title and optional note, server `createdAt`/`updatedAt`, and a source. A
+`soil_check_suggestion` may reference only a same-plant soil check; a
+`fertilizer_assessment_suggestion` may reference only a same-plant assessment;
+`user_created` has no record reference. Suggested dates are prefilled but are
+never saved or scheduled without confirmation, and no date is invented when a
+source record has none.
+
+Android and iOS use `flutter_local_notifications` with `timezone` and
+`flutter_timezone`. The app discovers the device's IANA zone, schedules with a
+DST-aware zoned API, and refreshes that zone while reconciling on the next app
+resume. Android uses inexact alarms and does not request exact-alarm access.
+Notification permission is requested only after the user enables device
+notification delivery while saving. Denial or scheduling failure does not roll
+back Firestore: the reminder remains visible in the app and may be retried.
+Notification text contains only the reminder kind and plant name. Taps carry a
+protected in-app reminder route.
+
+Each device maintains collision-aware, deterministic notification IDs in local
+preferences, partitioned by authenticated UID. Reconciliation watches saved
+records, schedules only future active reminders, replaces duplicate schedules,
+and cancels stale, completed, cancelled, or past entries known to the app. On
+sign-out it cancels and clears only the departing account's local metadata; it
+does not change Firestore status. Every signed-in device schedules its own copy,
+so Firestore never treats a device notification ID as authoritative.
+
+Web uses the same Firestore records and live dashboard categorization for
+overdue, due-today, upcoming, and history. It does not invoke the notification
+plugin, request browser permission, register a service worker, or promise
+delivery when closed: “Web reminders appear while you use PlantCare AI.
+Background notifications are not available in this version.” Local mobile
+delivery is also best-effort—there is no server guarantee. A future paid-tier
+migration can add authorized Cloud Functions and FCM without changing reminder
+record ownership or making AI the scheduler.
+
+Platform notes: simulators can exercise permission and routing, but notification
+delivery timing should be confirmed on a real device. OS power management, user
+settings, uninstall/reinstall, and platform scheduling limits can delay or
+remove local notifications. If permission is denied, enable PlantCare AI
+notifications in the device's system Settings.
+
+## Release preparation and verification
 
 ```sh
 flutter pub get
-flutter run
-dart format --output=none --set-exit-if-changed .
+dart run build_runner build
+dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test
+npm run test:rules
+(cd tools/knowledge_ingestion && npm run build && npm test && npm run validate && npm run dry-run)
+git diff --check
 ```
 
-Select a specific target with `flutter run -d chrome`, an Android device ID, or
-an iOS simulator ID.
+Run against local Auth and Firestore emulators on Android with:
+
+```sh
+firebase emulators:start --project demo-plantcare-ai --only auth,firestore
+flutter run -d emulator-5554 --dart-define=USE_FIREBASE_EMULATOR=true
+```
+
+Build release artifacts with explicit production App Check configuration:
+
+```sh
+flutter build web --release --dart-define=APP_ENV=production \
+  --dart-define=APP_CHECK_RECAPTCHA_ENTERPRISE_SITE_KEY=YOUR_NON_SECRET_SITE_KEY
+flutter build apk --release --dart-define=APP_ENV=production
+flutter build ios --release --no-codesign --dart-define=APP_ENV=production
+```
+
+Release builds reject `USE_APP_CHECK_DEBUG=true`. The web reCAPTCHA Enterprise
+site key is a public build-time identifier, not a provider secret; do not place
+debug tokens, service-account credentials, or AI provider keys in source or
+build defines.
+
+`firebase.json` serves `build/web`, rewrites all application paths to
+`index.html` for `go_router` deep links, and prevents aggressive caching of the
+HTML/bootstrap/service-worker entry points. Flutter does not emit reliably
+content-hashed names for every generated asset, so this configuration does not
+apply immutable caching to unhashed output.
+
+Preview and production Hosting commands are:
+
+```sh
+firebase hosting:channel:deploy release-candidate --project plantcare-ai-dev-tasnimalam
+firebase deploy --only hosting --project plantcare-ai-dev-tasnimalam
+```
+
+Deploy only Firestore Rules with:
+
+```sh
+firebase deploy --only firestore:rules --project plantcare-ai-dev-tasnimalam
+```
+
+Do not run any deploy command until the project owner explicitly approves it.
+
+### Required Console checks
+
+Before release, manually verify project `plantcare-ai-dev-tasnimalam` remains
+on the Spark plan, Email/Password Authentication is enabled, the intended
+Firestore Rules version is active, and Firebase AI Logic enforces both App
+Check and authenticated-users mode. These Console states cannot be proven by
+the client build.
+
+### Real-device reminder acceptance
+
+1. Grant notification permission after saving a future reminder; confirm it is
+   saved, scheduled, delivered in the background, and opens the same reminder.
+2. Deny permission on a clean install; confirm the reminder remains in the app
+   and the UI explains how to enable notifications later.
+3. Complete and cancel separate active reminders; confirm their pending local
+   notifications disappear while their Firestore history remains.
+4. Reactivate a completed or cancelled reminder with a future time; confirm it
+   is rescheduled once without creating another Firestore record.
+5. Sign out; confirm only that account's known local notifications are cleared.
+   Sign back in and resume the app; confirm future active reminders reconcile.
+6. Change the device timezone and cross a DST boundary where practical;
+   confirm local display and delivery follow the selected local wall time.
+7. On web, confirm the app states that reminders appear only while the app is
+   in use and no browser notification permission is requested.
 
 ## Intentionally deferred
 
-This milestone does not create Firestore user-profile documents. It also does
-not include Firebase Storage, Cloud Functions, vector search, diagnosis,
-treatment,
-pesticide guidance, soil-moisture records, watering or fertilizer workflows,
-notifications, App Check enforcement, Analytics, or Crashlytics. Images are
-analyzed transiently and remain intentionally absent from history and details.
+Spark V1 does not include Firebase Storage, Cloud Functions, FCM, vector search,
+embeddings, weather, sensors, browser push, subscriptions, Analytics,
+Crashlytics, server-authoritative diagnosis or treatment, pesticide guidance,
+exact fertilizer dosage, server-guaranteed notifications, account deletion, or
+full data export. Images are analyzed transiently and remain absent from
+history and details. Lists intentionally load the most recent bounded V1
+history; pagination is deferred.
