@@ -85,36 +85,22 @@ shows bottom navigation on narrow windows and a navigation rail at widths of
 
 ## Architecture
 
-The project follows a feature-first structure:
+The Dart workspace separates framework-neutral contracts from Flutter data
+adapters while the root application continues to own presentation, routing,
+bootstrap, and composition:
 
 ```text
-lib/
-├── app/
-│   ├── bootstrap/
-│   ├── dependency_injection/
-│   ├── router/
-│   ├── theme/
-│   └── app.dart
-├── core/
-│   ├── constants/
-│   ├── errors/
-│   ├── utils/
-│   └── widgets/
-├── features/
-│   ├── authentication/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
-│   ├── home/presentation/
-│   └── plants/
-│       ├── data/
-│       ├── domain/
-│       └── presentation/
-└── main.dart
+plantcare_ai (Flutter application)
+├── plantcare_data (Flutter data adapters)
+│   ├── plantcare_domain
+│   │   └── plantcare_shared
+│   └── plantcare_shared
+├── plantcare_domain (pure Dart)
+│   └── plantcare_shared
+└── plantcare_shared (pure Dart)
 ```
 
-Feature `data` and `domain` directories are intentionally created only when a
-feature has real persistence or business logic. Application and feature
+The root `lib/features` tree contains presentation only. Application and feature
 workflow state uses event-driven BLoCs from `flutter_bloc`; ephemeral visual
 state stays local to widgets. Routes use `go_router`, dependency injection uses
 `get_it` and `injectable`, and value equality uses `equatable`.
@@ -133,9 +119,10 @@ and does not create, copy, or embed a Gemini API key.
 ## Dependency injection generation
 
 After adding or changing injectable registrations, regenerate the checked-in
-configuration:
+data micro-package module before regenerating the app graph:
 
 ```sh
+(cd packages/plantcare_data && dart run build_runner build)
 dart run build_runner build
 ```
 

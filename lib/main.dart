@@ -17,7 +17,7 @@ void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     FlutterError.onError = FlutterError.presentError;
-    configureDependencies();
+    await configureDependencies();
 
     await bootstrapApplication(
       initializer: getIt<AppInitializer>(),
