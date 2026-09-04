@@ -214,10 +214,12 @@ abstract final class KnowledgeDocumentCodec {
   }
 
   static String _dataset(Map<String, dynamic> data) {
-    if (data['datasetVersion'] != KnowledgeVersions.dataset) {
+    final value = data['datasetVersion'];
+    if (value is! String ||
+        !KnowledgeVersions.supportedDatasets.contains(value)) {
       throw const FormatException('Unsupported knowledge dataset version.');
     }
-    return KnowledgeVersions.dataset;
+    return value;
   }
 
   static String _validId(String id) {

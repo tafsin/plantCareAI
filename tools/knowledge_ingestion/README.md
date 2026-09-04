@@ -9,7 +9,12 @@ Admin dependency or credential is included in the Flutter application.
 `data/sources.json` is a manifest keyed by stable source ID.
 `data/knowledge_chunks.json` contains focused paraphrased chunks. The single
 authoritative Zod implementation in `src/schema.ts` rejects unknown fields and
-enforces schema version 1 and dataset version `2026-09-03-v1`.
+enforces schema version 1 and dataset version `2026-09-03-v2`.
+
+Version `2026-09-03-v2` is the active reviewed production dataset and the
+Flutter knowledge consumers target it for all new retrieval, diagnosis,
+watering, and fertilizer work. Historical v1 user records remain readable and
+are not rewritten.
 
 Chunk constraints include:
 

@@ -6,7 +6,7 @@
     "url": "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-tomatoes",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "umd_tomato_problems": {
     "schemaVersion": 1,
@@ -15,7 +15,7 @@
     "url": "https://extension.umd.edu/resource/key-common-problems-tomatoes",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "usu_growing_pumpkins": {
     "schemaVersion": 1,
@@ -24,7 +24,7 @@
     "url": "https://extension.usu.edu/yardandgarden/research/pumpkins-in-the-garden",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "kew_cucurbita_pepo": {
     "schemaVersion": 1,
@@ -33,7 +33,7 @@
     "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:292416-1/general-information",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "botanical_garden",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "umd_squash_problems": {
     "schemaVersion": 1,
@@ -42,7 +42,7 @@
     "url": "https://extension.umd.edu/resource/key-common-problems-squash",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "ncsu_pothos": {
     "schemaVersion": 1,
@@ -51,7 +51,7 @@
     "url": "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "ncsu_snake_plant": {
     "schemaVersion": 1,
@@ -60,7 +60,7 @@
     "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/common-name/snake-plant/",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "mobot_snake_plant": {
     "schemaVersion": 1,
@@ -69,7 +69,7 @@
     "url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?basic=on&isprofile=0&taxonid=458214",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "botanical_garden",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "ncsu_peace_lily": {
     "schemaVersion": 1,
@@ -78,7 +78,7 @@
     "url": "https://plants.ces.ncsu.edu/plants/spathiphyllum/common-name/peace-lily/",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "university_extension",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
   },
   "mobot_peace_lily": {
     "schemaVersion": 1,
@@ -87,6 +87,51 @@
     "url": "https://www.missouribotanicalgarden.org/PlantFinder/PlantFinderDetails.aspx?basic=Spathiphyllum&isprofile=1&taxonid=264610",
     "accessedAt": "2026-09-03T00:00:00.000Z",
     "sourceType": "botanical_garden",
-    "datasetVersion": "2026-09-03-v1"
+    "datasetVersion": "2026-09-03-v2"
+  },
+  "illinois_houseplant_care": {
+    "schemaVersion": 1,
+    "title": "Care — Houseplants",
+    "publisher": "University of Illinois Extension",
+    "url": "https://extension.illinois.edu/houseplants/care",
+    "accessedAt": "2026-09-03T00:00:00.000Z",
+    "sourceType": "university_extension",
+    "datasetVersion": "2026-09-03-v2"
+  },
+  "iowa_houseplant_care": {
+    "schemaVersion": 1,
+    "title": "How to Care for Houseplants",
+    "publisher": "Iowa State University Extension and Outreach",
+    "url": "https://yardandgarden.extension.iastate.edu/how-to/how-care-houseplants",
+    "accessedAt": "2026-09-03T00:00:00.000Z",
+    "sourceType": "university_extension",
+    "datasetVersion": "2026-09-03-v2"
+  },
+  "ncsu_fertilize_houseplants": {
+    "schemaVersion": 1,
+    "title": "How to Fertilize House Plants",
+    "publisher": "North Carolina Cooperative Extension",
+    "url": "https://union.ces.ncsu.edu/news/how-to-fertilize-house-plants/",
+    "accessedAt": "2026-09-03T00:00:00.000Z",
+    "sourceType": "university_extension",
+    "datasetVersion": "2026-09-03-v2"
+  },
+  "ucanr_snake_plant": {
+    "schemaVersion": 1,
+    "title": "Snake Plant!",
+    "publisher": "University of California Agriculture and Natural Resources",
+    "url": "https://ucanr.edu/blog/uc-master-gardeners-diggin-it-slo/article/snake-plant",
+    "accessedAt": "2026-09-03T00:00:00.000Z",
+    "sourceType": "university_extension",
+    "datasetVersion": "2026-09-03-v2"
+  },
+  "iowa_extreme_heat_garden": {
+    "schemaVersion": 1,
+    "title": "Managing the Garden in Extreme Heat",
+    "publisher": "Iowa State University Extension and Outreach",
+    "url": "https://yardandgarden.extension.iastate.edu/how-to/managing-garden-extreme-heat",
+    "accessedAt": "2026-09-03T00:00:00.000Z",
+    "sourceType": "university_extension",
+    "datasetVersion": "2026-09-03-v2"
   }
 }

@@ -1,5 +1,5 @@
 export const SCHEMA_VERSION = 1 as const;
-export const DATASET_VERSION = "2026-09-03-v1" as const;
+export const DATASET_VERSION = "2026-09-03-v2" as const;
 export const APPROVED_PROJECT_ID = "plantcare-ai-dev-tasnimalam" as const;
 
 export const CANONICAL_PLANT_KEYS = [

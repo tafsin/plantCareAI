@@ -9,6 +9,16 @@ void main() {
     expect(chunk.symptomKeywords, ['yellowing']);
   });
 
+  test('reads historical v1 and active v2 knowledge metadata', () {
+    final historical = KnowledgeDocumentCodec.chunk('v1', _chunkData());
+    final current = KnowledgeDocumentCodec.chunk(
+      'v2',
+      _chunkData()..['datasetVersion'] = '2026-09-03-v2',
+    );
+    expect(historical.datasetVersion, '2026-09-03-v1');
+    expect(current.datasetVersion, '2026-09-03-v2');
+  });
+
   test('rejects malformed and unsupported chunk documents', () {
     expect(
       () => KnowledgeDocumentCodec.chunk(

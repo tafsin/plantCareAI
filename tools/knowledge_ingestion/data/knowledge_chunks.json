@@ -24,7 +24,7 @@
     ],
     "sourceIds": ["umn_growing_tomatoes"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -47,7 +47,7 @@
     ],
     "sourceIds": ["umn_growing_tomatoes", "umd_tomato_problems"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -77,7 +77,7 @@
     ],
     "sourceIds": ["umn_growing_tomatoes"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -105,7 +105,7 @@
     ],
     "sourceIds": ["umd_tomato_problems"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -134,7 +134,7 @@
     ],
     "sourceIds": ["umd_tomato_problems", "umn_growing_tomatoes"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -158,7 +158,7 @@
     ],
     "sourceIds": ["umd_tomato_problems", "umn_growing_tomatoes"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -186,7 +186,7 @@
     ],
     "sourceIds": ["umd_tomato_problems", "umn_growing_tomatoes"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -214,7 +214,7 @@
     ],
     "sourceIds": ["umn_growing_tomatoes"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -244,7 +244,7 @@
     ],
     "sourceIds": ["kew_cucurbita_pepo"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -279,7 +279,7 @@
     ],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -307,7 +307,7 @@
     "cautions": ["Variegation differs naturally among cultivars."],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -335,7 +335,7 @@
     "cautions": ["Do not leave the root zone continuously saturated."],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -365,7 +365,7 @@
     ],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -398,7 +398,7 @@
     "cautions": ["Do not diagnose root rot from leaf color alone."],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -426,7 +426,7 @@
     "cautions": ["A pebble tray must not leave the pot standing in water."],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -461,7 +461,7 @@
     ],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -496,7 +496,7 @@
     ],
     "sourceIds": ["ncsu_pothos"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -523,7 +523,7 @@
     "cautions": ["Cultivar markings alone do not prove species identity."],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -549,7 +549,7 @@
     "cautions": ["Move plants gradually when changing light exposure."],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -578,7 +578,7 @@
     ],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -606,7 +606,7 @@
     ],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -639,7 +639,7 @@
     ],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -665,7 +665,7 @@
     "cautions": ["Bring container plants indoors before local frost risk."],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -693,7 +693,7 @@
     ],
     "sourceIds": ["ncsu_snake_plant", "mobot_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -721,7 +721,7 @@
     ],
     "sourceIds": ["ncsu_snake_plant"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -745,7 +745,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -768,7 +768,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -791,7 +791,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -814,7 +814,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -835,7 +835,7 @@
     "cautions": ["Temperature injury can resemble watering or root problems."],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -859,7 +859,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -887,7 +887,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily", "mobot_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -915,7 +915,7 @@
     ],
     "sourceIds": ["ncsu_peace_lily"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -936,7 +936,7 @@
     "cautions": ["Planting dates and spacing vary with climate and cultivar."],
     "sourceIds": ["usu_growing_pumpkins"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -959,7 +959,7 @@
     ],
     "sourceIds": ["usu_growing_pumpkins"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -983,7 +983,7 @@
     ],
     "sourceIds": ["umd_squash_problems", "usu_growing_pumpkins"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -1010,7 +1010,7 @@
     ],
     "sourceIds": ["umd_squash_problems"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -1038,7 +1038,7 @@
     ],
     "sourceIds": ["umd_squash_problems", "usu_growing_pumpkins"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -1059,7 +1059,7 @@
     "cautions": ["Do not assume all vine wilting is caused by an insect."],
     "sourceIds": ["umd_squash_problems"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -1087,7 +1087,7 @@
     ],
     "sourceIds": ["umd_squash_problems"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   },
@@ -1116,7 +1116,248 @@
     ],
     "sourceIds": ["umd_squash_problems"],
     "reviewStatus": "reviewed",
-    "datasetVersion": "2026-09-03-v1",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "tomato",
+    "commonName": "Tomato",
+    "scientificName": "Solanum lycopersicum",
+    "aliases": ["Tomato", "Lycopersicon lycopersicum"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_soil_test_and_fruiting",
+    "environment": ["outdoor"],
+    "affectedParts": ["whole_plant", "fruit"],
+    "growthStages": ["vegetative", "flowering", "fruiting", "mature"],
+    "symptomKeywords": [],
+    "title": "Base tomato fertilizer choices on soil and fruiting stage",
+    "content": "For outdoor tomatoes, use a soil test to guide phosphorus and potassium; where extra phosphorus is not recommended, choose a low- or no-phosphorus vegetable fertilizer. A later application may be considered when the first fruits begin enlarging, while compost already added to the soil can reduce the need for more fertilizer.",
+    "cautions": [
+      "Too much nitrogen can produce leafy growth and delay fruiting.",
+      "Follow the product label and never use a fertilizer combined with a weed killer around vegetables."
+    ],
+    "sourceIds": ["umn_growing_tomatoes"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "tomato",
+    "commonName": "Tomato",
+    "scientificName": "Solanum lycopersicum",
+    "aliases": ["Tomato", "Lycopersicon lycopersicum"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_wait_while_stressed",
+    "environment": ["outdoor"],
+    "affectedParts": ["whole_plant"],
+    "growthStages": [
+      "seedling",
+      "vegetative",
+      "flowering",
+      "fruiting",
+      "mature"
+    ],
+    "symptomKeywords": [],
+    "title": "Do not auto-recommend fertilizer from a tomato stress report",
+    "content": "A report that a tomato is stressed or unhealthy does not identify a nutrient need. In the verified case of extreme heat, adding fertilizer promotes growth the plant cannot support and creates additional stress. General fertilizer guidance should therefore wait while the cause of the reported stress remains unknown.",
+    "cautions": [
+      "Leaf color or an image alone does not establish a nutrient deficiency.",
+      "Resume fertilizer review only after the stress has been addressed and active growth is appropriate."
+    ],
+    "sourceIds": ["umn_growing_tomatoes", "iowa_extreme_heat_garden"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "pumpkin",
+    "commonName": "Pumpkin",
+    "scientificName": "Cucurbita pepo",
+    "aliases": ["Pumpkin", "Field pumpkin"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_soil_test_and_runners",
+    "environment": ["outdoor"],
+    "affectedParts": ["whole_plant", "stem"],
+    "growthStages": ["vegetative", "flowering", "fruiting"],
+    "symptomKeywords": [],
+    "title": "Use soil evidence and vine development for pumpkin fertilizer",
+    "content": "Before planting pumpkins, determine fertilizer needs with a soil test and use its recommendations. A general garden fertilizer or well-composted organic amendment may be appropriate when the soil evidence supports it; after vines develop runners, the reviewed guidance supports considering additional nitrogen rather than feeding by an arbitrary calendar.",
+    "cautions": [
+      "Follow the product label and local soil-test recommendations instead of using a fixed app dosage.",
+      "Avoid damaging transplant roots because root injury slows establishment and growth."
+    ],
+    "sourceIds": ["usu_growing_pumpkins"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "pumpkin",
+    "commonName": "Pumpkin",
+    "scientificName": "Cucurbita pepo",
+    "aliases": ["Pumpkin", "Field pumpkin"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_wait_while_stressed",
+    "environment": ["outdoor"],
+    "affectedParts": ["whole_plant"],
+    "growthStages": [
+      "seedling",
+      "vegetative",
+      "flowering",
+      "fruiting",
+      "mature"
+    ],
+    "symptomKeywords": [],
+    "title": "Do not auto-recommend fertilizer from a pumpkin stress report",
+    "content": "A report that a pumpkin is stressed or unhealthy does not identify a nutrient need. In the verified case of extreme heat, adding fertilizer promotes growth the plant cannot support and creates additional stress. General fertilizer guidance should therefore wait while the cause of the reported stress remains unknown.",
+    "cautions": [
+      "Wilting, leaf color, or an image alone does not establish a nutrient deficiency.",
+      "Resume fertilizer review only after the stress has been addressed and active growth is appropriate."
+    ],
+    "sourceIds": ["usu_growing_pumpkins", "iowa_extreme_heat_garden"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "pothos",
+    "commonName": "Pothos",
+    "scientificName": "Epipremnum aureum",
+    "aliases": ["Pothos", "Golden pothos", "Devil's ivy"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_active_growth_interval",
+    "environment": ["indoor"],
+    "affectedParts": ["whole_plant"],
+    "growthStages": ["vegetative", "mature"],
+    "symptomKeywords": [],
+    "title": "Pothos fertilizer is limited to active growth",
+    "content": "For an indoor pothos in active growth, a balanced houseplant fertilizer may be considered no more often than every other month under the plant-specific guidance. Do not continue the routine when the plant is dormant in winter, and use the product label rather than an app-generated amount.",
+    "cautions": [
+      "Do not exceed the product label.",
+      "Slow or absent growth in winter is a reason to wait, not a fertilizer deficiency diagnosis."
+    ],
+    "sourceIds": ["ncsu_pothos", "illinois_houseplant_care"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "pothos",
+    "commonName": "Pothos",
+    "scientificName": "Epipremnum aureum",
+    "aliases": ["Pothos", "Golden pothos", "Devil's ivy"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_stress_and_repot_wait",
+    "environment": ["indoor"],
+    "affectedParts": ["whole_plant", "root"],
+    "growthStages": ["vegetative", "mature"],
+    "symptomKeywords": [],
+    "title": "Wait to fertilize stressed or newly repotted pothos",
+    "content": "Never fertilize a diseased, injured, or damaged pothos as though fertilizer were medicine; wait for recovery. After repotting, wait at least two to four weeks before regular fertilizing because fresh potting mix commonly contains fertilizer and immediate application is usually unnecessary.",
+    "cautions": [
+      "Excess fertilizer salts can burn roots.",
+      "Do not infer fertilizer need from yellow, brown, wilted, or otherwise unhealthy foliage."
+    ],
+    "sourceIds": ["ncsu_fertilize_houseplants", "iowa_houseplant_care"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "snake_plant",
+    "commonName": "Snake Plant",
+    "scientificName": "Dracaena trifasciata",
+    "aliases": [
+      "Snake plant",
+      "Sansevieria trifasciata",
+      "Mother-in-law's tongue"
+    ],
+    "category": "nutrient_guidance",
+    "issueKey": "minimal_fertilizer_active_season",
+    "environment": ["indoor"],
+    "affectedParts": ["whole_plant"],
+    "growthStages": ["vegetative", "mature"],
+    "symptomKeywords": [],
+    "title": "Snake plants have minimal seasonal fertilizer needs",
+    "content": "Snake plant fertilizer needs are minimal. During active spring or summer growth, either a broad houseplant fertilizer or a compost-based organic amendment may be considered; slow or dormant growth outside that active period is a reason to wait rather than apply a routine feed.",
+    "cautions": [
+      "Follow the product label and do not exceed it.",
+      "Minimal need means a missing or old fertilizer log is not proof that fertilizer is required."
+    ],
+    "sourceIds": ["ucanr_snake_plant", "illinois_houseplant_care"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "snake_plant",
+    "commonName": "Snake Plant",
+    "scientificName": "Dracaena trifasciata",
+    "aliases": [
+      "Snake plant",
+      "Sansevieria trifasciata",
+      "Mother-in-law's tongue"
+    ],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_stress_and_repot_wait",
+    "environment": ["indoor"],
+    "affectedParts": ["whole_plant", "root"],
+    "growthStages": ["vegetative", "mature"],
+    "symptomKeywords": [],
+    "title": "Wait to fertilize stressed or newly repotted snake plants",
+    "content": "Never fertilize a diseased, injured, or damaged snake plant as though fertilizer were medicine; wait for recovery. After repotting, wait at least two to four weeks before regular fertilizing because fresh potting mix commonly contains fertilizer and immediate application is usually unnecessary.",
+    "cautions": [
+      "Excess fertilizer salts can burn roots.",
+      "Do not infer fertilizer need from leaf color, damage, wilting, or an image observation."
+    ],
+    "sourceIds": ["ncsu_fertilize_houseplants", "iowa_houseplant_care"],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
+    "createdAt": "2026-09-03T00:00:00.000Z",
+    "updatedAt": "2026-09-03T00:00:00.000Z"
+  },
+  {
+    "schemaVersion": 1,
+    "canonicalPlantKey": "peace_lily",
+    "commonName": "Peace Lily",
+    "scientificName": "Spathiphyllum",
+    "aliases": ["Peace lily", "Spathiphyllum wallisii", "White sails"],
+    "category": "nutrient_guidance",
+    "issueKey": "fertilizer_active_growth_stress_and_repot",
+    "environment": ["indoor"],
+    "affectedParts": ["whole_plant", "root"],
+    "growthStages": ["vegetative", "flowering", "mature"],
+    "symptomKeywords": [],
+    "title": "Limit peace lily fertilizer to healthy active growth",
+    "content": "A peace lily has low fertility needs and fertilizer should be considered only during healthy active growth. Wait when growth is slow or dormant, never use fertilizer as medicine for a diseased or damaged plant, and wait at least two to four weeks after repotting before resuming regular fertilizing.",
+    "cautions": [
+      "Overfertilizing can burn leaf tips and roots.",
+      "Use a houseplant product only as its label directs and do not infer need from leaf symptoms."
+    ],
+    "sourceIds": [
+      "mobot_peace_lily",
+      "ncsu_fertilize_houseplants",
+      "iowa_houseplant_care",
+      "illinois_houseplant_care"
+    ],
+    "reviewStatus": "reviewed",
+    "datasetVersion": "2026-09-03-v2",
     "createdAt": "2026-09-03T00:00:00.000Z",
     "updatedAt": "2026-09-03T00:00:00.000Z"
   }

@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 
 abstract final class KnowledgeVersions {
   static const schema = 1;
-  static const dataset = '2026-09-03-v1';
+  static const dataset = '2026-09-03-v2';
+  static const supportedDatasets = {'2026-09-03-v1', dataset};
   static const algorithm = 'metadata-v1';
 }
 

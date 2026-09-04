@@ -13,9 +13,9 @@ describe("production knowledge dataset", () => {
   test("is complete, valid, versioned, and source-backed", async () => {
     const dataset = await loadDataset();
     assert.equal(SCHEMA_VERSION, 1);
-    assert.equal(DATASET_VERSION, "2026-09-03-v1");
-    assert.equal(dataset.chunks.length, 41);
-    assert.equal(Object.keys(dataset.sources).length, 10);
+    assert.equal(DATASET_VERSION, "2026-09-03-v2");
+    assert.equal(dataset.chunks.length, 50);
+    assert.equal(Object.keys(dataset.sources).length, 15);
     assert.deepEqual(
       Object.fromEntries(
         ["tomato", "pumpkin", "pothos", "snake_plant", "peace_lily"].map(
@@ -26,7 +26,7 @@ describe("production knowledge dataset", () => {
           ],
         ),
       ),
-      { tomato: 8, pumpkin: 9, pothos: 8, snake_plant: 8, peace_lily: 8 },
+      { tomato: 10, pumpkin: 11, pothos: 10, snake_plant: 10, peace_lily: 9 },
     );
     for (const chunk of dataset.chunks) {
       assert.ok(chunk.sourceIds.length > 0);
@@ -35,6 +35,68 @@ describe("production knowledge dataset", () => {
         /^[a-z0-9_]+__[a-z0-9_]+__[a-z0-9_]+$/,
       );
     }
+  });
+
+  test("fertilizer evidence audit covers every supported plant policy claim", async () => {
+    const dataset = await loadDataset();
+    const requiredIssueKeys = {
+      tomato: [
+        "fertilizer_soil_test_and_fruiting",
+        "fertilizer_wait_while_stressed",
+      ],
+      pumpkin: [
+        "fertilizer_soil_test_and_runners",
+        "fertilizer_wait_while_stressed",
+      ],
+      pothos: [
+        "fertilizer_active_growth_interval",
+        "fertilizer_stress_and_repot_wait",
+      ],
+      snake_plant: [
+        "minimal_fertilizer_active_season",
+        "fertilizer_stress_and_repot_wait",
+      ],
+      peace_lily: [
+        "low_fertility_needs",
+        "fertilizer_active_growth_stress_and_repot",
+      ],
+    } as const;
+
+    for (const [plantKey, issueKeys] of Object.entries(requiredIssueKeys)) {
+      const fertilizerChunks = dataset.chunks.filter(
+        (chunk) =>
+          chunk.canonicalPlantKey === plantKey &&
+          chunk.category === "nutrient_guidance",
+      );
+      assert.deepEqual(
+        issueKeys.every((issueKey) =>
+          fertilizerChunks.some((chunk) => chunk.issueKey === issueKey),
+        ),
+        true,
+      );
+      assert.ok(
+        fertilizerChunks.every(
+          (chunk) =>
+            chunk.reviewStatus === "reviewed" &&
+            chunk.sourceIds.length > 0 &&
+            chunk.sourceIds.every((sourceId) => sourceId in dataset.sources),
+        ),
+      );
+    }
+  });
+
+  test("fertilizer evidence stays broad and label-directed", async () => {
+    const dataset = await loadDataset();
+    const fertilizerChunks = dataset.chunks.filter(
+      (chunk) => chunk.category === "nutrient_guidance",
+    );
+    const combined = fertilizerChunks
+      .flatMap((chunk) => [chunk.title, chunk.content, ...chunk.cautions])
+      .join(" ");
+
+    assert.doesNotMatch(combined, /\b\d+[-–]\d+[-–]\d+\b/);
+    assert.doesNotMatch(combined, /\b(?:tablespoons?|teaspoons?|cups?)\b/i);
+    assert.match(combined, /product label/i);
   });
 
   test("rejects a missing required field", async () => {

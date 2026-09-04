@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/core/constants/app_constants.dart';
 import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/data/models/knowledge_document_codec.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
@@ -29,6 +30,8 @@ final class FirebaseKnowledgeRepository implements KnowledgeRepository {
       final snapshot = await _firestore
           .collection('knowledgeChunks')
           .where('canonicalPlantKey', isEqualTo: canonicalPlantKey)
+          .where('datasetVersion', isEqualTo: KnowledgeVersions.dataset)
+          .limit(AppConstants.maxKnowledgeChunksPerPlant)
           .get();
       final result = KnowledgeDocumentCodec.chunks({
         for (final document in snapshot.docs) document.id: document.data(),
