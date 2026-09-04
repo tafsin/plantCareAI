@@ -32,6 +32,28 @@ service cloud.firestore {
         || (value is number && value >= 0 && value <= 1);
     }
 
+    function validId(value) {
+      return value is string
+        && value.size() >= 1
+        && value.size() <= 160
+        && value.matches('^[A-Za-z0-9][A-Za-z0-9_.:-]*$');
+    }
+
+    function validIdListItem(items, index) {
+      return items.size() <= index || validId(items[index]);
+    }
+
+    function validIdList(items, minItems) {
+      return items is list
+        && items.size() >= minItems
+        && items.size() <= 5
+        && validIdListItem(items, 0)
+        && validIdListItem(items, 1)
+        && validIdListItem(items, 2)
+        && validIdListItem(items, 3)
+        && validIdListItem(items, 4);
+    }
+
     function validObservationItem(items, index) {
       return items.size() <= index || (
         items[index] is map
@@ -94,6 +116,348 @@ service cloud.firestore {
         && validTrimmedString(data.modelName, 80)
         && data.createdAt is timestamp
         && data.source == 'firebase_ai_client';
+    }
+
+    function validDiagnosisIssue(items, index) {
+      let item = items.size() > index ? items[index] : null;
+      return items.size() <= index || (
+        item is map
+        && item.keys().hasOnly([
+          'name', 'likelihood', 'evidenceStrength',
+          'supportingObservations', 'reasoning', 'evidenceChunkIds'
+        ])
+        && validBoundedString(item.name, 160)
+        && item.name.size() >= 1
+        && item.likelihood in [
+          'most_likely', 'plausible_alternative', 'less_likely'
+        ]
+        && item.evidenceStrength in ['limited', 'moderate', 'strong']
+        && item.supportingObservations is list
+        && item.supportingObservations.size() <= 5
+        && validBoundedString(item.reasoning, 600)
+        && item.reasoning.size() >= 1
+        && item.evidenceChunkIds is list
+        && item.evidenceChunkIds.size() >= 1
+        && item.evidenceChunkIds.size() <= 5
+      );
+    }
+
+    function validDiagnosisAction(items, index) {
+      let item = items.size() > index ? items[index] : null;
+      return items.size() <= index || (
+        item is map
+        && item.keys().hasOnly([
+          'action', 'priority', 'reason', 'evidenceChunkIds'
+        ])
+        && validBoundedString(item.action, 600)
+        && item.action.size() >= 1
+        && item.priority in ['now', 'soon', 'monitor']
+        && validBoundedString(item.reason, 600)
+        && item.reason.size() >= 1
+        && item.evidenceChunkIds is list
+        && item.evidenceChunkIds.size() >= 1
+        && item.evidenceChunkIds.size() <= 5
+      );
+    }
+
+    function validDiagnosisAvoidAction(items, index) {
+      let item = items.size() > index ? items[index] : null;
+      return items.size() <= index || (
+        item is map
+        && item.keys().hasOnly([
+          'action', 'reason', 'evidenceChunkIds'
+        ])
+        && validBoundedString(item.action, 600)
+        && item.action.size() >= 1
+        && validBoundedString(item.reason, 600)
+        && item.reason.size() >= 1
+        && item.evidenceChunkIds is list
+        && item.evidenceChunkIds.size() >= 1
+        && item.evidenceChunkIds.size() <= 5
+      );
+    }
+
+    function validDiagnosis(data) {
+      return data.keys().hasOnly([
+          'schemaVersion', 'status', 'summary', 'possibleIssues',
+          'recommendedActions', 'avoidActions', 'uncertainties', 'followUp',
+          'canonicalPlantKey', 'evidenceChunkIds', 'sourceIds',
+          'datasetVersion', 'retrievalAlgorithmVersion', 'modelName',
+          'source', 'createdAt'
+        ])
+        && data.schemaVersion == 1
+        && data.status in [
+          'healthy_appearance', 'insufficient_evidence', 'possible_issues_found'
+        ]
+        && validTrimmedString(data.summary, 600)
+        && data.possibleIssues is list
+        && data.possibleIssues.size() <= 3
+        && validDiagnosisIssue(data.possibleIssues, 0)
+        && validDiagnosisIssue(data.possibleIssues, 1)
+        && validDiagnosisIssue(data.possibleIssues, 2)
+        && (data.status == 'possible_issues_found'
+          ? data.possibleIssues.size() >= 1
+          : data.possibleIssues.size() == 0)
+        && data.recommendedActions is list
+        && data.recommendedActions.size() <= 3
+        && validDiagnosisAction(data.recommendedActions, 0)
+        && validDiagnosisAction(data.recommendedActions, 1)
+        && validDiagnosisAction(data.recommendedActions, 2)
+        && data.avoidActions is list
+        && data.avoidActions.size() <= 3
+        && validDiagnosisAvoidAction(data.avoidActions, 0)
+        && validDiagnosisAvoidAction(data.avoidActions, 1)
+        && validDiagnosisAvoidAction(data.avoidActions, 2)
+        && data.uncertainties is list
+        && data.uncertainties.size() <= 5
+        && data.followUp is map
+        && data.followUp.keys().hasOnly([
+          'anotherPhotoHelpful', 'instruction',
+          'professionalHelpRecommended', 'professionalHelpReason'
+        ])
+        && data.followUp.anotherPhotoHelpful is bool
+        && validNullableTrimmedString(data.followUp.instruction, 600)
+        && data.followUp.professionalHelpRecommended is bool
+        && validNullableTrimmedString(data.followUp.professionalHelpReason, 600)
+        && data.canonicalPlantKey in [
+          'tomato', 'pumpkin', 'pothos', 'snake_plant', 'peace_lily'
+        ]
+        && validIdList(data.evidenceChunkIds, 1)
+        && validIdList(data.sourceIds, 1)
+        && data.datasetVersion == '2026-09-03-v2'
+        && data.retrievalAlgorithmVersion == 'metadata-v1'
+        && data.modelName == 'gemini-3.5-flash-lite'
+        && data.source == 'firebase_ai_client_grounded'
+        && data.createdAt is timestamp;
+    }
+
+    function validStringListItem(items, index, maxLength) {
+      return items.size() <= index || validTrimmedString(items[index], maxLength);
+    }
+
+    function validDocumentId(value) {
+      return validTrimmedString(value, 1500) && value.matches('^[^/]+$');
+    }
+
+    function validSoilCheck(data) {
+      return data.keys().hasAll([
+          'schemaVersion', 'policyVersion', 'moistureLevel', 'method',
+          'outcome', 'title', 'explanation', 'cautions',
+          'canonicalPlantKey', 'evidenceChunkIds', 'environmentSnapshot',
+          'growingMediumSnapshot', 'datasetVersion', 'createdAt', 'source'
+        ])
+        && data.keys().hasOnly([
+          'schemaVersion', 'policyVersion', 'moistureLevel', 'method',
+          'outcome', 'title', 'explanation', 'cautions',
+          'canonicalPlantKey', 'evidenceChunkIds', 'suggestedCheckAt',
+          'environmentSnapshot', 'growingMediumSnapshot', 'datasetVersion',
+          'createdAt', 'source'
+        ])
+        && data.schemaVersion == 1
+        && data.policyVersion == 'manual-watering-v1'
+        && data.datasetVersion == '2026-09-03-v2'
+        && data.moistureLevel in ['very_dry', 'dry', 'slightly_moist', 'moist', 'wet']
+        && data.method == 'manual_finger_test'
+        && data.outcome in ['water_now', 'wait', 'check_again', 'inconsistent_input']
+        && validTrimmedString(data.title, 160)
+        && validTrimmedString(data.explanation, 800)
+        && data.cautions is list
+        && data.cautions.size() <= 8
+        && validStringListItem(data.cautions, 0, 300)
+        && validStringListItem(data.cautions, 1, 300)
+        && validStringListItem(data.cautions, 2, 300)
+        && validStringListItem(data.cautions, 3, 300)
+        && validStringListItem(data.cautions, 4, 300)
+        && validStringListItem(data.cautions, 5, 300)
+        && validStringListItem(data.cautions, 6, 300)
+        && validStringListItem(data.cautions, 7, 300)
+        && data.canonicalPlantKey in ['tomato', 'pumpkin', 'pothos', 'snake_plant', 'peace_lily']
+        && data.evidenceChunkIds is list
+        && data.evidenceChunkIds.size() >= 1
+        && data.evidenceChunkIds.size() <= 3
+        && validStringListItem(data.evidenceChunkIds, 0, 140)
+        && validStringListItem(data.evidenceChunkIds, 1, 140)
+        && validStringListItem(data.evidenceChunkIds, 2, 140)
+        && data.environmentSnapshot in ['indoor', 'outdoor']
+        && data.growingMediumSnapshot in ['pot', 'ground']
+        && data.createdAt is timestamp
+        && (!('suggestedCheckAt' in data)
+          || (data.suggestedCheckAt is timestamp && data.suggestedCheckAt > data.createdAt))
+        && data.source == 'deterministic_client_policy';
+    }
+
+    function validFertilizerAssessment(data) {
+      let required = [
+        'schemaVersion', 'policyVersion', 'datasetVersion',
+        'canonicalPlantKey', 'growthActivity', 'growthStageSnapshot',
+        'environmentSnapshot', 'outcome', 'title', 'explanation',
+        'cautions', 'evidenceChunkIds', 'createdAt', 'source'
+      ];
+      let allowed = required.concat([
+        'fertilizerCategory', 'lastFertilizedAt', 'suggestedReviewAt'
+      ]);
+      return data.keys().hasAll(required)
+        && data.keys().hasOnly(allowed)
+        && data.schemaVersion == 1
+        && data.policyVersion == 'deterministic-fertilizer-v1'
+        && data.datasetVersion == '2026-09-03-v2'
+        && data.source == 'deterministic_client_policy'
+        && data.canonicalPlantKey in [
+          'tomato', 'pumpkin', 'pothos', 'snake_plant', 'peace_lily'
+        ]
+        && data.growthActivity in [
+          'active_growth', 'slow_or_dormant', 'stressed_or_unhealthy',
+          'recently_repotted', 'unknown'
+        ]
+        && data.growthStageSnapshot in [
+          'seedling', 'vegetative', 'flowering', 'fruiting', 'mature'
+        ]
+        && data.environmentSnapshot in ['indoor', 'outdoor']
+        && data.outcome in [
+          'consider_fertilizing', 'wait', 'avoid_while_stressed',
+          'more_information_needed', 'insufficient_evidence'
+        ]
+        && validTrimmedString(data.title, 160)
+        && validTrimmedString(data.explanation, 1000)
+        && data.cautions is list
+        && data.cautions.size() >= 1
+        && data.cautions.size() <= 8
+        && validStringListItem(data.cautions, 0, 300)
+        && validStringListItem(data.cautions, 1, 300)
+        && validStringListItem(data.cautions, 2, 300)
+        && validStringListItem(data.cautions, 3, 300)
+        && validStringListItem(data.cautions, 4, 300)
+        && validStringListItem(data.cautions, 5, 300)
+        && validStringListItem(data.cautions, 6, 300)
+        && validStringListItem(data.cautions, 7, 300)
+        && data.evidenceChunkIds is list
+        && data.evidenceChunkIds.size() >= 1
+        && data.evidenceChunkIds.size() <= 4
+        && validStringListItem(data.evidenceChunkIds, 0, 140)
+        && validStringListItem(data.evidenceChunkIds, 1, 140)
+        && validStringListItem(data.evidenceChunkIds, 2, 140)
+        && validStringListItem(data.evidenceChunkIds, 3, 140)
+        && (!('fertilizerCategory' in data)
+          || data.fertilizerCategory in [
+            'balanced_houseplant', 'vegetable_or_tomato',
+            'flowering_or_fruiting', 'general_garden',
+            'compost_or_organic_amendment'
+          ])
+        && (data.outcome == 'consider_fertilizing'
+          ? 'fertilizerCategory' in data
+          : !('fertilizerCategory' in data))
+        && (!('lastFertilizedAt' in data)
+          || (data.lastFertilizedAt is timestamp
+            && data.lastFertilizedAt <= data.createdAt))
+        && (!('suggestedReviewAt' in data)
+          || (data.suggestedReviewAt is timestamp
+            && data.suggestedReviewAt > data.createdAt))
+        && data.createdAt is timestamp;
+    }
+
+    function validCareOptionalString(data, field, maxLength) {
+      return !(field in data) || validTrimmedString(data[field], maxLength);
+    }
+
+    function validCareLog(data) {
+      let common = [
+        'schemaVersion', 'type', 'occurredAt', 'createdAt', 'source'
+      ];
+      let watering = [
+        'schemaVersion', 'type', 'occurredAt', 'notes', 'createdAt', 'source',
+        'wateringMethod', 'amountMl'
+      ];
+      let fertilizing = [
+        'schemaVersion', 'type', 'occurredAt', 'notes', 'createdAt', 'source',
+        'productName', 'fertilizerForm', 'applicationNote'
+      ];
+      return data.keys().hasAll(common)
+        && data.schemaVersion == 1
+        && data.type in ['watering', 'fertilizing']
+        && data.source == 'user_entered'
+        && data.createdAt is timestamp
+        && data.occurredAt is timestamp
+        && data.occurredAt <= request.time + duration.value(5, 'm')
+        && data.occurredAt >= data.createdAt - duration.value(365, 'd')
+        && validCareOptionalString(data, 'notes', 500)
+        && (
+          data.type == 'watering'
+            ? data.keys().hasOnly(watering)
+              && data.keys().hasAll(['wateringMethod'])
+              && data.wateringMethod in ['top', 'bottom', 'soak', 'drip', 'other']
+              && (!('amountMl' in data)
+                || (data.amountMl is number
+                  && data.amountMl > 0
+                  && data.amountMl <= 100000))
+            : data.keys().hasOnly(fertilizing)
+              && data.keys().hasAll(['fertilizerForm'])
+              && data.fertilizerForm in [
+                'liquid', 'granular', 'slow_release', 'compost',
+                'organic_other', 'other'
+              ]
+              && validCareOptionalString(data, 'productName', 120)
+              && validCareOptionalString(data, 'applicationNote', 500)
+        );
+    }
+
+    function validReminder(data, uid, plantId) {
+      let required = [
+        'schemaVersion', 'type', 'dueAt', 'status', 'title', 'source',
+        'createdAt', 'updatedAt'
+      ];
+      let allowed = required.concat([
+        'note', 'soilCheckId', 'fertilizerAssessmentId'
+      ]);
+      return data.keys().hasAll(required)
+        && data.keys().hasOnly(allowed)
+        && data.schemaVersion == 1
+        && data.type in ['soil_check', 'fertilizer_review']
+        && data.status in ['active', 'completed', 'cancelled']
+        && data.source in [
+          'user_created', 'soil_check_suggestion',
+          'fertilizer_assessment_suggestion'
+        ]
+        && validTrimmedString(data.title, 120)
+        && validCareOptionalString(data, 'note', 500)
+        && data.dueAt is timestamp
+        && data.dueAt >= request.time - duration.value(365, 'd')
+        && data.dueAt <= request.time + duration.value(3650, 'd')
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && (
+          data.source == 'user_created'
+            ? !('soilCheckId' in data)
+              && !('fertilizerAssessmentId' in data)
+            : data.source == 'soil_check_suggestion'
+              ? data.type == 'soil_check'
+                && validDocumentId(data.soilCheckId)
+                && !('fertilizerAssessmentId' in data)
+                && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId)/soilChecks/$(data.soilCheckId))
+              : data.type == 'fertilizer_review'
+                && validDocumentId(data.fertilizerAssessmentId)
+                && !('soilCheckId' in data)
+                && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId)/fertilizerAssessments/$(data.fertilizerAssessmentId))
+        );
+    }
+
+    function validReminderUpdate(before, after) {
+      let changed = after.diff(before).affectedKeys();
+      return changed.hasOnly(['status', 'dueAt', 'updatedAt'])
+        && after.createdAt == before.createdAt
+        && after.updatedAt == request.time
+        && (
+          before.status == 'active'
+            ? (
+              after.status in ['completed', 'cancelled']
+                ? after.dueAt == before.dueAt
+                : after.status == 'active'
+                  && after.dueAt > request.time
+                  && after.dueAt != before.dueAt
+            )
+            : after.status == 'active'
+              && after.dueAt > request.time
+              && after.dueAt != before.dueAt
+        );
     }
 
     function validPlant(data) {
@@ -162,6 +526,74 @@ service cloud.firestore {
         allow update: if false;
         allow delete: if signedInAs(uid)
           && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+
+        match /diagnoses/{diagnosisId} {
+          allow read: if signedInAs(uid)
+            && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+            && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId)/observations/$(observationId));
+          allow create: if signedInAs(uid)
+            && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+            && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId)/observations/$(observationId))
+            && validDiagnosis(request.resource.data)
+            && request.resource.data.createdAt == request.time;
+          allow update: if false;
+          allow delete: if signedInAs(uid)
+            && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+            && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId)/observations/$(observationId));
+        }
+      }
+
+      match /soilChecks/{soilCheckId} {
+        allow read: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+        allow create: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+          && validSoilCheck(request.resource.data)
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+        allow delete: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+      }
+
+      match /careLogs/{careLogId} {
+        allow read: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+        allow create: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+          && validCareLog(request.resource.data)
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+        allow delete: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+      }
+
+      match /fertilizerAssessments/{assessmentId} {
+        allow read: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+        allow create: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+          && validFertilizerAssessment(request.resource.data)
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+        allow delete: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+      }
+
+      match /reminders/{reminderId} {
+        allow read: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+        allow create: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+          && validReminder(request.resource.data, uid, plantId)
+          && request.resource.data.status == 'active'
+          && request.resource.data.dueAt > request.time
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+        allow update: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+          && validReminder(request.resource.data, uid, plantId)
+          && validReminderUpdate(resource.data, request.resource.data);
+        allow delete: if false;
       }
     }
 
