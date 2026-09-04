@@ -71,6 +71,12 @@ void main() {
       ).type,
       PlantObservationFailureType.appCheckRejected,
     );
+    expect(
+      FirebaseAiPlantObservationService.mapFirebaseAiErrorMessage(
+        'HTTP 403 permission denied',
+      ).type,
+      PlantObservationFailureType.permissionDenied,
+    );
   });
 
   test('maps retired and unavailable models separately', () {

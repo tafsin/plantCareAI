@@ -3,7 +3,11 @@ import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowle
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 
-enum DiagnosisStatus { healthyAppearance, insufficientEvidence, possibleIssuesFound }
+enum DiagnosisStatus {
+  healthyAppearance,
+  insufficientEvidence,
+  possibleIssuesFound,
+}
 
 enum DiagnosisLikelihood { mostLikely, plausibleAlternative, lessLikely }
 

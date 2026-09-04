@@ -5,6 +5,7 @@ import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/core/constants/app_constants.dart';
 import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/core/utils/environment_config.dart';
 import 'package:plantcare_ai/features/plant_observation/data/models/plant_observation_codec.dart';
@@ -46,7 +47,7 @@ final class FirebaseAiPlantObservationService
     required this._environmentConfig,
   });
 
-  static const model = 'gemini-3.5-flash-lite';
+  static const model = AppConstants.firebaseAiModel;
   final bool Function() _isAuthenticated;
   final GenerateObservationResponse _generateResponse;
   final EnvironmentConfig _environmentConfig;
@@ -179,14 +180,22 @@ Return exactly the configured structured response with no prose or markdown.
         'Sign in to analyze a plant photo.',
       );
     }
-    if (normalized.contains('403') ||
-        normalized.contains('app check') ||
+    if (normalized.contains('app check') ||
         normalized.contains('appcheck') ||
         normalized.contains('attestation')) {
       return const PlantObservationFailure(
         PlantObservationFailureType.appCheckRejected,
         'Plant analysis is temporarily unavailable. Please update or restart '
         'the app and try again.',
+      );
+    }
+    if (normalized.contains('403') ||
+        normalized.contains('permission denied') ||
+        normalized.contains('permission-denied') ||
+        normalized.contains('forbidden')) {
+      return const PlantObservationFailure(
+        PlantObservationFailureType.permissionDenied,
+        'Your account is not authorized to use plant analysis right now.',
       );
     }
     if (normalized.contains('retired') ||

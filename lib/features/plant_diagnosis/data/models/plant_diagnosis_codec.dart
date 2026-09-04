@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
+import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
 
 abstract final class PlantDiagnosisCodec {
   static const maxIssues = 3;
-  static const maxActions = 5;
-  static const maxAvoidActions = 5;
+  static const maxActions = 3;
+  static const maxAvoidActions = 3;
   static const maxUncertainties = 5;
   static const maxSupportingObservations = 5;
   static const maxEvidenceIds = 5;
@@ -44,26 +44,19 @@ abstract final class PlantDiagnosisCodec {
     };
     final issues = _list(json, 'possibleIssues', maxIssues)
         .map(
-          (raw) => _decodeIssue(
-            _entry(raw, 'possibleIssues'),
-            allowedChunkIds,
-          ),
+          (raw) => _decodeIssue(_entry(raw, 'possibleIssues'), allowedChunkIds),
         )
         .toList(growable: false);
     final actions = _list(json, 'recommendedActions', maxActions)
         .map(
-          (raw) => _decodeAction(
-            _entry(raw, 'recommendedActions'),
-            allowedChunkIds,
-          ),
+          (raw) =>
+              _decodeAction(_entry(raw, 'recommendedActions'), allowedChunkIds),
         )
         .toList(growable: false);
     final avoid = _list(json, 'avoidActions', maxAvoidActions)
         .map(
-          (raw) => _decodeAvoidAction(
-            _entry(raw, 'avoidActions'),
-            allowedChunkIds,
-          ),
+          (raw) =>
+              _decodeAvoidAction(_entry(raw, 'avoidActions'), allowedChunkIds),
         )
         .toList(growable: false);
     final status = _enum(json, 'status', DiagnosisStatus.values);
@@ -96,11 +89,18 @@ abstract final class PlantDiagnosisCodec {
       ...actions.expand((item) => item.evidenceChunkIds),
       ...avoid.expand((item) => item.evidenceChunkIds),
     };
-    final sourceIds = usedChunkIds
-        .expand((id) => sourceIdsByChunk[id] ?? const <String>{})
-        .toSet()
-        .toList()
-      ..sort();
+    if (usedChunkIds.isEmpty) {
+      usedChunkIds.addAll(allowedChunkIds);
+    }
+    final sourceIds =
+        usedChunkIds
+            .expand((id) => sourceIdsByChunk[id] ?? const <String>{})
+            .toSet()
+            .toList()
+          ..sort();
+    if (sourceIds.length > 5) {
+      throw const FormatException('Too many source references.');
+    }
     return PlantDiagnosis(
       schemaVersion: version,
       status: status,
@@ -115,10 +115,7 @@ abstract final class PlantDiagnosisCodec {
         maxBodyTextLength,
       ),
       followUp: DiagnosisFollowUp(
-        anotherPhotoHelpful: _boolean(
-          followUpJson,
-          'anotherPhotoHelpful',
-        ),
+        anotherPhotoHelpful: _boolean(followUpJson, 'anotherPhotoHelpful'),
         instruction: _nullablePlainString(
           followUpJson,
           'instruction',
@@ -176,29 +173,20 @@ abstract final class PlantDiagnosisCodec {
     if (data['source'] != PlantDiagnosis.source) {
       throw const FormatException('Invalid diagnosis source.');
     }
-    final evidence = _stringList(
+    final evidence = _idList(
       data,
       'evidenceChunkIds',
-      15,
+      5,
       maxShortTextLength,
     ).toSet();
-    final sources = _stringList(
-      data,
-      'sourceIds',
-      15,
-      maxShortTextLength,
-    );
+    final sources = _idList(data, 'sourceIds', 5, maxShortTextLength);
     final retrieval = KnowledgeRetrievalResult(
       canonicalPlantKey: _plainString(
         data,
         'canonicalPlantKey',
         maxShortTextLength,
       ),
-      datasetVersion: _plainString(
-        data,
-        'datasetVersion',
-        maxShortTextLength,
-      ),
+      datasetVersion: _plainString(data, 'datasetVersion', maxShortTextLength),
       algorithmVersion: _plainString(
         data,
         'retrievalAlgorithmVersion',
@@ -321,8 +309,7 @@ abstract final class PlantDiagnosisCodec {
     'followUp': {
       'anotherPhotoHelpful': value.followUp.anotherPhotoHelpful,
       'instruction': value.followUp.instruction,
-      'professionalHelpRecommended':
-          value.followUp.professionalHelpRecommended,
+      'professionalHelpRecommended': value.followUp.professionalHelpRecommended,
       'professionalHelpReason': value.followUp.professionalHelpReason,
     },
   };
@@ -396,7 +383,7 @@ abstract final class PlantDiagnosisCodec {
     Map<String, dynamic> map,
     Set<String> allowed,
   ) {
-    final ids = _stringList(
+    final ids = _idList(
       map,
       'evidenceChunkIds',
       maxEvidenceIds,
@@ -461,6 +448,22 @@ abstract final class PlantDiagnosisCodec {
       .map((value) => _plainValue(value, key, maxStringLength))
       .toList(growable: false);
 
+  static List<String> _idList(
+    Map<String, dynamic> map,
+    String key,
+    int maxLength,
+    int maxStringLength,
+  ) => _list(map, key, maxLength)
+      .map((value) {
+        if (value is! String ||
+            value.length > maxStringLength ||
+            !RegExp(r'^[A-Za-z0-9][A-Za-z0-9_.:-]*$').hasMatch(value)) {
+          throw FormatException('$key must contain valid IDs.');
+        }
+        return value;
+      })
+      .toList(growable: false);
+
   static String _plainString(
     Map<String, dynamic> map,
     String key,
@@ -472,7 +475,8 @@ abstract final class PlantDiagnosisCodec {
         value.isEmpty ||
         value != value.trim() ||
         value.length > maxLength ||
-        RegExp(r'<[^>]*>|https?://|\[[^\]]+\]\([^\)]+\)|[`*_#]').hasMatch(value)) {
+        RegExp(r'<[^>]*>|https?://|\[[^\]]+\]\([^\)]+\)|[`*_#]')
+            .hasMatch(value)) {
       throw FormatException('$key must be bounded plain text.');
     }
     return value;

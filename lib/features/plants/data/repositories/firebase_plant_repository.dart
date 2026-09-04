@@ -2,7 +2,9 @@ import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/core/constants/app_constants.dart';
 import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plants/data/models/firestore_plant_model.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
@@ -31,6 +33,7 @@ final class FirebasePlantRepository implements PlantRepository {
     try {
       return _plants()
           .orderBy('updatedAt', descending: true)
+          .limit(AppConstants.maxPlantsPerUser)
           .snapshots(includeMetadataChanges: true)
           .map(
             (snapshot) =>
@@ -108,12 +111,14 @@ final class FirebasePlantRepository implements PlantRepository {
     StackTrace stackTrace,
   ) {
     if (error is PlantFailure) return error;
-    developer.log(
-      'Firestore failed during $operation',
-      name: 'plantcare_ai.plants',
-      error: error,
-      stackTrace: stackTrace,
-    );
+    if (kDebugMode) {
+      developer.log(
+        'Firestore failed during $operation',
+        name: 'plantcare_ai.plants',
+        error: error.runtimeType,
+        stackTrace: stackTrace,
+      );
+    }
     if (error is FirebaseException) {
       return switch (error.code) {
         'permission-denied' => const PlantFailure(

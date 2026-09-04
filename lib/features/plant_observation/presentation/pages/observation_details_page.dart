@@ -90,6 +90,27 @@ class ObservationDetailsPage extends StatelessWidget {
                     'Model: ${state.observation!.modelName ?? 'Unknown'} • Source: client-originated Firebase AI output',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      FilledButton.icon(
+                        onPressed: () => context.go(
+                          AppRoutes.diagnoseObservation(plantId, observationId),
+                        ),
+                        icon: const Icon(Icons.health_and_safety_outlined),
+                        label: const Text('Generate grounded diagnosis'),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () => context.go(
+                          AppRoutes.diagnosisHistory(plantId, observationId),
+                        ),
+                        icon: const Icon(Icons.history),
+                        label: const Text('Diagnosis history'),
+                      ),
+                    ],
+                  ),
                   if (enableKnowledgeRetrieval) ...[
                     const SizedBox(height: 24),
                     KnowledgeRetrievalPanel(

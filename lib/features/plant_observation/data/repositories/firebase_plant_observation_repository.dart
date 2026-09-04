@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/core/constants/app_constants.dart';
 import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plant_observation/data/models/plant_observation_codec.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
@@ -58,6 +59,7 @@ final class FirebasePlantObservationRepository
     try {
       return _observations(plantId)
           .orderBy('createdAt', descending: true)
+          .limit(AppConstants.maxHistoryItemsPerPlant)
           .snapshots(includeMetadataChanges: true)
           .map(
             (snapshot) => snapshot.docs
