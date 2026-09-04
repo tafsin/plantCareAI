@@ -1,0 +1,12 @@
+{
+  "name": "plantcare-ai-firebase-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:rules": "firebase emulators:exec --project demo-plantcare-ai --only firestore \"node --test test/firestore-rules.test.js\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "firebase": "^12.2.1"
+  }
+}

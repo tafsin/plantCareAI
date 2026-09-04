@@ -1,0 +1,42 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "plantcare-ai-dev-tasnimalam",
+          "appId": "1:399156723564:android:1f0d2556c1e7b945617d49",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "plantcare-ai-dev-tasnimalam",
+          "appId": "1:399156723564:ios:3f6ce24072d51be7617d49",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "plantcare-ai-dev-tasnimalam",
+          "configurations": {
+            "android": "1:399156723564:android:1f0d2556c1e7b945617d49",
+            "ios": "1:399156723564:ios:3f6ce24072d51be7617d49",
+            "web": "1:399156723564:web:133652eda71c3de3617d49"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    }
+  }
+}

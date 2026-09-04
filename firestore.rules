@@ -1,0 +1,182 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedInAs(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function validTrimmedString(value, maxLength) {
+      return value is string
+        && value.size() >= 1
+        && value.size() <= maxLength
+        && value.matches('^\\S(?:[\\s\\S]*\\S)?$');
+    }
+
+    function validOptionalString(data, field, maxLength) {
+      return !(field in data)
+        || data[field] == null
+        || validTrimmedString(data[field], maxLength);
+    }
+
+    function validNullableTrimmedString(value, maxLength) {
+      return value == null || validTrimmedString(value, maxLength);
+    }
+
+    function validBoundedString(value, maxLength) {
+      return value is string && value.size() <= maxLength;
+    }
+
+    function validConfidence(value) {
+      return value == null
+        || (value is number && value >= 0 && value <= 1);
+    }
+
+    function validObservationItem(items, index) {
+      return items.size() <= index || (
+        items[index] is map
+        && items[index].keys().hasAll(['type', 'description', 'confidence'])
+        && items[index].keys().hasOnly(['type', 'description', 'confidence'])
+        && items[index].type in [
+          'yellowing', 'browning', 'spots', 'lesions', 'curling',
+          'wilting', 'holes', 'residue', 'webbing', 'insects',
+          'moldLikeGrowth', 'physicalDamage', 'discoloration', 'other'
+        ]
+        && validTrimmedString(items[index].description, 500)
+        && validConfidence(items[index].confidence)
+      );
+    }
+
+    function validObservation(data) {
+      return data.keys().hasAll([
+          'schemaVersion', 'plantVisible', 'imageQualityUsable',
+          'imageQualityIssues', 'possibleCommonName',
+          'possibleScientificName', 'identificationConfidence',
+          'affectedParts', 'observations', 'distribution', 'severity',
+          'followUpPhotoHelpful', 'followUpInstruction', 'modelName',
+          'createdAt', 'source'
+        ])
+        && data.keys().hasOnly([
+          'schemaVersion', 'plantVisible', 'imageQualityUsable',
+          'imageQualityIssues', 'possibleCommonName',
+          'possibleScientificName', 'identificationConfidence',
+          'affectedParts', 'observations', 'distribution', 'severity',
+          'followUpPhotoHelpful', 'followUpInstruction', 'modelName',
+          'createdAt', 'source'
+        ])
+        && data.schemaVersion == 1
+        && data.plantVisible is bool
+        && data.imageQualityUsable is bool
+        && data.imageQualityIssues is list
+        && data.imageQualityIssues.size() <= 8
+        && data.imageQualityIssues.hasOnly([
+          'blurred', 'dark', 'overexposed', 'tooDistant', 'obstructed',
+          'multiplePlants', 'lowResolution', 'other'
+        ])
+        && validNullableTrimmedString(data.possibleCommonName, 80)
+        && validNullableTrimmedString(data.possibleScientificName, 120)
+        && validConfidence(data.identificationConfidence)
+        && data.affectedParts is list
+        && data.affectedParts.size() <= 8
+        && data.affectedParts.hasOnly([
+          'leaf', 'stem', 'flower', 'fruit', 'root', 'wholePlant', 'unknown'
+        ])
+        && data.observations is list
+        && data.observations.size() <= 4
+        && validObservationItem(data.observations, 0)
+        && validObservationItem(data.observations, 1)
+        && validObservationItem(data.observations, 2)
+        && validObservationItem(data.observations, 3)
+        && validBoundedString(data.distribution, 500)
+        && data.severity in ['none', 'mild', 'moderate', 'severe', 'unclear']
+        && data.followUpPhotoHelpful is bool
+        && validNullableTrimmedString(data.followUpInstruction, 500)
+        && validTrimmedString(data.modelName, 80)
+        && data.createdAt is timestamp
+        && data.source == 'firebase_ai_client';
+    }
+
+    function validPlant(data) {
+      return data.keys().hasAll([
+          'commonName',
+          'environment',
+          'growingMedium',
+          'sunlight',
+          'growthStage',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'commonName',
+          'scientificName',
+          'environment',
+          'growingMedium',
+          'potSizeLiters',
+          'sunlight',
+          'growthStage',
+          'notes',
+          'createdAt',
+          'updatedAt'
+        ])
+        && validTrimmedString(data.commonName, 80)
+        && validOptionalString(data, 'scientificName', 120)
+        && validOptionalString(data, 'notes', 1000)
+        && data.environment in ['indoor', 'outdoor']
+        && data.growingMedium in ['pot', 'ground']
+        && data.sunlight in ['low', 'partial', 'full']
+        && data.growthStage in [
+          'seedling', 'vegetative', 'flowering', 'fruiting', 'mature'
+        ]
+        && (
+          data.growingMedium == 'ground'
+            ? (!('potSizeLiters' in data) || data.potSizeLiters == null)
+            : (!('potSizeLiters' in data)
+              || data.potSizeLiters == null
+              || (data.potSizeLiters is number
+                && data.potSizeLiters > 0
+                && data.potSizeLiters <= 10000))
+        )
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    match /users/{uid}/plants/{plantId} {
+      allow read: if signedInAs(uid);
+      allow create: if signedInAs(uid)
+        && validPlant(request.resource.data)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if signedInAs(uid)
+        && validPlant(request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if signedInAs(uid);
+
+      match /observations/{observationId} {
+        allow read: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+        allow create: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
+          && validObservation(request.resource.data)
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+        allow delete: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
+      }
+    }
+
+    match /knowledgeChunks/{chunkId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if false;
+    }
+
+    match /knowledgeSources/{sourceId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
