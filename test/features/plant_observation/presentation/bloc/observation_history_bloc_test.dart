@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/observation_history_bloc.dart';
 
 import '../../../../helpers/fake_plant_observation_dependencies.dart';

@@ -8,6 +8,7 @@ import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
 import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_ai/features/soil_check/domain/errors/soil_check_failure.dart';
 import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart';
 import 'package:plantcare_ai/features/soil_check/domain/services/soil_evidence_validator.dart';
 import 'package:plantcare_ai/features/soil_check/domain/services/watering_policy.dart';

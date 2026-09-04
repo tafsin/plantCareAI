@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/app/router/app_router.dart';
 import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
 import 'package:plantcare_ai/features/care_history/domain/services/latest_care_logs.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_history_bloc.dart';
 import 'package:plantcare_ai/features/care_history/presentation/widgets/care_log_labels.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_history_bloc.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plants_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/widgets/plant_labels.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc.dart';
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_history_bloc.dart';
+import 'package:plantcare_ai/features/soil_check/presentation/widgets/soil_check_labels.dart';
 
 class PlantDetailsPage extends StatelessWidget {
   const PlantDetailsPage({

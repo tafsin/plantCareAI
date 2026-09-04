@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart';
 import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart';
@@ -9,12 +9,12 @@ import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc
 
 @lazySingleton
 final class ReminderBlocFactory {
-  const ReminderBlocFactory(this._repository, this._scheduler, this._auth);
+  const ReminderBlocFactory(this._repository, this._scheduler, this._session);
   final ReminderRepository _repository;
   final NotificationScheduler _scheduler;
-  final FirebaseAuth _auth;
+  final AuthenticationSession _session;
   String get _uid =>
-      _auth.currentUser?.uid ?? (throw StateError('Sign in first.'));
+      _session.currentUser?.uid ?? (throw StateError('Sign in first.'));
   RemindersBloc createListBloc() => RemindersBloc(_repository);
   ReminderFormBloc createFormBloc({
     required String plantId,

@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plant_observation/data/services/local_plant_image_processor.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
+import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 
 void main() {
   const processor = LocalPlantImageProcessor();

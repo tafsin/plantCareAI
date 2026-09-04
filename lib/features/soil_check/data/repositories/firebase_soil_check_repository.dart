@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/soil_check/data/models/soil_check_codec.dart';
 import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_ai/features/soil_check/domain/errors/soil_check_failure.dart';
 import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart';
 
 @LazySingleton(as: SoilCheckRepository)
@@ -55,7 +55,7 @@ final class FirebaseSoilCheckRepository implements SoilCheckRepository {
     try {
       return _checks(plantId)
           .orderBy('createdAt', descending: true)
-          .limit(AppConstants.maxHistoryItemsPerPlant)
+          .limit(DataLimits.maxHistoryItemsPerPlant)
           .snapshots(includeMetadataChanges: true)
           .map(
             (value) => value.docs

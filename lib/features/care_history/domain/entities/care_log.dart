@@ -21,14 +21,6 @@ enum FertilizerForm {
 extension WateringMethodValue on WateringMethod {
   String get value => name;
 
-  String get label => switch (this) {
-    WateringMethod.top => 'Top watering',
-    WateringMethod.bottom => 'Bottom watering',
-    WateringMethod.soak => 'Soak',
-    WateringMethod.drip => 'Drip',
-    WateringMethod.other => 'Other',
-  };
-
   static WateringMethod parse(String value) => switch (value) {
     'top' => WateringMethod.top,
     'bottom' => WateringMethod.bottom,
@@ -44,15 +36,6 @@ extension FertilizerFormValue on FertilizerForm {
     FertilizerForm.slowRelease => 'slow_release',
     FertilizerForm.organicOther => 'organic_other',
     _ => name,
-  };
-
-  String get label => switch (this) {
-    FertilizerForm.liquid => 'Liquid',
-    FertilizerForm.granular => 'Granular',
-    FertilizerForm.slowRelease => 'Slow release',
-    FertilizerForm.compost => 'Compost',
-    FertilizerForm.organicOther => 'Other organic',
-    FertilizerForm.other => 'Other',
   };
 
   static FertilizerForm parse(String value) => switch (value) {

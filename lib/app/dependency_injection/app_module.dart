@@ -3,12 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/app/application/reminder_lifecycle_service.dart';
 import 'package:plantcare_ai/app/bootstrap/app_initializer.dart';
 import 'package:plantcare_ai/app/bootstrap/firebase_app_check_activator.dart';
 import 'package:plantcare_ai/app/bootstrap/firebase_app_initializer.dart';
 import 'package:plantcare_ai/app/bootstrap/firebase_auth_emulator.dart';
+import 'package:plantcare_ai/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
 import 'package:plantcare_ai/core/utils/environment_config.dart';
+import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/authentication_bloc_factory.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_bloc_factory.dart';
@@ -17,7 +21,6 @@ import 'package:plantcare_ai/features/knowledge_retrieval/presentation/bloc/know
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc_factory.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc_factory.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_bloc_factory.dart';
-import 'package:plantcare_ai/features/reminders/data/services/reminder_lifecycle_service.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_bloc_factory.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_bloc_factory.dart';
 import 'package:plantcare_ai/firebase_options.dart';
@@ -54,6 +57,11 @@ abstract class AppModule {
 
   @lazySingleton
   FirebaseFirestore get firebaseFirestore => FirebaseFirestore.instance;
+
+  @lazySingleton
+  AuthenticationSession authenticationSession(
+    AuthenticationRepository repository,
+  ) => repository;
 
   @lazySingleton
   EnvironmentConfig get environmentConfig =>

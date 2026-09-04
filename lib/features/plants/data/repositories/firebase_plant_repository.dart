@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/plants/data/models/firestore_plant_model.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_ai/features/plants/domain/errors/plant_failure.dart';
 import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
 
 @LazySingleton(as: PlantRepository)
@@ -33,7 +33,7 @@ final class FirebasePlantRepository implements PlantRepository {
     try {
       return _plants()
           .orderBy('updatedAt', descending: true)
-          .limit(AppConstants.maxPlantsPerUser)
+          .limit(DataLimits.maxPlantsPerUser)
           .snapshots(includeMetadataChanges: true)
           .map(
             (snapshot) =>

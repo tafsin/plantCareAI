@@ -6,6 +6,7 @@ import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/kn
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/knowledge_ranker.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
+import 'package:plantcare_ai/features/plant_diagnosis/domain/errors/plant_diagnosis_failure.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/services/plant_diagnosis_service.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';

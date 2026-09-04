@@ -176,11 +176,11 @@ final class DeterministicWateringEngine {
     WateringOutcome outcome,
   ) => switch (outcome) {
     WateringOutcome.waterNow =>
-      '${moisture.label} soil is at or below the threshold for this plant’s ${_preferenceLabel(policy.preference)} preference. Water thoroughly without using a fixed volume.',
+      '${_moistureLabel(moisture)} soil is at or below the threshold for this plant’s ${_preferenceLabel(policy.preference)} preference. Water thoroughly without using a fixed volume.',
     WateringOutcome.wait =>
-      '${moisture.label} soil is above this plant’s watering threshold, so adding water now is not recommended.',
+      '${_moistureLabel(moisture)} soil is above this plant’s watering threshold, so adding water now is not recommended.',
     WateringOutcome.checkAgain =>
-      '${moisture.label} soil is near the decision boundary for this plant’s ${_preferenceLabel(policy.preference)} preference. Recheck below the surface before deciding.',
+      '${_moistureLabel(moisture)} soil is near the decision boundary for this plant’s ${_preferenceLabel(policy.preference)} preference. Recheck below the surface before deciding.',
     WateringOutcome.inconsistentInput => 'The inputs need confirmation.',
     WateringOutcome.unsupportedPlant => 'No supported policy is available.',
   };
@@ -189,6 +189,14 @@ final class DeterministicWateringEngine {
     MoisturePreference.prefersConsistentlyMoist => 'consistently moist soil',
     MoisturePreference.allowSurfaceToDry => 'surface drying',
     MoisturePreference.allowMoreCompleteDrying => 'more complete drying',
+  };
+
+  String _moistureLabel(SoilMoistureLevel value) => switch (value) {
+    SoilMoistureLevel.veryDry => 'Very dry',
+    SoilMoistureLevel.dry => 'Dry',
+    SoilMoistureLevel.slightlyMoist => 'Slightly moist',
+    SoilMoistureLevel.moist => 'Moist',
+    SoilMoistureLevel.wet => 'Wet',
   };
 
   void _validate() {

@@ -5,6 +5,7 @@ import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart
 import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
 import 'package:plantcare_ai/features/care_history/domain/services/latest_care_logs.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
+import 'package:plantcare_ai/features/fertilizer_assessment/domain/errors/fertilizer_assessment_failure.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/repositories/fertilizer_assessment_repository.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/services/fertilizer_evidence_validator.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/services/fertilizer_policy.dart';

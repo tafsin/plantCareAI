@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/app/router/app_router.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_details_bloc.dart';
+import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_assessment_labels.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_guidance_view.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 
 class FertilizerAssessmentDetailsPage extends StatelessWidget {

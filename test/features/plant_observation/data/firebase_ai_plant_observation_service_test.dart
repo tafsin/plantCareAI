@@ -2,11 +2,11 @@ import 'dart:typed_data';
 
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/core/utils/environment_config.dart';
 import 'package:plantcare_ai/features/plant_observation/data/services/firebase_ai_plant_observation_service.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
+import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 
 void main() {
   test('uses the explicit stable Gemini 3.5 Flash-Lite model', () {

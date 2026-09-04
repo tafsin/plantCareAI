@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/reminders/data/models/reminder_codec.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart';
@@ -36,7 +36,7 @@ final class FirebaseReminderRepository implements ReminderRepository {
     controller = StreamController<List<Reminder>>(
       onListen: () {
         plantsSubscription = _plants()
-            .limit(AppConstants.maxPlantsPerUser)
+            .limit(DataLimits.maxPlantsPerUser)
             .snapshots()
             .listen((snapshot) {
               final ids = snapshot.docs.map((doc) => doc.id).toSet();
@@ -72,7 +72,7 @@ final class FirebaseReminderRepository implements ReminderRepository {
   Stream<List<Reminder>> watchForPlant(String plantId) =>
       _items(plantId)
           .orderBy('dueAt')
-          .limit(AppConstants.maxRemindersPerPlant)
+          .limit(DataLimits.maxRemindersPerPlant)
           .snapshots()
           .map(
             (snapshot) => snapshot.docs

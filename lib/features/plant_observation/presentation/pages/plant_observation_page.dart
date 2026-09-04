@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/app/router/app_router.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc.dart';

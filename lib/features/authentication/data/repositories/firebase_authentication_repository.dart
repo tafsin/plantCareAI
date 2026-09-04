@@ -2,8 +2,8 @@ import 'dart:developer' as developer;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
+import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
 import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
 
 @LazySingleton(as: AuthenticationRepository)
@@ -19,6 +19,9 @@ final class FirebaseAuthenticationRepository
 
   @override
   AppUser? get currentUser => _toAppUser(_firebaseAuth.currentUser);
+
+  @override
+  bool get isSignedIn => currentUser != null;
 
   @override
   Future<AppUser> register({

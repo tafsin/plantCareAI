@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/features/plant_diagnosis/domain/errors/plant_diagnosis_failure.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/diagnosis_details_bloc.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/diagnosis_history_bloc.dart';
 

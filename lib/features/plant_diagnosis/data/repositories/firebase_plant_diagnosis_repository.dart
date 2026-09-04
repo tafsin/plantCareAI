@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/data/models/plant_diagnosis_codec.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
+import 'package:plantcare_ai/features/plant_diagnosis/domain/errors/plant_diagnosis_failure.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart';
 
 @LazySingleton(as: PlantDiagnosisRepository)
@@ -70,7 +70,7 @@ final class FirebasePlantDiagnosisRepository
     try {
       return _diagnoses(plantId, observationId)
           .orderBy('createdAt', descending: true)
-          .limit(AppConstants.maxHistoryItemsPerPlant)
+          .limit(DataLimits.maxHistoryItemsPerPlant)
           .snapshots(includeMetadataChanges: true)
           .map(
             (snapshot) => snapshot.docs

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/app/router/app_router.dart';
 import 'package:plantcare_ai/core/constants/app_constants.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({required this.location, required this.child, super.key});

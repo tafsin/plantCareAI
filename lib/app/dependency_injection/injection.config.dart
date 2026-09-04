@@ -15,6 +15,8 @@ import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:go_router/go_router.dart' as _i583;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:plantcare_ai/app/application/reminder_lifecycle_service.dart'
+    as _i200;
 import 'package:plantcare_ai/app/bootstrap/app_initializer.dart' as _i964;
 import 'package:plantcare_ai/app/bootstrap/firebase_app_check_activator.dart'
     as _i342;
@@ -26,6 +28,8 @@ import 'package:plantcare_ai/features/authentication/data/repositories/firebase_
     as _i406;
 import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart'
     as _i154;
+import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart'
+    as _i402;
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart'
     as _i2;
 import 'package:plantcare_ai/features/authentication/presentation/bloc/authentication_bloc_factory.dart'
@@ -86,8 +90,6 @@ import 'package:plantcare_ai/features/reminders/data/repositories/firebase_remin
     as _i420;
 import 'package:plantcare_ai/features/reminders/data/services/local_notification_scheduler.dart'
     as _i176;
-import 'package:plantcare_ai/features/reminders/data/services/reminder_lifecycle_service.dart'
-    as _i170;
 import 'package:plantcare_ai/features/reminders/data/services/shared_preferences_notification_id_store.dart'
     as _i985;
 import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart'
@@ -175,6 +177,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i154.AuthenticationRepository>(),
       ),
     );
+    gh.lazySingleton<_i402.AuthenticationSession>(
+      () =>
+          appModule.authenticationSession(gh<_i154.AuthenticationRepository>()),
+    );
     gh.lazySingleton<_i687.PlantDiagnosisRepository>(
       () => _i976.FirebasePlantDiagnosisRepository(
         gh<_i974.FirebaseFirestore>(),
@@ -219,6 +225,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i456.NotificationScheduler>(
       () => _i176.LocalNotificationScheduler(gh<_i456.NotificationIdStore>()),
     );
+    gh.lazySingleton<_i208.ReminderBlocFactory>(
+      () => _i208.ReminderBlocFactory(
+        gh<_i142.ReminderRepository>(),
+        gh<_i456.NotificationScheduler>(),
+        gh<_i402.AuthenticationSession>(),
+      ),
+    );
     gh.lazySingleton<_i1029.KnowledgeRetrievalBlocFactory>(
       () =>
           _i1029.KnowledgeRetrievalBlocFactory(gh<_i819.KnowledgeRepository>()),
@@ -229,6 +242,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i342.FirebaseAppCheckActivator>(),
       ),
     );
+    gh.lazySingleton<_i200.ReminderLifecycleService>(
+      () => _i200.ReminderLifecycleService(
+        gh<_i402.AuthenticationSession>(),
+        gh<_i142.ReminderRepository>(),
+        gh<_i879.PlantRepository>(),
+        gh<_i456.NotificationScheduler>(),
+      ),
+    );
     gh.lazySingleton<_i970.FertilizerAssessmentBlocFactory>(
       () => _i970.FertilizerAssessmentBlocFactory(
         gh<_i879.PlantRepository>(),
@@ -237,26 +258,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i819.KnowledgeRepository>(),
       ),
     );
-    gh.lazySingleton<_i170.ReminderLifecycleService>(
-      () => _i170.ReminderLifecycleService(
-        gh<_i59.FirebaseAuth>(),
-        gh<_i142.ReminderRepository>(),
-        gh<_i879.PlantRepository>(),
-        gh<_i456.NotificationScheduler>(),
-      ),
-    );
     gh.lazySingleton<_i1.PlantDiagnosisBlocFactory>(
       () => _i1.PlantDiagnosisBlocFactory(
         gh<_i819.KnowledgeRepository>(),
         gh<_i687.PlantDiagnosisRepository>(),
         gh<_i376.PlantDiagnosisService>(),
-      ),
-    );
-    gh.lazySingleton<_i208.ReminderBlocFactory>(
-      () => _i208.ReminderBlocFactory(
-        gh<_i142.ReminderRepository>(),
-        gh<_i456.NotificationScheduler>(),
-        gh<_i59.FirebaseAuth>(),
       ),
     );
     gh.lazySingleton<_i727.SoilCheckBlocFactory>(

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
+import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_processor.dart';
 
 @LazySingleton(as: PlantImageProcessor)

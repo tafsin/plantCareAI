@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 
 void main() {

@@ -21,10 +21,6 @@ extension ReminderTypeValue on ReminderType {
     ReminderType.soilCheck => 'soil_check',
     ReminderType.fertilizerReview => 'fertilizer_review',
   };
-  String get label => switch (this) {
-    ReminderType.soilCheck => 'Check soil moisture',
-    ReminderType.fertilizerReview => 'Review fertilizer guidance',
-  };
   static ReminderType parse(String value) => switch (value) {
     'soil_check' => ReminderType.soilCheck,
     'fertilizer_review' => ReminderType.fertilizerReview,

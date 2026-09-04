@@ -10,6 +10,9 @@ final class FakeAuthenticationRepository implements AuthenticationRepository {
   @override
   AppUser? currentUser;
 
+  @override
+  bool get isSignedIn => currentUser != null;
+
   AppUser signInUser = const AppUser(uid: 'signed-in', email: 'user@test.com');
   AppUser registeredUser = const AppUser(
     uid: 'registered',

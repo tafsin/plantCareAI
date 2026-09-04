@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
+import 'package:plantcare_ai/features/knowledge_retrieval/domain/errors/knowledge_retrieval_failure.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/knowledge_ranker.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/presentation/bloc/knowledge_retrieval_bloc.dart';

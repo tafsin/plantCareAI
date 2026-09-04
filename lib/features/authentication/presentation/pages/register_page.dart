@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/app/router/app_router.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/register_bloc.dart';
 import 'package:plantcare_ai/features/authentication/presentation/validation/auth_input_validator.dart';
 import 'package:plantcare_ai/features/authentication/presentation/widgets/auth_page_frame.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({this.redirect, super.key});

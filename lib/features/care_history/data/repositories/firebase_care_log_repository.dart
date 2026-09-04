@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/care_history/data/models/care_log_codec.dart';
 import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
+import 'package:plantcare_ai/features/care_history/domain/errors/care_log_failure.dart';
 import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
 
 @LazySingleton(as: CareLogRepository)
@@ -55,7 +55,7 @@ final class FirebaseCareLogRepository implements CareLogRepository {
       await for (final snapshot
           in _logs(plantId)
               .orderBy('occurredAt', descending: true)
-              .limit(AppConstants.maxHistoryItemsPerPlant)
+              .limit(DataLimits.maxHistoryItemsPerPlant)
               .snapshots(includeMetadataChanges: true)) {
         final logs = <CareLog>[];
         for (final document in snapshot.docs) {

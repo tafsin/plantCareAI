@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
+import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
 
 import '../../../../helpers/fake_authentication_repository.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/app/router/app_router.dart';
+import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plants_bloc.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc.dart';

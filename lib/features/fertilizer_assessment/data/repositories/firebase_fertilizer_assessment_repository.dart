@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/data/models/fertilizer_assessment_codec.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
+import 'package:plantcare_ai/features/fertilizer_assessment/domain/errors/fertilizer_assessment_failure.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/repositories/fertilizer_assessment_repository.dart';
 
 @LazySingleton(as: FertilizerAssessmentRepository)
@@ -56,7 +56,7 @@ final class FirebaseFertilizerAssessmentRepository
     try {
       return _assessments(plantId)
           .orderBy('createdAt', descending: true)
-          .limit(AppConstants.maxHistoryItemsPerPlant)
+          .limit(DataLimits.maxHistoryItemsPerPlant)
           .snapshots(includeMetadataChanges: true)
           .map(
             (snapshot) => snapshot.docs

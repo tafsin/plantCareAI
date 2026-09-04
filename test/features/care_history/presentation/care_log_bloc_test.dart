@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
+import 'package:plantcare_ai/features/care_history/domain/errors/care_log_failure.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_history_bloc.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_details_bloc.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_form_bloc.dart';

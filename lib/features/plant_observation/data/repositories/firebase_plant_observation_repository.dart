@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/plant_observation/data/models/plant_observation_codec.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
+import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/repositories/plant_observation_repository.dart';
 
 @LazySingleton(as: PlantObservationRepository)
@@ -59,7 +59,7 @@ final class FirebasePlantObservationRepository
     try {
       return _observations(plantId)
           .orderBy('createdAt', descending: true)
-          .limit(AppConstants.maxHistoryItemsPerPlant)
+          .limit(DataLimits.maxHistoryItemsPerPlant)
           .snapshots(includeMetadataChanges: true)
           .map(
             (snapshot) => snapshot.docs

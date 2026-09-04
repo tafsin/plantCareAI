@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
+import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
@@ -12,16 +13,17 @@ import 'package:plantcare_ai/features/reminders/domain/services/notification_sch
 @lazySingleton
 final class ReminderLifecycleService with WidgetsBindingObserver {
   ReminderLifecycleService(
-    this._auth,
+    this._session,
     this._reminders,
     this._plants,
     this._scheduler,
   );
-  final FirebaseAuth _auth;
+
+  final AuthenticationSession _session;
   final ReminderRepository _reminders;
   final PlantRepository _plants;
   final NotificationScheduler _scheduler;
-  StreamSubscription<User?>? _authSubscription;
+  StreamSubscription<AppUser?>? _authSubscription;
   StreamSubscription<List<Reminder>>? _reminderSubscription;
   StreamSubscription<List<Plant>>? _plantSubscription;
   String? _userId;
@@ -32,11 +34,11 @@ final class ReminderLifecycleService with WidgetsBindingObserver {
     if (_authSubscription != null) return;
     WidgetsBinding.instance.addObserver(this);
     await _scheduler.initialize();
-    _authSubscription = _auth.userChanges().listen(_userChanged);
-    _userChanged(_auth.currentUser);
+    _authSubscription = _session.authStateChanges.listen(_userChanged);
+    _userChanged(_session.currentUser);
   }
 
-  void _userChanged(User? user) {
+  void _userChanged(AppUser? user) {
     final previous = _userId;
     if (previous == user?.uid && _reminderSubscription != null) return;
     _reminderSubscription?.cancel();

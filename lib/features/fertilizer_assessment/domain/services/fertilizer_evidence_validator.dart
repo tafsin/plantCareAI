@@ -1,5 +1,5 @@
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
+import 'package:plantcare_ai/features/fertilizer_assessment/domain/errors/fertilizer_assessment_failure.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
 

@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_ai/features/plants/domain/errors/plant_failure.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_form_bloc.dart';
 
 import '../../../../helpers/fake_plant_repository.dart';

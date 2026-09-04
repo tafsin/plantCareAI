@@ -1,10 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_ai/features/soil_check/domain/errors/soil_check_failure.dart';
 import 'package:plantcare_ai/features/soil_check/domain/services/soil_evidence_validator.dart';
 import 'package:plantcare_ai/features/soil_check/domain/services/watering_policy.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_bloc.dart';

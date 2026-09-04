@@ -5,6 +5,7 @@ import 'package:plantcare_ai/features/reminders/data/services/local_notification
 import 'package:plantcare_ai/features/reminders/data/services/shared_preferences_notification_id_store.dart';
 import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart';
+import 'package:plantcare_ai/features/reminders/presentation/widgets/reminder_labels.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
