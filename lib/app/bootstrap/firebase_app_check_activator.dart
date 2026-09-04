@@ -1,6 +1,6 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/foundation.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
+import 'package:plantcare_shared/environment.dart';
 
 enum AppCheckActivationMode { disabled, debug, production }
 

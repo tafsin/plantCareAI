@@ -10,7 +10,6 @@ import 'package:plantcare_ai/app/bootstrap/firebase_app_initializer.dart';
 import 'package:plantcare_ai/app/bootstrap/firebase_auth_emulator.dart';
 import 'package:plantcare_ai/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
 import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
@@ -24,6 +23,7 @@ import 'package:plantcare_ai/features/plants/presentation/bloc/plant_bloc_factor
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_bloc_factory.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_bloc_factory.dart';
 import 'package:plantcare_ai/firebase_options.dart';
+import 'package:plantcare_shared/environment.dart';
 
 @module
 abstract class AppModule {

@@ -6,12 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/firebase_ai_config.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
 import 'package:plantcare_ai/features/plant_observation/data/models/plant_observation_codec.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/services/plant_observation_service.dart';
+import 'package:plantcare_shared/environment.dart';
 
 typedef GenerateObservationResponse = Future<String?> Function(
   SelectedPlantImage image,

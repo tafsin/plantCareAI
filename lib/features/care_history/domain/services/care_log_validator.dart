@@ -1,5 +1,5 @@
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
+import 'package:plantcare_shared/errors.dart';
 
 abstract final class CareLogLimits {
   static const notes = 500;

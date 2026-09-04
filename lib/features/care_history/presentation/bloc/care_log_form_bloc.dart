@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
 import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
 import 'package:plantcare_ai/features/care_history/domain/services/care_log_validator.dart';
+import 'package:plantcare_shared/errors.dart';
 
 sealed class CareLogFormEvent extends Equatable {
   const CareLogFormEvent();

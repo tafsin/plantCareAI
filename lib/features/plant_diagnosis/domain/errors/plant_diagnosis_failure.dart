@@ -1,4 +1,4 @@
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_shared/errors.dart';
 
 enum PlantDiagnosisFailureType {
   unauthenticated,

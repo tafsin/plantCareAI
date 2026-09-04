@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:plantcare_ai/features/authentication/presentation/validation/auth_input_validator.dart';
+import 'package:plantcare_shared/errors.dart';
 
 const passwordResetSuccessMessage =
     'If an account exists for that email, a reset link has been sent.';

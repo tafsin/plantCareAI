@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
 import 'package:plantcare_ai/features/care_history/domain/errors/care_log_failure.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/domain/errors/fertilizer_assessment_failure.dart';
@@ -8,6 +7,7 @@ import 'package:plantcare_ai/features/plant_diagnosis/domain/errors/plant_diagno
 import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 import 'package:plantcare_ai/features/plants/domain/errors/plant_failure.dart';
 import 'package:plantcare_ai/features/soil_check/domain/errors/soil_check_failure.dart';
+import 'package:plantcare_shared/errors.dart';
 
 void main() {
   test('generic application errors retain value equality', () {

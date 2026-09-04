@@ -6,12 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/firebase_ai_config.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/data/models/plant_diagnosis_codec.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/errors/plant_diagnosis_failure.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/domain/services/plant_diagnosis_service.dart';
+import 'package:plantcare_shared/environment.dart';
 
 typedef GenerateDiagnosisResponse = Future<String?> Function(String prompt);
 

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/app/bootstrap/firebase_app_check_activator.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
+import 'package:plantcare_shared/environment.dart';
 
 void main() {
   test('debug provider is used only when explicitly enabled', () async {

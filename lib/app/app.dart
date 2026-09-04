@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/app/theme/app_theme.dart';
 import 'package:plantcare_ai/app/theme/theme_bloc.dart';
 import 'package:plantcare_ai/core/constants/app_constants.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
 import 'package:plantcare_ai/features/authentication/presentation/pages/auth_loading_page.dart';
+import 'package:plantcare_shared/environment.dart';
 
 class PlantCareApp extends StatelessWidget {
   const PlantCareApp({

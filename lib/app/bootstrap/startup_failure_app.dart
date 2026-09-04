@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plantcare_ai/app/theme/app_theme.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/core/widgets/app_error_view.dart';
+import 'package:plantcare_shared/errors.dart';
 
 typedef RetryStartup = Future<bool> Function();
 

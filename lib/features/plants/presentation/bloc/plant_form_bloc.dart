@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
 import 'package:plantcare_ai/features/plants/domain/validation/plant_validator.dart';
+import 'package:plantcare_shared/errors.dart';
 
 sealed class PlantFormEvent extends Equatable {
   const PlantFormEvent();

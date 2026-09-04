@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:plantcare_ai/core/utils/environment_config.dart';
+import 'package:plantcare_shared/environment.dart';
 
 final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
   const CompileTimeEnvironmentConfig();

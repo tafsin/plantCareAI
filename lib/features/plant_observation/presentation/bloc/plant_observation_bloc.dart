@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/repositories/plant_observation_repository.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_picker.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_processor.dart';
 import 'package:plantcare_ai/features/plant_observation/domain/services/plant_observation_service.dart';
+import 'package:plantcare_shared/errors.dart';
 
 sealed class PlantObservationEvent extends Equatable {
   const PlantObservationEvent();

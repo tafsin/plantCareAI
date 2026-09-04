@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plantcare_ai/core/errors/app_error.dart';
+import 'package:plantcare_shared/errors.dart';
 
 class AppErrorView extends StatelessWidget {
   const AppErrorView({required this.error, this.onRetry, super.key});
