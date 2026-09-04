@@ -123,7 +123,7 @@ final class FirebaseAuthenticationRepository
     developer.log(
       'Firebase Authentication failed during $operation: ${error.code}',
       name: 'plantcare_ai.authentication',
-      error: error,
+      error: error.code,
       stackTrace: stackTrace,
     );
   }
@@ -136,7 +136,7 @@ final class FirebaseAuthenticationRepository
     developer.log(
       'Unexpected authentication failure during $operation',
       name: 'plantcare_ai.authentication',
-      error: error,
+      error: error.runtimeType,
       stackTrace: stackTrace,
     );
   }

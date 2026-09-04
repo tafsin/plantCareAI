@@ -11,10 +11,18 @@ class AppShell extends StatelessWidget {
   final String location;
   final Widget child;
 
-  int get _selectedIndex => location.startsWith(AppRoutes.plants) ? 1 : 0;
+  int get _selectedIndex => location.startsWith(AppRoutes.reminders)
+      ? 2
+      : location.startsWith(AppRoutes.plants)
+      ? 1
+      : 0;
 
   void _navigate(BuildContext context, int index) {
-    context.go(index == 0 ? AppRoutes.home : AppRoutes.plants);
+    context.go(switch (index) {
+      0 => AppRoutes.home,
+      1 => AppRoutes.plants,
+      _ => AppRoutes.reminders,
+    });
   }
 
   @override
@@ -42,12 +50,23 @@ class AppShell extends StatelessWidget {
           builder: (context, constraints) {
             final isWide =
                 constraints.maxWidth >= AppConstants.wideLayoutBreakpoint;
-            final title = _selectedIndex == 0 ? 'Home' : 'My Plants';
+            final title = switch (_selectedIndex) {
+              0 when location == AppRoutes.privacySafety => 'Privacy & Safety',
+              0 => 'Home',
+              1 => 'My Plants',
+              _ => 'Reminders',
+            };
 
             return Scaffold(
               appBar: AppBar(
                 title: Text(title),
                 actions: [
+                  IconButton(
+                    key: const ValueKey('privacy-safety-button'),
+                    tooltip: 'Privacy and safety',
+                    onPressed: () => context.go(AppRoutes.privacySafety),
+                    icon: const Icon(Icons.info_outline),
+                  ),
                   IconButton(
                     key: const ValueKey('logout-button'),
                     tooltip: 'Sign out',
@@ -84,6 +103,11 @@ class AppShell extends StatelessWidget {
                           selectedIcon: Icon(Icons.local_florist),
                           label: Text('My Plants'),
                         ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.notifications_outlined),
+                          selectedIcon: Icon(Icons.notifications),
+                          label: Text('Reminders'),
+                        ),
                       ],
                     ),
                     const VerticalDivider(width: 1),
@@ -110,6 +134,12 @@ class AppShell extends StatelessWidget {
                           icon: Icon(Icons.local_florist_outlined),
                           selectedIcon: Icon(Icons.local_florist),
                           label: 'My Plants',
+                        ),
+                        NavigationDestination(
+                          key: ValueKey('reminders-destination'),
+                          icon: Icon(Icons.notifications_outlined),
+                          selectedIcon: Icon(Icons.notifications),
+                          label: 'Reminders',
                         ),
                       ],
                     ),

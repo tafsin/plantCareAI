@@ -97,6 +97,30 @@ void main() {
       validatedProtectedDestination('/plants/plant-1/edit'),
       '/plants/plant-1/edit',
     );
+    expect(
+      validatedProtectedDestination('/plants/plant-1/soil-checks/new'),
+      '/plants/plant-1/soil-checks/new',
+    );
+    expect(
+      validatedProtectedDestination('/plants/plant-1/soil-checks'),
+      '/plants/plant-1/soil-checks',
+    );
+    expect(
+      validatedProtectedDestination('/plants/plant-1/soil-checks/check-1'),
+      '/plants/plant-1/soil-checks/check-1',
+    );
+    expect(
+      validatedProtectedDestination(
+        '/plants/plant-1/fertilizer-assessments/new',
+      ),
+      '/plants/plant-1/fertilizer-assessments/new',
+    );
+    expect(
+      validatedProtectedDestination(
+        '/plants/plant-1/fertilizer-assessments/assessment-1',
+      ),
+      '/plants/plant-1/fertilizer-assessments/assessment-1',
+    );
 
     final harness = await _pumpHarness(
       tester,

@@ -113,7 +113,7 @@ final class AuthSessionBloc extends Bloc<AuthSessionEvent, AuthSessionState>
         developer.log(
           'Authentication state stream failed',
           name: 'plantcare_ai.authentication',
-          error: error,
+          error: error.runtimeType,
           stackTrace: stackTrace,
         );
         add(const AuthSessionUserChanged(null));
@@ -153,7 +153,7 @@ final class AuthSessionBloc extends Bloc<AuthSessionEvent, AuthSessionState>
       developer.log(
         'Logout failed',
         name: 'plantcare_ai.authentication',
-        error: error,
+        error: error.runtimeType,
         stackTrace: stackTrace,
       );
       _logoutInProgress = false;

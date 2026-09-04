@@ -2,14 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
+import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
+import 'package:plantcare_ai/features/care_history/domain/services/latest_care_logs.dart';
+import 'package:plantcare_ai/features/care_history/presentation/bloc/care_history_bloc.dart';
+import 'package:plantcare_ai/features/care_history/presentation/widgets/care_log_labels.dart';
+import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_history_bloc.dart';
 import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plants_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/widgets/plant_labels.dart';
+import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
+import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc.dart';
+import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_history_bloc.dart';
 
 class PlantDetailsPage extends StatelessWidget {
-  const PlantDetailsPage({required this.plantId, super.key});
+  const PlantDetailsPage({
+    required this.plantId,
+    this.enableSoilChecks = false,
+    this.enableCareLogs = false,
+    this.enableFertilizerAssessments = false,
+    this.enableReminders = false,
+    super.key,
+  });
   final String plantId;
+  final bool enableSoilChecks;
+  final bool enableCareLogs;
+  final bool enableFertilizerAssessments;
+  final bool enableReminders;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +62,13 @@ class PlantDetailsPage extends StatelessWidget {
             plantId: plantId,
             message: state.errorMessage,
           ),
-          PlantDetailsStatus.loaded => _PlantDetails(plant: state.plant!),
+          PlantDetailsStatus.loaded => _PlantDetails(
+            plant: state.plant!,
+            enableSoilChecks: enableSoilChecks,
+            enableCareLogs: enableCareLogs,
+            enableFertilizerAssessments: enableFertilizerAssessments,
+            enableReminders: enableReminders,
+          ),
         },
       ),
     );
@@ -50,8 +76,18 @@ class PlantDetailsPage extends StatelessWidget {
 }
 
 class _PlantDetails extends StatelessWidget {
-  const _PlantDetails({required this.plant});
+  const _PlantDetails({
+    required this.plant,
+    required this.enableSoilChecks,
+    required this.enableCareLogs,
+    required this.enableFertilizerAssessments,
+    required this.enableReminders,
+  });
   final Plant plant;
+  final bool enableSoilChecks;
+  final bool enableCareLogs;
+  final bool enableFertilizerAssessments;
+  final bool enableReminders;
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +172,68 @@ class _PlantDetails extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
+              if (enableSoilChecks) ...[
+                _SoilSection(plantId: plant.id),
+                const SizedBox(height: 16),
+              ],
+              if (enableCareLogs) ...[
+                _CareSection(plantId: plant.id),
+                const SizedBox(height: 16),
+              ],
+              if (enableFertilizerAssessments && enableCareLogs) ...[
+                _FertilizerSection(plantId: plant.id),
+                const SizedBox(height: 16),
+              ],
+              if (enableReminders) ...[
+                BlocBuilder<RemindersBloc, RemindersState>(
+                  builder: (context, state) {
+                    final active = state.items
+                        .where((item) => item.status == ReminderStatus.active)
+                        .length;
+                    return Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Care reminders',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              active == 0
+                                  ? 'No active reminders.'
+                                  : '$active active reminder${active == 1 ? '' : 's'}.',
+                            ),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 8,
+                              children: [
+                                FilledButton.tonalIcon(
+                                  onPressed: () => context.go(
+                                    AppRoutes.newReminder(plant.id),
+                                    extra: plant.commonName,
+                                  ),
+                                  icon: const Icon(Icons.add_alert),
+                                  label: const Text('New reminder'),
+                                ),
+                                OutlinedButton(
+                                  onPressed: () => context.go(
+                                    AppRoutes.plantReminders(plant.id),
+                                  ),
+                                  child: const Text('View reminders'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
@@ -206,6 +304,249 @@ class _PlantDetails extends StatelessWidget {
       context.read<PlantsBloc>().add(PlantDeleteRequested(plant.id));
     }
   }
+}
+
+class _FertilizerSection extends StatelessWidget {
+  const _FertilizerSection({required this.plantId});
+  final String plantId;
+
+  @override
+  Widget build(BuildContext context) => Card(
+    key: const ValueKey('fertilizer-section'),
+    child: Padding(
+      padding: const EdgeInsets.all(20),
+      child:
+          BlocBuilder<
+            FertilizerAssessmentHistoryBloc,
+            FertilizerAssessmentHistoryState
+          >(
+            builder: (context, state) {
+              final latestAssessment = state.items.isEmpty
+                  ? null
+                  : state.items.first;
+              final latestFertilizer = latestCareLogs(
+                context.watch<CareHistoryBloc>().state.logs,
+              ).fertilizing;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Fertilizer',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  if (state.status ==
+                          FertilizerAssessmentHistoryStatus.loading &&
+                      state.items.isEmpty)
+                    const LinearProgressIndicator()
+                  else if (state.status ==
+                          FertilizerAssessmentHistoryStatus.failure &&
+                      state.items.isEmpty)
+                    Text(
+                      state.errorMessage ??
+                          'Couldn’t load fertilizer guidance.',
+                    )
+                  else
+                    Wrap(
+                      spacing: 24,
+                      runSpacing: 8,
+                      children: [
+                        _Field(
+                          label: 'Last fertilized',
+                          value: latestFertilizer == null
+                              ? 'No fertilizer recorded'
+                              : careDateLabel(latestFertilizer.occurredAt),
+                        ),
+                        _Field(
+                          label: 'Latest guidance',
+                          value:
+                              latestAssessment?.guidance.title ??
+                              'No assessment recorded',
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      FilledButton.tonalIcon(
+                        onPressed: () => context.go(
+                          AppRoutes.newFertilizerAssessment(plantId),
+                        ),
+                        icon: const Icon(Icons.eco_outlined),
+                        label: const Text('Check fertilizer guidance'),
+                      ),
+                      FilledButton.tonalIcon(
+                        onPressed: () => context.go(
+                          AppRoutes.newCareLog(
+                            plantId,
+                            CareLogType.fertilizing,
+                          ),
+                        ),
+                        icon: const Icon(Icons.add_task_outlined),
+                        label: const Text('Log fertilizer'),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: () => context.go(
+                          AppRoutes.fertilizerAssessmentHistory(plantId),
+                        ),
+                        icon: const Icon(Icons.history),
+                        label: const Text('View assessment history'),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+    ),
+  );
+}
+
+class _CareSection extends StatelessWidget {
+  const _CareSection({required this.plantId});
+  final String plantId;
+
+  @override
+  Widget build(BuildContext context) => Card(
+    key: const ValueKey('care-section'),
+    child: Padding(
+      padding: const EdgeInsets.all(20),
+      child: BlocBuilder<CareHistoryBloc, CareHistoryState>(
+        builder: (context, state) {
+          final latest = latestCareLogs(state.logs);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Care', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              if (state.status == CareHistoryStatus.loading &&
+                  state.logs.isEmpty)
+                const LinearProgressIndicator()
+              else if (state.status == CareHistoryStatus.failure &&
+                  state.logs.isEmpty)
+                Text(state.errorMessage ?? 'Couldn\'t load care history.')
+              else
+                Wrap(
+                  spacing: 24,
+                  runSpacing: 8,
+                  children: [
+                    _Field(
+                      label: 'Last watered',
+                      value: latest.watering == null
+                          ? 'No watering recorded'
+                          : careDateLabel(latest.watering!.occurredAt),
+                    ),
+                    _Field(
+                      label: 'Last fertilized',
+                      value: latest.fertilizing == null
+                          ? 'No fertilizer recorded'
+                          : careDateLabel(latest.fertilizing!.occurredAt),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  FilledButton.tonalIcon(
+                    onPressed: () => context.go(
+                      AppRoutes.newCareLog(plantId, CareLogType.watering),
+                    ),
+                    icon: const Icon(Icons.water_drop_outlined),
+                    label: const Text('Log watering'),
+                  ),
+                  FilledButton.tonalIcon(
+                    onPressed: () => context.go(
+                      AppRoutes.newCareLog(plantId, CareLogType.fertilizing),
+                    ),
+                    icon: const Icon(Icons.eco_outlined),
+                    label: const Text('Log fertilizer'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => context.go(AppRoutes.careHistory(plantId)),
+                    icon: const Icon(Icons.history),
+                    label: const Text('View care history'),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    ),
+  );
+}
+
+class _SoilSection extends StatelessWidget {
+  const _SoilSection({required this.plantId});
+  final String plantId;
+  @override
+  Widget build(BuildContext context) => Card(
+    key: const ValueKey('soil-section'),
+    child: Padding(
+      padding: const EdgeInsets.all(20),
+      child: BlocBuilder<SoilCheckHistoryBloc, SoilCheckHistoryState>(
+        builder: (context, state) {
+          final latest = state.items.isEmpty ? null : state.items.first;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Soil', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              if (state.status == SoilCheckHistoryStatus.loading)
+                const LinearProgressIndicator()
+              else if (state.status == SoilCheckHistoryStatus.failure)
+                Text(
+                  state.errorMessage ?? 'Couldn\'t load the latest soil check.',
+                )
+              else if (latest == null)
+                const Text('No manual soil checks yet.')
+              else
+                Wrap(
+                  spacing: 24,
+                  runSpacing: 8,
+                  children: [
+                    _Field(
+                      label: 'Latest moisture',
+                      value: latest.moistureLevel.label,
+                    ),
+                    _Field(
+                      label: 'Recommendation',
+                      value: latest.guidance.title,
+                    ),
+                    _Field(
+                      label: 'Last checked',
+                      value: plantDateLabel(latest.createdAt),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                children: [
+                  FilledButton.tonalIcon(
+                    onPressed: () =>
+                        context.go(AppRoutes.newSoilCheck(plantId)),
+                    icon: const Icon(Icons.water_drop_outlined),
+                    label: const Text('Check soil'),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () =>
+                        context.go(AppRoutes.soilCheckHistory(plantId)),
+                    icon: const Icon(Icons.history),
+                    label: const Text('View history'),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    ),
+  );
 }
 
 class _Field extends StatelessWidget {

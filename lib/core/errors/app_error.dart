@@ -63,6 +63,7 @@ enum PlantObservationFailureType {
   imageProcessing,
   aiUnavailable,
   appCheckRejected,
+  permissionDenied,
   modelUnavailable,
   retiredModel,
   quotaExceeded,
@@ -103,6 +104,7 @@ final class KnowledgeRetrievalFailure extends AppError {
 enum PlantDiagnosisFailureType {
   unauthenticated,
   appCheckRejected,
+  permissionDenied,
   unsupportedPlant,
   plantConflict,
   insufficientEvidence,
@@ -123,6 +125,65 @@ final class PlantDiagnosisFailure extends AppError {
   const PlantDiagnosisFailure(this.type, super.message);
 
   final PlantDiagnosisFailureType type;
+
+  @override
+  List<Object?> get props => [type, message];
+}
+
+enum SoilCheckFailureType {
+  unauthenticated,
+  plantNotFound,
+  insufficientEvidence,
+  malformedEvidence,
+  saveFailed,
+  notFound,
+  network,
+  unknown,
+}
+
+final class SoilCheckFailure extends AppError {
+  const SoilCheckFailure(this.type, super.message);
+
+  final SoilCheckFailureType type;
+
+  @override
+  List<Object?> get props => [type, message];
+}
+
+enum CareLogFailureType {
+  unauthenticated,
+  permissionDenied,
+  network,
+  malformedData,
+  missingParent,
+  notFound,
+  unknown,
+}
+
+final class CareLogFailure extends AppError {
+  const CareLogFailure(this.type, super.message);
+
+  final CareLogFailureType type;
+
+  @override
+  List<Object?> get props => [type, message];
+}
+
+enum FertilizerAssessmentFailureType {
+  unauthenticated,
+  plantNotFound,
+  insufficientEvidence,
+  malformedEvidence,
+  saveFailed,
+  notFound,
+  network,
+  unknown,
+}
+
+final class FertilizerAssessmentFailure extends AppError {
+  const FertilizerAssessmentFailure(this.type, super.message);
+
+  final FertilizerAssessmentFailureType type;
 
   @override
   List<Object?> get props => [type, message];

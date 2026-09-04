@@ -46,7 +46,7 @@ Future<void> bootstrapApplication({
 
 void _reportStartupError(Object error, StackTrace stackTrace) {
   if (kDebugMode) {
-    debugPrint('PlantCare AI startup failed: $error');
+    debugPrint('PlantCare AI startup failed: ${error.runtimeType}');
     debugPrintStack(stackTrace: stackTrace);
   }
 }
