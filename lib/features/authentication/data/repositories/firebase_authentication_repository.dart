@@ -2,9 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
-import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:plantcare_domain/authentication.dart';
 
 @LazySingleton(as: AuthenticationRepository)
 final class FirebaseAuthenticationRepository

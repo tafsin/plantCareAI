@@ -5,8 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:plantcare_domain/authentication.dart';
 
 sealed class AuthSessionEvent extends Equatable {
   const AuthSessionEvent();

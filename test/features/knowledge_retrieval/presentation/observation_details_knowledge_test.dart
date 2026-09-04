@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/knowledge_ranker.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/presentation/bloc/knowledge_retrieval_bloc.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/observation_details_bloc.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/pages/observation_details_page.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plants.dart';
 
 import '../../../helpers/fake_knowledge_repository.dart';
 import '../../../helpers/fake_plant_observation_dependencies.dart';

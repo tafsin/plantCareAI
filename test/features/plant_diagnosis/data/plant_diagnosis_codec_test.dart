@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/data/models/plant_diagnosis_codec.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plant_diagnosis.dart';
 
 import '../../../helpers/fake_knowledge_repository.dart';
 

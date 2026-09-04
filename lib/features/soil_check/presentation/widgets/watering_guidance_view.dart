@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/soil_check.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WateringGuidanceView extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/presentation/bloc/knowledge_retrieval_bloc.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/presentation/widgets/knowledge_retrieval_panel.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
@@ -9,6 +8,7 @@ import 'package:plantcare_ai/features/plant_observation/presentation/bloc/observ
 import 'package:plantcare_ai/features/plant_observation/presentation/widgets/observation_result_view.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/widgets/plant_labels.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 
 class ObservationDetailsPage extends StatelessWidget {
   const ObservationDetailsPage({

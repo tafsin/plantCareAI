@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/widgets/observation_result_view.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
+import 'package:plantcare_domain/plant_observation.dart';
+import 'package:plantcare_domain/plants.dart';
 
 class PlantObservationPage extends StatelessWidget {
   const PlantObservationPage({required this.plantId, super.key});

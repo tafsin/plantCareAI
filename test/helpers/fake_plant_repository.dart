@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
-import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
+import 'package:plantcare_domain/plants.dart';
 
 final class FakePlantRepository implements PlantRepository {
   final StreamController<List<Plant>> _plantsController =

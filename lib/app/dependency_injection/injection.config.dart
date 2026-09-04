@@ -25,40 +25,26 @@ import 'package:plantcare_ai/app/dependency_injection/app_module.dart'
 import 'package:plantcare_ai/app/theme/theme_bloc.dart' as _i973;
 import 'package:plantcare_ai/features/authentication/data/repositories/firebase_authentication_repository.dart'
     as _i406;
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart'
-    as _i154;
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart'
-    as _i402;
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart'
     as _i2;
 import 'package:plantcare_ai/features/authentication/presentation/bloc/authentication_bloc_factory.dart'
     as _i1017;
 import 'package:plantcare_ai/features/care_history/data/repositories/firebase_care_log_repository.dart'
     as _i729;
-import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart'
-    as _i972;
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_bloc_factory.dart'
     as _i139;
 import 'package:plantcare_ai/features/fertilizer_assessment/data/repositories/firebase_fertilizer_assessment_repository.dart'
     as _i863;
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/repositories/fertilizer_assessment_repository.dart'
-    as _i304;
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_bloc_factory.dart'
     as _i970;
 import 'package:plantcare_ai/features/knowledge_retrieval/data/repositories/firebase_knowledge_repository.dart'
     as _i1064;
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart'
-    as _i819;
 import 'package:plantcare_ai/features/knowledge_retrieval/presentation/bloc/knowledge_retrieval_bloc_factory.dart'
     as _i1029;
 import 'package:plantcare_ai/features/plant_diagnosis/data/repositories/firebase_plant_diagnosis_repository.dart'
     as _i976;
 import 'package:plantcare_ai/features/plant_diagnosis/data/services/firebase_ai_plant_diagnosis_service.dart'
     as _i796;
-import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart'
-    as _i687;
-import 'package:plantcare_ai/features/plant_diagnosis/domain/services/plant_diagnosis_service.dart'
-    as _i376;
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc_factory.dart'
     as _i1;
 import 'package:plantcare_ai/features/plant_observation/data/repositories/firebase_plant_observation_repository.dart'
@@ -69,20 +55,10 @@ import 'package:plantcare_ai/features/plant_observation/data/services/image_pick
     as _i533;
 import 'package:plantcare_ai/features/plant_observation/data/services/local_plant_image_processor.dart'
     as _i491;
-import 'package:plantcare_ai/features/plant_observation/domain/repositories/plant_observation_repository.dart'
-    as _i210;
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_picker.dart'
-    as _i805;
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_processor.dart'
-    as _i807;
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_observation_service.dart'
-    as _i519;
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc_factory.dart'
     as _i641;
 import 'package:plantcare_ai/features/plants/data/repositories/firebase_plant_repository.dart'
     as _i78;
-import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart'
-    as _i879;
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_bloc_factory.dart'
     as _i964;
 import 'package:plantcare_ai/features/reminders/data/repositories/firebase_reminder_repository.dart'
@@ -91,18 +67,21 @@ import 'package:plantcare_ai/features/reminders/data/services/local_notification
     as _i176;
 import 'package:plantcare_ai/features/reminders/data/services/shared_preferences_notification_id_store.dart'
     as _i985;
-import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart'
-    as _i142;
-import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart'
-    as _i456;
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_bloc_factory.dart'
     as _i208;
 import 'package:plantcare_ai/features/soil_check/data/repositories/firebase_soil_check_repository.dart'
     as _i949;
-import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart'
-    as _i441;
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_bloc_factory.dart'
     as _i727;
+import 'package:plantcare_domain/authentication.dart' as _i521;
+import 'package:plantcare_domain/care_history.dart' as _i82;
+import 'package:plantcare_domain/fertilizer_assessment.dart' as _i726;
+import 'package:plantcare_domain/knowledge_retrieval.dart' as _i941;
+import 'package:plantcare_domain/plant_diagnosis.dart' as _i823;
+import 'package:plantcare_domain/plant_observation.dart' as _i449;
+import 'package:plantcare_domain/plants.dart' as _i867;
+import 'package:plantcare_domain/reminders.dart' as _i412;
+import 'package:plantcare_domain/soil_check.dart' as _i658;
 import 'package:plantcare_shared/environment.dart' as _i515;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -121,40 +100,34 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i515.EnvironmentConfig>(
       () => appModule.environmentConfig,
     );
-    gh.lazySingleton<_i805.PlantImagePicker>(
+    gh.lazySingleton<_i449.PlantImagePicker>(
       () => _i533.ImagePickerPlantImagePicker(),
     );
-    gh.lazySingleton<_i456.NotificationIdStore>(
+    gh.lazySingleton<_i449.PlantImageProcessor>(
+      () => const _i491.LocalPlantImageProcessor(),
+    );
+    gh.lazySingleton<_i412.NotificationIdStore>(
       () => _i985.SharedPreferencesNotificationIdStore(),
     );
     gh.lazySingleton<_i342.FirebaseAppCheckActivator>(
       () => appModule.firebaseAppCheckActivator(gh<_i515.EnvironmentConfig>()),
     );
-    gh.lazySingleton<_i807.PlantImageProcessor>(
-      () => const _i491.LocalPlantImageProcessor(),
+    gh.lazySingleton<_i449.PlantObservationService>(
+      () => _i359.FirebaseAiPlantObservationService(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i515.EnvironmentConfig>(),
+      ),
     );
-    gh.lazySingleton<_i441.SoilCheckRepository>(
+    gh.lazySingleton<_i726.FertilizerAssessmentRepository>(
+      () => _i863.FirebaseFertilizerAssessmentRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i59.FirebaseAuth>(),
+      ),
+    );
+    gh.lazySingleton<_i658.SoilCheckRepository>(
       () => _i949.FirebaseSoilCheckRepository(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
-      ),
-    );
-    gh.lazySingleton<_i972.CareLogRepository>(
-      () => _i729.FirebaseCareLogRepository(
-        gh<_i974.FirebaseFirestore>(),
-        gh<_i59.FirebaseAuth>(),
-      ),
-    );
-    gh.lazySingleton<_i142.ReminderRepository>(
-      () => _i420.FirebaseReminderRepository(
-        gh<_i974.FirebaseFirestore>(),
-        gh<_i59.FirebaseAuth>(),
-      ),
-    );
-    gh.lazySingleton<_i376.PlantDiagnosisService>(
-      () => _i796.FirebaseAiPlantDiagnosisService(
-        gh<_i59.FirebaseAuth>(),
-        gh<_i515.EnvironmentConfig>(),
       ),
     );
     gh.lazySingleton<_i963.AppInitializer>(
@@ -163,113 +136,111 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i342.FirebaseAppCheckActivator>(),
       ),
     );
-    gh.lazySingleton<_i154.AuthenticationRepository>(
-      () => _i406.FirebaseAuthenticationRepository(gh<_i59.FirebaseAuth>()),
-    );
-    gh.lazySingleton<_i879.PlantRepository>(
-      () => _i78.FirebasePlantRepository(
-        gh<_i974.FirebaseFirestore>(),
-        gh<_i59.FirebaseAuth>(),
-      ),
-    );
-    gh.lazySingleton<_i139.CareLogBlocFactory>(
-      () => _i139.CareLogBlocFactory(gh<_i972.CareLogRepository>()),
-    );
-    gh.lazySingleton<_i2.AuthSessionBloc>(
-      () => _i2.AuthSessionBloc(gh<_i154.AuthenticationRepository>()),
-    );
-    gh.lazySingleton<_i1017.AuthenticationBlocFactory>(
-      () => _i1017.AuthenticationBlocFactory(
-        gh<_i154.AuthenticationRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i402.AuthenticationSession>(
-      () =>
-          appModule.authenticationSession(gh<_i154.AuthenticationRepository>()),
-    );
-    gh.lazySingleton<_i519.PlantObservationService>(
-      () => _i359.FirebaseAiPlantObservationService(
+    gh.lazySingleton<_i823.PlantDiagnosisService>(
+      () => _i796.FirebaseAiPlantDiagnosisService(
         gh<_i59.FirebaseAuth>(),
         gh<_i515.EnvironmentConfig>(),
       ),
     );
-    gh.lazySingleton<_i687.PlantDiagnosisRepository>(
+    gh.lazySingleton<_i823.PlantDiagnosisRepository>(
       () => _i976.FirebasePlantDiagnosisRepository(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
       ),
     );
-    gh.lazySingleton<_i964.PlantBlocFactory>(
-      () => _i964.PlantBlocFactory(gh<_i879.PlantRepository>()),
-    );
-    gh.lazySingleton<_i819.KnowledgeRepository>(
-      () => _i1064.FirebaseKnowledgeRepository(
-        gh<_i974.FirebaseFirestore>(),
-        gh<_i59.FirebaseAuth>(),
-      ),
-    );
-    gh.lazySingleton<_i304.FertilizerAssessmentRepository>(
-      () => _i863.FirebaseFertilizerAssessmentRepository(
-        gh<_i974.FirebaseFirestore>(),
-        gh<_i59.FirebaseAuth>(),
-      ),
-    );
-    gh.lazySingleton<_i210.PlantObservationRepository>(
+    gh.lazySingleton<_i449.PlantObservationRepository>(
       () => _i177.FirebasePlantObservationRepository(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
       ),
     );
-    gh.lazySingleton<_i641.PlantObservationBlocFactory>(
-      () => _i641.PlantObservationBlocFactory(
-        gh<_i805.PlantImagePicker>(),
-        gh<_i807.PlantImageProcessor>(),
-        gh<_i519.PlantObservationService>(),
-        gh<_i210.PlantObservationRepository>(),
+    gh.lazySingleton<_i941.KnowledgeRepository>(
+      () => _i1064.FirebaseKnowledgeRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i59.FirebaseAuth>(),
       ),
     );
-    gh.lazySingleton<_i456.NotificationScheduler>(
-      () => _i176.LocalNotificationScheduler(gh<_i456.NotificationIdStore>()),
-    );
-    gh.lazySingleton<_i208.ReminderBlocFactory>(
-      () => _i208.ReminderBlocFactory(
-        gh<_i142.ReminderRepository>(),
-        gh<_i456.NotificationScheduler>(),
-        gh<_i402.AuthenticationSession>(),
+    gh.lazySingleton<_i867.PlantRepository>(
+      () => _i78.FirebasePlantRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i59.FirebaseAuth>(),
       ),
     );
-    gh.lazySingleton<_i1029.KnowledgeRetrievalBlocFactory>(
-      () =>
-          _i1029.KnowledgeRetrievalBlocFactory(gh<_i819.KnowledgeRepository>()),
-    );
-    gh.lazySingleton<_i200.ReminderLifecycleService>(
-      () => _i200.ReminderLifecycleService(
-        gh<_i402.AuthenticationSession>(),
-        gh<_i142.ReminderRepository>(),
-        gh<_i879.PlantRepository>(),
-        gh<_i456.NotificationScheduler>(),
-      ),
-    );
-    gh.lazySingleton<_i970.FertilizerAssessmentBlocFactory>(
-      () => _i970.FertilizerAssessmentBlocFactory(
-        gh<_i879.PlantRepository>(),
-        gh<_i972.CareLogRepository>(),
-        gh<_i304.FertilizerAssessmentRepository>(),
-        gh<_i819.KnowledgeRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i1.PlantDiagnosisBlocFactory>(
-      () => _i1.PlantDiagnosisBlocFactory(
-        gh<_i819.KnowledgeRepository>(),
-        gh<_i687.PlantDiagnosisRepository>(),
-        gh<_i376.PlantDiagnosisService>(),
+    gh.lazySingleton<_i82.CareLogRepository>(
+      () => _i729.FirebaseCareLogRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i59.FirebaseAuth>(),
       ),
     );
     gh.lazySingleton<_i727.SoilCheckBlocFactory>(
       () => _i727.SoilCheckBlocFactory(
-        gh<_i879.PlantRepository>(),
-        gh<_i441.SoilCheckRepository>(),
-        gh<_i819.KnowledgeRepository>(),
+        gh<_i867.PlantRepository>(),
+        gh<_i658.SoilCheckRepository>(),
+        gh<_i941.KnowledgeRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i521.AuthenticationRepository>(
+      () => _i406.FirebaseAuthenticationRepository(gh<_i59.FirebaseAuth>()),
+    );
+    gh.lazySingleton<_i412.ReminderRepository>(
+      () => _i420.FirebaseReminderRepository(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i59.FirebaseAuth>(),
+      ),
+    );
+    gh.lazySingleton<_i412.NotificationScheduler>(
+      () => _i176.LocalNotificationScheduler(gh<_i412.NotificationIdStore>()),
+    );
+    gh.lazySingleton<_i2.AuthSessionBloc>(
+      () => _i2.AuthSessionBloc(gh<_i521.AuthenticationRepository>()),
+    );
+    gh.lazySingleton<_i1017.AuthenticationBlocFactory>(
+      () => _i1017.AuthenticationBlocFactory(
+        gh<_i521.AuthenticationRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i970.FertilizerAssessmentBlocFactory>(
+      () => _i970.FertilizerAssessmentBlocFactory(
+        gh<_i867.PlantRepository>(),
+        gh<_i82.CareLogRepository>(),
+        gh<_i726.FertilizerAssessmentRepository>(),
+        gh<_i941.KnowledgeRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i1029.KnowledgeRetrievalBlocFactory>(
+      () =>
+          _i1029.KnowledgeRetrievalBlocFactory(gh<_i941.KnowledgeRepository>()),
+    );
+    gh.lazySingleton<_i139.CareLogBlocFactory>(
+      () => _i139.CareLogBlocFactory(gh<_i82.CareLogRepository>()),
+    );
+    gh.lazySingleton<_i1.PlantDiagnosisBlocFactory>(
+      () => _i1.PlantDiagnosisBlocFactory(
+        gh<_i941.KnowledgeRepository>(),
+        gh<_i823.PlantDiagnosisRepository>(),
+        gh<_i823.PlantDiagnosisService>(),
+      ),
+    );
+    gh.lazySingleton<_i641.PlantObservationBlocFactory>(
+      () => _i641.PlantObservationBlocFactory(
+        gh<_i449.PlantImagePicker>(),
+        gh<_i449.PlantImageProcessor>(),
+        gh<_i449.PlantObservationService>(),
+        gh<_i449.PlantObservationRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i964.PlantBlocFactory>(
+      () => _i964.PlantBlocFactory(gh<_i867.PlantRepository>()),
+    );
+    gh.lazySingleton<_i521.AuthenticationSession>(
+      () =>
+          appModule.authenticationSession(gh<_i521.AuthenticationRepository>()),
+    );
+    gh.lazySingleton<_i208.ReminderBlocFactory>(
+      () => _i208.ReminderBlocFactory(
+        gh<_i412.ReminderRepository>(),
+        gh<_i412.NotificationScheduler>(),
+        gh<_i521.AuthenticationSession>(),
       ),
     );
     gh.lazySingleton<_i583.GoRouter>(
@@ -284,6 +255,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i139.CareLogBlocFactory>(),
         gh<_i970.FertilizerAssessmentBlocFactory>(),
         gh<_i208.ReminderBlocFactory>(),
+      ),
+    );
+    gh.lazySingleton<_i200.ReminderLifecycleService>(
+      () => _i200.ReminderLifecycleService(
+        gh<_i521.AuthenticationSession>(),
+        gh<_i412.ReminderRepository>(),
+        gh<_i867.PlantRepository>(),
+        gh<_i412.NotificationScheduler>(),
       ),
     );
     return this;

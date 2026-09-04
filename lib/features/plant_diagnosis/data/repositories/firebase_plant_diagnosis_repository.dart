@@ -6,9 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/data/models/plant_diagnosis_codec.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/errors/plant_diagnosis_failure.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart';
+import 'package:plantcare_domain/plant_diagnosis.dart';
 
 @LazySingleton(as: PlantDiagnosisRepository)
 final class FirebasePlantDiagnosisRepository

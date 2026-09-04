@@ -1,4 +1,4 @@
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_domain/soil_check.dart';
 
 extension SoilMoistureLevelLabel on SoilMoistureLevel {
   String get label => switch (this) {

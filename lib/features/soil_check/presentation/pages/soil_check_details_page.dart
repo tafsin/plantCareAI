@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_details_bloc.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/widgets/soil_check_labels.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/widgets/watering_guidance_view.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 class SoilCheckDetailsPage extends StatelessWidget {
   const SoilCheckDetailsPage({

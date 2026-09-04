@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 abstract final class PlantObservationCodec {
   static const int maxIssues = 8;

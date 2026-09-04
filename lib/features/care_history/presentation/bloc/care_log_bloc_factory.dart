@@ -1,9 +1,8 @@
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_history_bloc.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_details_bloc.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_form_bloc.dart';
+import 'package:plantcare_domain/care_history.dart';
 
 @lazySingleton
 final class CareLogBlocFactory {

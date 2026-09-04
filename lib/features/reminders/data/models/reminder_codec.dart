@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 abstract final class ReminderCodec {
   static Map<String, Object?> toCreate(Reminder reminder) {

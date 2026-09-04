@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/services/plant_diagnosis_service.dart';
+import 'package:plantcare_domain/plant_diagnosis.dart';
 
 final class FakePlantDiagnosisService implements PlantDiagnosisService {
   PlantDiagnosis? response;

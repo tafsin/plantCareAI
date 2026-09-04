@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
 import 'package:plantcare_ai/features/care_history/presentation/widgets/care_log_labels.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_assessment_labels.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/presentation/widgets/reminder_labels.dart';
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/widgets/soil_check_labels.dart';
+import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
+import 'package:plantcare_domain/reminders.dart';
+import 'package:plantcare_domain/soil_check.dart';
 
 void main() {
   test('care-log labels remain stable', () {

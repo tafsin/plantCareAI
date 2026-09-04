@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
 import 'package:plantcare_ai/features/authentication/presentation/validation/auth_input_validator.dart';
+import 'package:plantcare_domain/authentication.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class RegisterEvent extends Equatable {

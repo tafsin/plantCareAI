@@ -5,12 +5,12 @@ import 'package:plantcare_ai/app/app.dart';
 import 'package:plantcare_ai/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
 import 'package:plantcare_ai/app/theme/theme_bloc.dart';
-import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/authentication_bloc_factory.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/password_reset_bloc.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_bloc_factory.dart';
+import 'package:plantcare_domain/authentication.dart';
 
 import '../../../../helpers/fake_authentication_repository.dart';
 import '../../../../helpers/fake_plant_repository.dart';

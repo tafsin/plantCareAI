@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/features/plants/data/models/firestore_plant_model.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_domain/plants.dart';
 
 void main() {
   test('maps a normalized draft to Firestore create data', () {

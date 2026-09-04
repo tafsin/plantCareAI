@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart';
+import 'package:plantcare_domain/reminders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @LazySingleton(as: NotificationIdStore)

@@ -1,11 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/knowledge_ranker.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plant_observation.dart';
+import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class KnowledgeRetrievalEvent extends Equatable {

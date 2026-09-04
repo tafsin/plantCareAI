@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
-import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart';
-import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 sealed class ReminderDetailsEvent extends Equatable {
   const ReminderDetailsEvent();

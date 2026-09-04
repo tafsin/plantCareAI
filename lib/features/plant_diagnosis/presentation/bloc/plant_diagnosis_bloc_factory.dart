@@ -1,12 +1,9 @@
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/knowledge_ranker.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/services/plant_diagnosis_service.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/diagnosis_details_bloc.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/diagnosis_history_bloc.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plant_diagnosis.dart';
 
 @lazySingleton
 final class PlantDiagnosisBlocFactory {

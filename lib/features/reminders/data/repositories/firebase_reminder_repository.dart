@@ -5,8 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/reminders/data/models/reminder_codec.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
-import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 @LazySingleton(as: ReminderRepository)
 final class FirebaseReminderRepository implements ReminderRepository {

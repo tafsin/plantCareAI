@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/features/plant_observation/data/models/plant_observation_codec.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 void main() {
   test('decodes a complete structured observation', () {

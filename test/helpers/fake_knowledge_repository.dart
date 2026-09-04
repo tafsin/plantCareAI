@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 
 const sampleKnowledgeChunk = KnowledgeChunk(
   id: 'tomato__fungal_disease__yellow_leaf',

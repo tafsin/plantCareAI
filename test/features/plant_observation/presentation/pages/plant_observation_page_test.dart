@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
-import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/pages/plant_observation_page.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 import '../../../../helpers/fake_plant_observation_dependencies.dart';
 import '../../../../helpers/fake_plant_repository.dart';

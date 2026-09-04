@@ -1,4 +1,4 @@
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
+import 'package:plantcare_domain/care_history.dart';
 
 extension WateringMethodLabel on WateringMethod {
   String get label => switch (this) {

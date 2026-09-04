@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 class ObservationResultView extends StatelessWidget {
   const ObservationResultView({required this.observation, super.key});

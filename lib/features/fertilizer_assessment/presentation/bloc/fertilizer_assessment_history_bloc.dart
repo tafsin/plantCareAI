@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/repositories/fertilizer_assessment_repository.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class FertilizerAssessmentHistoryEvent extends Equatable {

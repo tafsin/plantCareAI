@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc.dart';
 import 'package:plantcare_ai/features/plant_diagnosis/presentation/widgets/diagnosis_result_view.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/observation_details_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 
 class PlantDiagnosisPage extends StatelessWidget {
   const PlantDiagnosisPage({

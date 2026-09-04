@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_assessment_labels.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FertilizerGuidanceView extends StatelessWidget {

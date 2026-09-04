@@ -1,5 +1,5 @@
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
+import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 abstract final class AppRoutes {
   static const home = '/';

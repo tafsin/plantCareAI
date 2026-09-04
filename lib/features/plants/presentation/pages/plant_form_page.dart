@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
-import 'package:plantcare_ai/features/plants/domain/validation/plant_validator.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_form_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/widgets/plant_labels.dart';
+import 'package:plantcare_domain/plants.dart';
 
 class PlantFormPage extends StatefulWidget {
   const PlantFormPage({this.initialPlant, super.key});

@@ -6,10 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/knowledge_retrieval/data/models/knowledge_document_codec.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/errors/knowledge_retrieval_failure.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 
 @LazySingleton(as: KnowledgeRepository)
 final class FirebaseKnowledgeRepository implements KnowledgeRepository {

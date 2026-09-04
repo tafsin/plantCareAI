@@ -1,12 +1,10 @@
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
-import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
-import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart';
-import 'package:plantcare_ai/features/soil_check/domain/services/soil_evidence_validator.dart';
-import 'package:plantcare_ai/features/soil_check/domain/services/watering_policy.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_bloc.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_details_bloc.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_history_bloc.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plants.dart';
+import 'package:plantcare_domain/soil_check.dart';
 
 @lazySingleton
 final class SoilCheckBlocFactory {

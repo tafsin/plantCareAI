@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
+import 'package:plantcare_domain/care_history.dart';
 
 final class FakeCareLogRepository implements CareLogRepository {
   final history = StreamController<List<CareLog>>.broadcast(sync: true);

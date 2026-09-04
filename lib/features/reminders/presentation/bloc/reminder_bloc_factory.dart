@@ -1,11 +1,9 @@
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_session.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
-import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart';
-import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_details_bloc.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_form_bloc.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc.dart';
+import 'package:plantcare_domain/authentication.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 @lazySingleton
 final class ReminderBlocFactory {

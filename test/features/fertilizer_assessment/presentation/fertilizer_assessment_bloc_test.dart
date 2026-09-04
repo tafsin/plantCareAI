@@ -1,15 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/services/fertilizer_evidence_validator.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/services/fertilizer_policy.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_bloc.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_details_bloc.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_history_bloc.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/repositories/knowledge_repository.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plants.dart';
 
 import '../../../helpers/fake_care_log_dependencies.dart';
 import '../../../helpers/fake_fertilizer_assessment_repository.dart';

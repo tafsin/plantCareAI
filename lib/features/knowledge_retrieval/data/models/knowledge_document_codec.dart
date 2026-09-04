@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 
 abstract final class KnowledgeDocumentCodec {
   static const _categories = {

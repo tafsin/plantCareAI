@@ -1,12 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/repositories/plant_observation_repository.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_picker.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_processor.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_observation_service.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 const sampleObservation = PlantObservation(
   schemaVersion: 1,

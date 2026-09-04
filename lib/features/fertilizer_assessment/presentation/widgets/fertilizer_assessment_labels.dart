@@ -1,4 +1,4 @@
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
 
 extension GrowthActivityLabel on GrowthActivity {
   String get label => switch (this) {

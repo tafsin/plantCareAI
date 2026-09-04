@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 import '../../../../helpers/fake_plant_observation_dependencies.dart';
 

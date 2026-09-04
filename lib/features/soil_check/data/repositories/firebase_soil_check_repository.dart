@@ -6,9 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/soil_check/data/models/soil_check_codec.dart';
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
-import 'package:plantcare_ai/features/soil_check/domain/errors/soil_check_failure.dart';
-import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart';
+import 'package:plantcare_domain/soil_check.dart';
 
 @LazySingleton(as: SoilCheckRepository)
 final class FirebaseSoilCheckRepository implements SoilCheckRepository {

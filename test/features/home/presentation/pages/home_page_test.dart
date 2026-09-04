@@ -3,9 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/app/theme/app_theme.dart';
 import 'package:plantcare_ai/features/home/presentation/pages/home_page.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
-import 'package:plantcare_ai/features/reminders/domain/repositories/reminder_repository.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 final class _FakeReminderRepository implements ReminderRepository {
   @override

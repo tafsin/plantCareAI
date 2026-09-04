@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/selected_plant_image.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_picker.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 @LazySingleton(as: PlantImagePicker)
 final class ImagePickerPlantImagePicker implements PlantImagePicker {

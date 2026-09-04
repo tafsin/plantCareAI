@@ -1,11 +1,8 @@
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/repositories/plant_observation_repository.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_picker.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_image_processor.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/services/plant_observation_service.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/observation_details_bloc.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/observation_history_bloc.dart';
 import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 @lazySingleton
 final class PlantObservationBlocFactory {

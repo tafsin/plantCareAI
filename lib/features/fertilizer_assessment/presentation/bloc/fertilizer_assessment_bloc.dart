@@ -1,17 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
-import 'package:plantcare_ai/features/care_history/domain/services/latest_care_logs.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/errors/fertilizer_assessment_failure.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/repositories/fertilizer_assessment_repository.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/services/fertilizer_evidence_validator.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/services/fertilizer_policy.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/entities/knowledge_retrieval.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/domain/services/plant_name_resolver.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
-import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
+import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
+import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class FertilizerAssessmentEvent extends Equatable {

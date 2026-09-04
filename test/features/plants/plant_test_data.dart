@@ -1,4 +1,4 @@
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_domain/plants.dart';
 
 final samplePlant = Plant(
   id: 'plant-1',

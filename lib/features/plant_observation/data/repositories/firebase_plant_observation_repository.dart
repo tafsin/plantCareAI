@@ -6,9 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/plant_observation/data/models/plant_observation_codec.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/entities/plant_observation.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/errors/plant_observation_failure.dart';
-import 'package:plantcare_ai/features/plant_observation/domain/repositories/plant_observation_repository.dart';
+import 'package:plantcare_domain/plant_observation.dart';
 
 @LazySingleton(as: PlantObservationRepository)
 final class FirebasePlantObservationRepository

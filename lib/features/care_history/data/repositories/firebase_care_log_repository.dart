@@ -6,9 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_ai/core/data/data_limits.dart';
 import 'package:plantcare_ai/features/care_history/data/models/care_log_codec.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/care_history/domain/errors/care_log_failure.dart';
-import 'package:plantcare_ai/features/care_history/domain/repositories/care_log_repository.dart';
+import 'package:plantcare_domain/care_history.dart';
 
 @LazySingleton(as: CareLogRepository)
 final class FirebaseCareLogRepository implements CareLogRepository {

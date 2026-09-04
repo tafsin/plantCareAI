@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
+import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 void main() {
   test('static destinations remain stable', () {

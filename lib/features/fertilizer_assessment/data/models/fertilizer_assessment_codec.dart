@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
+import 'package:plantcare_domain/plants.dart';
 
 abstract final class FertilizerAssessmentCodec {
   static Map<String, Object?> toFirestore(FertilizerAssessment value) {

@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/password_reset_bloc.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/register_bloc.dart';
 import 'package:plantcare_ai/features/authentication/presentation/bloc/sign_in_bloc.dart';
+import 'package:plantcare_domain/authentication.dart';
 
 import '../../../../helpers/fake_authentication_repository.dart';
 

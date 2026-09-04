@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/entities/plant_diagnosis.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/domain/repositories/plant_diagnosis_repository.dart';
+import 'package:plantcare_domain/plant_diagnosis.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class DiagnosisHistoryEvent extends Equatable {

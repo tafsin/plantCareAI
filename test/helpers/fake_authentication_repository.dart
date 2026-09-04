@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:plantcare_ai/features/authentication/domain/entities/app_user.dart';
-import 'package:plantcare_ai/features/authentication/domain/repositories/authentication_repository.dart';
+import 'package:plantcare_domain/authentication.dart';
 
 final class FakeAuthenticationRepository implements AuthenticationRepository {
   final StreamController<AppUser?> _controller =

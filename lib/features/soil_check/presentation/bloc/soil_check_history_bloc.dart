@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
-import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart';
+import 'package:plantcare_domain/soil_check.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class SoilCheckHistoryEvent extends Equatable {

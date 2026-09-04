@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/features/care_history/presentation/widgets/care_log_labels.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/domain/entities/fertilizer_assessment.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_bloc.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_assessment_labels.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_guidance_view.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
+import 'package:plantcare_domain/fertilizer_assessment.dart';
 
 class NewFertilizerAssessmentPage extends StatelessWidget {
   const NewFertilizerAssessmentPage({required this.plantId, super.key});

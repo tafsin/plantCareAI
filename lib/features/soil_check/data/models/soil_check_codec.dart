@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/plants/domain/entities/plant.dart';
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
+import 'package:plantcare_domain/plants.dart';
+import 'package:plantcare_domain/soil_check.dart';
 
 abstract final class SoilCheckCodec {
   static Map<String, Object?> toFirestore(SoilCheckRecord record) {

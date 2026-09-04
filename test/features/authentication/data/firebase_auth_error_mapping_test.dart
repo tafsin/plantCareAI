@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/features/authentication/data/repositories/firebase_authentication_repository.dart';
-import 'package:plantcare_ai/features/authentication/domain/errors/authentication_failure.dart';
+import 'package:plantcare_domain/authentication.dart';
 
 void main() {
   test('maps Firebase auth codes without leaking raw details', () {

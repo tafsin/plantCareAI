@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
-import 'package:plantcare_ai/features/care_history/domain/services/care_log_validator.dart';
+import 'package:plantcare_domain/care_history.dart';
 
 abstract final class CareLogCodec {
   static const _common = {

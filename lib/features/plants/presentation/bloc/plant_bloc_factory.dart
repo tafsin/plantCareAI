@@ -1,8 +1,8 @@
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/plants/domain/repositories/plant_repository.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_details_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plant_form_bloc.dart';
 import 'package:plantcare_ai/features/plants/presentation/bloc/plants_bloc.dart';
+import 'package:plantcare_domain/plants.dart';
 
 @lazySingleton
 final class PlantBlocFactory {

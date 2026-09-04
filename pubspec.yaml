@@ -22,6 +22,7 @@ environment:
   sdk: ^3.13.1
 
 workspace:
+  - packages/plantcare_domain
   - packages/plantcare_shared
 
 # Dependencies specify other packages that your package needs in order to work.
@@ -31,6 +32,8 @@ workspace:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  plantcare_domain:
+    path: packages/plantcare_domain
   flutter:
     sdk: flutter
 

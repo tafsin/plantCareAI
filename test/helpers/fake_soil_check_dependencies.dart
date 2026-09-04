@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:plantcare_ai/features/soil_check/domain/entities/soil_check.dart';
-import 'package:plantcare_ai/features/soil_check/domain/repositories/soil_check_repository.dart';
+import 'package:plantcare_domain/soil_check.dart';
 
 final class FakeSoilCheckRepository implements SoilCheckRepository {
   final history = StreamController<List<SoilCheckRecord>>.broadcast(sync: true);

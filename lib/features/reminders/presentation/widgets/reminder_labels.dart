@@ -1,4 +1,4 @@
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 extension ReminderTypeLabel on ReminderType {
   String get label => switch (this) {

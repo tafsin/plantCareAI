@@ -7,7 +7,6 @@ import 'package:plantcare_ai/features/authentication/presentation/bloc/authentic
 import 'package:plantcare_ai/features/authentication/presentation/pages/forgot_password_page.dart';
 import 'package:plantcare_ai/features/authentication/presentation/pages/register_page.dart';
 import 'package:plantcare_ai/features/authentication/presentation/pages/sign_in_page.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_history_bloc.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_bloc_factory.dart';
 import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_details_bloc.dart';
@@ -46,7 +45,6 @@ import 'package:plantcare_ai/features/plants/presentation/bloc/plants_bloc.dart'
 import 'package:plantcare_ai/features/plants/presentation/pages/my_plants_page.dart';
 import 'package:plantcare_ai/features/plants/presentation/pages/plant_details_page.dart';
 import 'package:plantcare_ai/features/plants/presentation/pages/plant_form_page.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_bloc_factory.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_details_bloc.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminders_bloc.dart';
@@ -60,6 +58,8 @@ import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_hi
 import 'package:plantcare_ai/features/soil_check/presentation/pages/new_soil_check_page.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/pages/soil_check_details_page.dart';
 import 'package:plantcare_ai/features/soil_check/presentation/pages/soil_check_history_page.dart';
+import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 String? validatedProtectedDestination(String? candidate) {
   if (candidate == null) {

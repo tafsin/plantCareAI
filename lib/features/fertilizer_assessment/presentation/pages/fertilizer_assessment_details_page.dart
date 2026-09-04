@@ -5,7 +5,7 @@ import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fe
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_assessment_labels.dart';
 import 'package:plantcare_ai/features/fertilizer_assessment/presentation/widgets/fertilizer_guidance_view.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 class FertilizerAssessmentDetailsPage extends StatelessWidget {
   const FertilizerAssessmentDetailsPage({

@@ -4,8 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:injectable/injectable.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
-import 'package:plantcare_ai/features/reminders/domain/services/notification_scheduler.dart';
+import 'package:plantcare_domain/reminders.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 

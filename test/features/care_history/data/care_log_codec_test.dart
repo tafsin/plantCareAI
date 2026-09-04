@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_ai/features/care_history/data/models/care_log_codec.dart';
-import 'package:plantcare_ai/features/care_history/domain/entities/care_log.dart';
+import 'package:plantcare_domain/care_history.dart';
 
 void main() {
   final created = DateTime.utc(2026, 9, 3, 12);

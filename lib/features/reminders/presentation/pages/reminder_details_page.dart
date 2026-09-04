@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_ai/features/navigation/presentation/app_routes.dart';
-import 'package:plantcare_ai/features/reminders/domain/entities/reminder.dart';
 import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_details_bloc.dart';
+import 'package:plantcare_domain/reminders.dart';
 
 class ReminderDetailsPage extends StatelessWidget {
   const ReminderDetailsPage({required this.plantId, super.key});
