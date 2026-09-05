@@ -31,7 +31,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+**/build/
 /coverage/
 
 # Symbolication related
@@ -59,6 +59,6 @@ app.*.map.json
 .firebase/
 firebase-debug.log
 .firebaserc
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
-lib/firebase_options.dart
+apps/plantcare_app/android/app/google-services.json
+apps/plantcare_app/ios/Runner/GoogleService-Info.plist
+apps/plantcare_app/lib/firebase_options.dart

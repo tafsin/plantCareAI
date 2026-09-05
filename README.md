@@ -85,44 +85,40 @@ shows bottom navigation on narrow windows and a navigation rail at widths of
 
 ## Architecture
 
-The project follows a feature-first structure:
+The repository root is an orchestration-only Dart workspace. Product code is
+split into five packages with a single downward dependency direction:
 
 ```text
-lib/
-├── app/
-│   ├── bootstrap/
-│   ├── dependency_injection/
-│   ├── router/
-│   ├── theme/
-│   └── app.dart
-├── core/
-│   ├── constants/
-│   ├── errors/
-│   ├── utils/
-│   └── widgets/
-├── features/
-│   ├── authentication/
-│   │   ├── data/
-│   │   ├── domain/
-│   │   └── presentation/
-│   ├── home/presentation/
-│   └── plants/
-│       ├── data/
-│       ├── domain/
-│       └── presentation/
-└── main.dart
+apps/plantcare_app (executable Flutter application)
+├── packages/plantcare_features (Flutter presentation)
+│   ├── packages/plantcare_domain
+│   └── packages/plantcare_shared
+├── packages/plantcare_data (Firebase and platform adapters)
+│   ├── packages/plantcare_domain
+│   └── packages/plantcare_shared
+├── packages/plantcare_domain (pure Dart contracts and policies)
+│   └── packages/plantcare_shared
+└── packages/plantcare_shared (minimal pure Dart abstractions)
 ```
 
-Feature `data` and `domain` directories are intentionally created only when a
-feature has real persistence or business logic. Application and feature
-workflow state uses event-driven BLoCs from `flutter_bloc`; ephemeral visual
-state stays local to widgets. Routes use `go_router`, dependency injection uses
-`get_it` and `injectable`, and value equality uses `equatable`.
+`plantcare_app` owns `main.dart`, Firebase/App Check bootstrap, emulator
+selection, GoRouter composition and guards, the responsive shell, app theme,
+reminder lifecycle startup, and final GetIt ownership. `plantcare_features`
+owns pages, widgets, event-driven BLoCs, feature factories, labels, validation,
+and safe destination builders. `plantcare_data` owns Firebase and device-plugin
+implementations. `plantcare_domain` owns entities, repository/service contracts,
+validators, and deterministic policies. `plantcare_shared` owns only shared
+errors and environment abstractions.
+
+No package may import another package's `lib/src` or test tree. Run
+`melos run boundaries` to enforce the graph and reject obsolete
+`package:plantcare_ai` imports or Cubits.
 
 `EnvironmentConfig` reads the non-secret `APP_ENV` compile-time value. It
 defaults to `development` and accepts `staging` or `production`:
 
 ```sh
+cd apps/plantcare_app
 flutter run --dart-define=APP_ENV=production
 ```
 
@@ -132,17 +128,64 @@ and does not create, copy, or embed a Gemini API key.
 
 ## Dependency injection generation
 
-After adding or changing injectable registrations, regenerate the checked-in
-configuration:
+After adding or changing injectable registrations, generate the checked-in
+data module, features module, and final app graph in that order:
 
 ```sh
-dart run build_runner build
+melos run generate
 ```
 
-For active development, use:
+The equivalent explicit commands are:
 
 ```sh
-dart run build_runner watch
+(cd packages/plantcare_data && dart run build_runner build && \
+  dart format lib/src/dependency_injection/injection.module.dart)
+(cd packages/plantcare_features && dart run build_runner build && \
+  dart format lib/src/dependency_injection/injection.module.dart)
+(cd apps/plantcare_app && dart run build_runner build && \
+  dart format lib/app/dependency_injection/injection.config.dart)
+```
+
+## Workspace setup and commands
+
+Install Dart/Flutter dependencies and inspect the workspace from the repository
+root:
+
+```sh
+dart pub get
+dart pub workspace list
+melos list
+```
+
+Melos 7.4.0 provides these root commands:
+
+```sh
+melos run bootstrap       # dependency resolution
+melos run boundaries      # architectural import checks
+melos run generate        # ordered DI generation
+melos run format          # owned-source formatting check
+melos run analyze         # whole-workspace analysis
+melos run test:dart       # shared and domain
+melos run test:flutter    # data, features, and app
+melos run test            # all Dart/Flutter tests
+melos run build:web       # release web build
+```
+
+Run package tests directly when working on one boundary:
+
+```sh
+dart test packages/plantcare_shared
+dart test packages/plantcare_domain
+flutter test packages/plantcare_data
+flutter test packages/plantcare_features
+flutter test apps/plantcare_app
+```
+
+Run the application from its package directory:
+
+```sh
+cd apps/plantcare_app
+flutter run -d chrome
 ```
 
 ## Firebase setup
@@ -167,10 +210,12 @@ firebase projects:create plantcare-ai-dev-tasnimalam \
   --display-name "PlantCare AI Development"
 ```
 
-Configure the existing Android, iOS, and web applications from the project
-root. Preserve the current platform identifiers when prompted:
+If the preserved client files must be recreated on a new machine, configure the
+existing Android, iOS, and web registrations from the app package. Preserve the
+current platform identifiers when prompted, and retain the root `firebase.json`:
 
 ```sh
+cd apps/plantcare_app
 flutterfire configure \
   --project=plantcare-ai-dev-tasnimalam \
   --platforms=android,ios,web \
@@ -178,8 +223,9 @@ flutterfire configure \
   --ios-bundle-id=com.tasnimalam.plantcareAi
 ```
 
-This generates `lib/firebase_options.dart` and the native client configuration
-files. This local project intentionally ignores those files, so every new
+This generates `apps/plantcare_app/lib/firebase_options.dart` and the native
+client configuration files under `apps/plantcare_app`. This local project
+intentionally ignores those files, so every new
 developer machine and CI environment must run `flutterfire configure` before
 analysis or a build. The files contain client configuration rather than server
 secrets and may be committed in projects that choose that policy. If Git is
@@ -212,7 +258,8 @@ provider.
 After configuration, fetch dependencies and run the application:
 
 ```sh
-flutter pub get
+dart pub get
+cd apps/plantcare_app
 flutter run
 ```
 
@@ -354,8 +401,9 @@ tokens are never passed through widgets or BLoCs and are never persisted.
 provider implicitly. To register a local Chrome debug token, run exactly:
 
 ```sh
-flutter run -d chrome \
+(cd apps/plantcare_app && flutter run -d chrome \
   --dart-define=USE_APP_CHECK_DEBUG=true
+)
 ```
 
 Obtain the SDK-generated token from the browser logs and register it at
@@ -371,9 +419,9 @@ DeviceCheck fallback. Web uses reCAPTCHA Enterprise and requires its real site
 key at build/run time:
 
 ```sh
-flutter build web --release \
+(cd apps/plantcare_app && flutter build web --release \
   --dart-define=APP_ENV=production \
-  --dart-define=APP_CHECK_RECAPTCHA_ENTERPRISE_SITE_KEY=YOUR_REAL_SITE_KEY
+  --dart-define=APP_CHECK_RECAPTCHA_ENTERPRISE_SITE_KEY=YOUR_REAL_SITE_KEY)
 ```
 
 No placeholder key belongs in source control. A production web startup fails
@@ -419,6 +467,7 @@ firebase emulators:start --only auth,firestore
 Run a debug build with emulator use enabled:
 
 ```sh
+cd apps/plantcare_app
 flutter run --dart-define=USE_FIREBASE_EMULATOR=true
 ```
 
@@ -729,11 +778,12 @@ notifications in the device's system Settings.
 ## Release preparation and verification
 
 ```sh
-flutter pub get
-dart run build_runner build
-dart format --output=none --set-exit-if-changed lib test
-flutter analyze
-flutter test
+dart pub get
+melos run generate
+melos run format
+melos run analyze
+melos run test
+melos run boundaries
 npm run test:rules
 (cd tools/knowledge_ingestion && npm run build && npm test && npm run validate && npm run dry-run)
 git diff --check
@@ -743,16 +793,20 @@ Run against local Auth and Firestore emulators on Android with:
 
 ```sh
 firebase emulators:start --project demo-plantcare-ai --only auth,firestore
-flutter run -d emulator-5554 --dart-define=USE_FIREBASE_EMULATOR=true
+(cd apps/plantcare_app && flutter run -d emulator-5554 \
+  --dart-define=USE_FIREBASE_EMULATOR=true)
 ```
 
 Build release artifacts with explicit production App Check configuration:
 
 ```sh
-flutter build web --release --dart-define=APP_ENV=production \
-  --dart-define=APP_CHECK_RECAPTCHA_ENTERPRISE_SITE_KEY=YOUR_NON_SECRET_SITE_KEY
-flutter build apk --release --dart-define=APP_ENV=production
-flutter build ios --release --no-codesign --dart-define=APP_ENV=production
+(cd apps/plantcare_app && flutter build web --release \
+  --dart-define=APP_ENV=production \
+  --dart-define=APP_CHECK_RECAPTCHA_ENTERPRISE_SITE_KEY=YOUR_NON_SECRET_SITE_KEY)
+(cd apps/plantcare_app && flutter build apk --release \
+  --dart-define=APP_ENV=production)
+(cd apps/plantcare_app && flutter build ios --release --no-codesign \
+  --dart-define=APP_ENV=production)
 ```
 
 Release builds reject `USE_APP_CHECK_DEBUG=true`. The web reCAPTCHA Enterprise
@@ -760,11 +814,23 @@ site key is a public build-time identifier, not a provider secret; do not place
 debug tokens, service-account credentials, or AI provider keys in source or
 build defines.
 
-`firebase.json` serves `build/web`, rewrites all application paths to
+`firebase.json` serves `apps/plantcare_app/build/web`, rewrites all application paths to
 `index.html` for `go_router` deep links, and prevents aggressive caching of the
 HTML/bootstrap/service-worker entry points. Flutter does not emit reliably
 content-hashed names for every generated asset, so this configuration does not
 apply immutable caching to unhashed output.
+
+After `melos run build:web`, verify the relocated output locally from the
+repository root without deploying:
+
+```sh
+firebase emulators:start --project demo-plantcare-ai --only hosting
+```
+
+The Hosting emulator serves `/` and deep links such as `/privacy-safety` from
+the same SPA entry point. Firebase client paths are configured in
+`firebase.json` under `apps/plantcare_app`; `firestore.rules` remains at the
+repository root.
 
 Preview and production Hosting commands are:
 

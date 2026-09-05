@@ -5,7 +5,7 @@
         "default": {
           "projectId": "plantcare-ai-dev-tasnimalam",
           "appId": "1:399156723564:android:1f0d2556c1e7b945617d49",
-          "fileOutput": "android/app/google-services.json"
+          "fileOutput": "apps/plantcare_app/android/app/google-services.json"
         }
       },
       "ios": {
@@ -13,11 +13,11 @@
           "projectId": "plantcare-ai-dev-tasnimalam",
           "appId": "1:399156723564:ios:3f6ce24072d51be7617d49",
           "uploadDebugSymbols": false,
-          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+          "fileOutput": "apps/plantcare_app/ios/Runner/GoogleService-Info.plist"
         }
       },
       "dart": {
-        "lib/firebase_options.dart": {
+        "apps/plantcare_app/lib/firebase_options.dart": {
           "projectId": "plantcare-ai-dev-tasnimalam",
           "configurations": {
             "android": "1:399156723564:android:1f0d2556c1e7b945617d49",
@@ -32,7 +32,7 @@
     "rules": "firestore.rules"
   },
   "hosting": {
-    "public": "build/web",
+    "public": "apps/plantcare_app/build/web",
     "ignore": [
       "firebase.json",
       "**/.*",
