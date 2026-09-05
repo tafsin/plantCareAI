@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_data/src/plant_diagnosis/models/plant_diagnosis_codec.dart';
 import 'package:plantcare_domain/knowledge_retrieval.dart';
@@ -72,6 +73,35 @@ void main() {
         throwsFormatException,
       );
     }
+  });
+
+  test('saved diagnoses retain their original v2 or v3 dataset version', () {
+    final diagnosis = PlantDiagnosisCodec.fromAiJson(
+      _validJson(),
+      retrieval: retrieval,
+      modelName: 'gemini-3.5-flash-lite',
+    );
+    final stored = Map<String, dynamic>.from(
+      PlantDiagnosisCodec.toFirestore(diagnosis),
+    )..['createdAt'] = Timestamp.fromDate(DateTime.utc(2026, 9, 5));
+    final historical = PlantDiagnosisCodec.fromFirestoreData(
+      id: 'v2',
+      data: stored,
+    );
+    expect(historical.datasetVersion, KnowledgeVersions.dataset);
+
+    final v3 = PlantDiagnosisCodec.fromFirestoreData(
+      id: 'v3',
+      data: {...stored, 'datasetVersion': KnowledgeVersions.preferredDataset},
+    );
+    expect(v3.datasetVersion, KnowledgeVersions.preferredDataset);
+    expect(
+      () => PlantDiagnosisCodec.fromFirestoreData(
+        id: 'future',
+        data: {...stored, 'datasetVersion': 'future-v4'},
+      ),
+      throwsFormatException,
+    );
   });
 }
 

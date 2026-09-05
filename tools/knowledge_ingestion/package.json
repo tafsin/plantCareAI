@@ -8,7 +8,9 @@
     "format:check": "prettier --check .",
     "test": "node --import tsx --test test/**/*.test.ts",
     "validate": "tsx src/cli.ts --project plantcare-ai-dev-tasnimalam",
-    "dry-run": "tsx src/cli.ts --project plantcare-ai-dev-tasnimalam"
+    "dry-run": "tsx src/cli.ts --project plantcare-ai-dev-tasnimalam",
+    "candidate:v3:dry-run": "tsx src/candidate_v3_cli.ts",
+    "candidate:v3:compare": "tsx src/candidate_v3_compare_cli.ts"
   },
   "dependencies": {
     "firebase-admin": "^14.3.0",

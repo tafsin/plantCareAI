@@ -257,6 +257,11 @@ final class _Knowledge implements KnowledgeRepository {
   int chunkLoads = 0;
 
   @override
+  Future<KnowledgeEvidenceSet> loadPreferredEvidenceForPlant(String key) {
+    throw UnimplementedError('Fertilizer v1 uses the production v2 methods.');
+  }
+
+  @override
   Future<KnowledgeDocuments<KnowledgeChunk>> loadChunksForPlant(
     String key,
   ) async {

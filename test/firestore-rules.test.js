@@ -248,6 +248,14 @@ const knowledgeChunkRef = (context) =>
 const knowledgeSourceRef = (context) =>
   doc(context.firestore(), 'knowledgeSources/umn_growing_tomatoes');
 
+const v3ReleaseRef = (context) =>
+  doc(context.firestore(), 'knowledgeDatasets/2026-09-05-v3');
+
+const v3ChunkRef = (context) => doc(
+  context.firestore(),
+  'knowledgeDatasets/2026-09-05-v3/chunks/tomato__identity__species_identity',
+);
+
 const seedKnowledge = async () => testEnv.withSecurityRulesDisabled(async (context) => {
   await setDoc(knowledgeChunkRef(context), {
     schemaVersion: 1,
@@ -496,9 +504,13 @@ describe('diagnosis ownership, immutability, and validation', () => {
     ));
   });
 
-  test('requires v2 grounding metadata and bounded string and ID arrays', async () => {
+  test('accepts v2 and v3 grounding while rejecting unsupported metadata', async () => {
     const alice = testEnv.authenticatedContext('alice');
     await createObservation(alice);
+    await assertSucceeds(setDoc(
+      diagnosisRef(alice, 'alice', 'plant-1', 'observation-1', 'v3'),
+      validDiagnosis({ datasetVersion: '2026-09-05-v3' }),
+    ));
     for (const [id, overrides] of [
       ['dataset', { datasetVersion: '2026-09-03-v1' }],
       ['algorithm', { retrievalAlgorithmVersion: 'vector-v1' }],
@@ -888,5 +900,28 @@ describe('curated knowledge is authenticated-read-only', () => {
     const alice = testEnv.authenticatedContext('alice');
     await assertFails(deleteDoc(knowledgeChunkRef(alice)));
     await assertFails(deleteDoc(knowledgeSourceRef(alice)));
+  });
+
+  test('v3 release metadata and documents are authenticated-read-only', async () => {
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      await setDoc(v3ReleaseRef(context), {
+        schemaVersion: 1,
+        datasetVersion: '2026-09-05-v3',
+        status: 'complete',
+      });
+      await setDoc(v3ChunkRef(context), {
+        schemaVersion: 1,
+        datasetVersion: '2026-09-05-v3',
+      });
+    });
+    const alice = testEnv.authenticatedContext('alice');
+    const guest = testEnv.unauthenticatedContext();
+    await assertSucceeds(getDoc(v3ReleaseRef(alice)));
+    await assertSucceeds(getDoc(v3ChunkRef(alice)));
+    await assertFails(getDoc(v3ReleaseRef(guest)));
+    await assertFails(getDoc(v3ChunkRef(guest)));
+    await assertFails(setDoc(v3ReleaseRef(alice), { status: 'complete' }));
+    await assertFails(setDoc(v3ChunkRef(alice), { schemaVersion: 1 }));
+    await assertFails(deleteDoc(v3ChunkRef(alice)));
   });
 });

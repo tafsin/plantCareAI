@@ -184,6 +184,11 @@ final class _Knowledge implements KnowledgeRepository {
   bool mismatch = false;
   int chunkLoads = 0;
   @override
+  Future<KnowledgeEvidenceSet> loadPreferredEvidenceForPlant(String key) {
+    throw UnimplementedError('Manual watering v1 uses production v2 methods.');
+  }
+
+  @override
   Future<KnowledgeDocuments<KnowledgeChunk>> loadChunksForPlant(
     String key,
   ) async {

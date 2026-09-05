@@ -16,6 +16,18 @@ Flutter knowledge consumers target it for all new retrieval, diagnosis,
 watering, and fertilizer work. Historical v1 user records remain readable and
 are not rewritten.
 
+`data/candidate_v3.json` is a validation-only overlay for the adaptive watering
+evidence review. It composes in memory with v2 as
+`2026-09-05-v3-candidate`; the production loader and ingestion CLI cannot select
+it. Validate it with `npm run candidate:v3:dry-run`. Promotion requires review,
+an explicit production-ingestion approval, and a separate version change.
+
+The zero-downtime application bridge expects a promoted release under
+`knowledgeDatasets/2026-09-05-v3`, with `chunks` and `sources` subcollections.
+The flat V2 collections must remain unchanged. A complete release marker is
+written last, only after read-back validation; its absence keeps clients on V2.
+The current tooling does not write this release or its marker.
+
 Chunk constraints include:
 
 - one of the five allowlisted canonical plant keys and knowledge categories;

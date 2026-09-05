@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "2026-09-05-v3-candidate",
+  "baseDatasetVersion": "2026-09-03-v2",
+  "sources": {
+    "iowa_container_plant_care": {
+      "schemaVersion": 1,
+      "title": "Care of Plants Growing in Containers",
+      "publisher": "Iowa State University Extension and Outreach",
+      "url": "https://yardandgarden.extension.iastate.edu/how-to/care-plants-growing-containers",
+      "accessedAt": "2026-09-05T00:00:00.000Z",
+      "sourceType": "university_extension",
+      "datasetVersion": "2026-09-05-v3-candidate"
+    },
+    "maryland_container_vegetables": {
+      "schemaVersion": 1,
+      "title": "Growing Vegetables in Containers and Salad Tables",
+      "publisher": "University of Maryland Extension",
+      "url": "https://extension.umd.edu/resource/growing-vegetables-containers-and-salad-tables",
+      "accessedAt": "2026-09-05T00:00:00.000Z",
+      "sourceType": "university_extension",
+      "datasetVersion": "2026-09-05-v3-candidate"
+    },
+    "iowa_garden_watering_tips": {
+      "schemaVersion": 1,
+      "title": "Watering Tips for the Garden, Lawn, and Landscape",
+      "publisher": "Iowa State University Extension and Outreach",
+      "url": "https://yardandgarden.extension.iastate.edu/how-to/watering-tips-garden-lawn-and-landscape",
+      "accessedAt": "2026-09-05T00:00:00.000Z",
+      "sourceType": "university_extension",
+      "datasetVersion": "2026-09-05-v3-candidate"
+    },
+    "maryland_garden_planning": {
+      "schemaVersion": 1,
+      "title": "Garden Planning: Growing and Maintaining a Vegetable Garden",
+      "publisher": "University of Maryland Extension",
+      "url": "https://extension.umd.edu/enst.umd.edu/agnr.umd.edu/sites/extension.umd.edu/files/2023-04/CCMG%20GIEI%20Garden%20Planning%20Presentation.pdf",
+      "accessedAt": "2026-09-05T00:00:00.000Z",
+      "sourceType": "university_extension",
+      "datasetVersion": "2026-09-05-v3-candidate"
+    }
+  },
+  "chunks": [
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "tomato",
+      "commonName": "Tomato",
+      "scientificName": "Solanum lycopersicum",
+      "aliases": ["Tomato", "Lycopersicon lycopersicum"],
+      "category": "watering",
+      "issueKey": "adaptive_recheck_context",
+      "environment": ["outdoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": [
+        "seedling",
+        "vegetative",
+        "flowering",
+        "fruiting",
+        "mature"
+      ],
+      "symptomKeywords": ["soil_moisture", "watering_history"],
+      "title": "Recheck tomato soil instead of predicting from elapsed time",
+      "content": "Use the current below-surface soil check as the watering decision signal. A prior watering record can explain context but cannot prove present need, because rainfall, soil, heat, wind, and plant growth change drying. For established outdoor garden plants, checking about every two days is a review cadence, not a watering schedule; seedlings need closer observation.",
+      "cautions": [
+        "Rainfall and weather must be checked separately because this app does not observe them.",
+        "Wet or moist soil remains a reason to wait even when the last recorded watering is old."
+      ],
+      "sourceIds": [
+        "iowa_garden_watering_tips",
+        "maryland_garden_planning",
+        "umn_growing_tomatoes"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "tomato",
+      "commonName": "Tomato",
+      "scientificName": "Solanum lycopersicum",
+      "aliases": ["Tomato", "Lycopersicon lycopersicum"],
+      "category": "watering",
+      "issueKey": "container_drying_modifiers",
+      "environment": ["outdoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": [
+        "seedling",
+        "vegetative",
+        "flowering",
+        "fruiting",
+        "mature"
+      ],
+      "symptomKeywords": ["small_container", "large_container", "full_sun"],
+      "title": "Tomato containers need moisture checks at least daily",
+      "content": "Outdoor containers dry faster than garden beds and should be checked daily rather than watered automatically. Small containers dry faster than large ones, and containers in full sun dry faster than those in shade. These factors can move a soil recheck earlier within the daily review window, but the next finger test still decides whether water is needed.",
+      "cautions": [
+        "Weather, wind, container material, potting mix, roots, and plant size are not captured by pot size and sunlight alone.",
+        "Do not infer a watering quantity or fixed interval from container size."
+      ],
+      "sourceIds": [
+        "iowa_container_plant_care",
+        "maryland_container_vegetables"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "pumpkin",
+      "commonName": "Pumpkin",
+      "scientificName": "Cucurbita pepo",
+      "aliases": ["Pumpkin"],
+      "category": "watering",
+      "issueKey": "adaptive_recheck_context",
+      "environment": ["outdoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": [
+        "seedling",
+        "vegetative",
+        "flowering",
+        "fruiting",
+        "mature"
+      ],
+      "symptomKeywords": ["soil_moisture", "watering_history"],
+      "title": "Recheck pumpkin soil instead of predicting from elapsed time",
+      "content": "Use the current below-surface soil check as the watering decision signal. A prior watering record can explain context but cannot prove present need, because rainfall, soil, heat, wind, and plant growth change drying. For established outdoor garden plants, checking about every two days is a review cadence, not a watering schedule; seedlings need closer observation.",
+      "cautions": [
+        "Rainfall and weather must be checked separately because this app does not observe them.",
+        "Wet or moist soil remains a reason to wait even when the last recorded watering is old."
+      ],
+      "sourceIds": [
+        "iowa_garden_watering_tips",
+        "maryland_garden_planning",
+        "usu_growing_pumpkins"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "pumpkin",
+      "commonName": "Pumpkin",
+      "scientificName": "Cucurbita pepo",
+      "aliases": ["Pumpkin"],
+      "category": "watering",
+      "issueKey": "container_drying_modifiers",
+      "environment": ["outdoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": [
+        "seedling",
+        "vegetative",
+        "flowering",
+        "fruiting",
+        "mature"
+      ],
+      "symptomKeywords": ["small_container", "large_container", "full_sun"],
+      "title": "Pumpkin containers need moisture checks at least daily",
+      "content": "Outdoor containers dry faster than garden beds and should be checked daily rather than watered automatically. Small containers dry faster than large ones, and containers in full sun dry faster than those in shade. These factors can move a soil recheck earlier within the daily review window, but the next finger test still decides whether water is needed.",
+      "cautions": [
+        "Weather, wind, container material, potting mix, roots, and plant size are not captured by pot size and sunlight alone.",
+        "Do not infer a watering quantity or fixed interval from container size."
+      ],
+      "sourceIds": [
+        "iowa_container_plant_care",
+        "maryland_container_vegetables"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "pothos",
+      "commonName": "Pothos",
+      "scientificName": "Epipremnum aureum",
+      "aliases": ["Pothos", "Golden pothos", "Devil's ivy"],
+      "category": "watering",
+      "issueKey": "adaptive_recheck_context",
+      "environment": ["indoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": ["vegetative", "mature"],
+      "symptomKeywords": ["soil_moisture", "watering_history"],
+      "title": "Current pothos soil moisture outweighs watering history",
+      "content": "Use the current finger test rather than elapsed time to decide whether an indoor pothos needs water. A prior watering record is context only because light, temperature, humidity, pot size, potting mix, roots, and season change drying. When soil is wet, wait and check again in one or two days; do not convert that recheck window into an automatic watering date.",
+      "cautions": [
+        "Wet or moist soil remains a reason to wait even when the last recorded watering is old.",
+        "A missing watering record does not establish that water is needed."
+      ],
+      "sourceIds": [
+        "iowa_houseplant_care",
+        "illinois_houseplant_care",
+        "ncsu_pothos"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "pothos",
+      "commonName": "Pothos",
+      "scientificName": "Epipremnum aureum",
+      "aliases": ["Pothos", "Golden pothos", "Devil's ivy"],
+      "category": "watering",
+      "issueKey": "container_drying_modifiers",
+      "environment": ["indoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": ["vegetative", "mature"],
+      "symptomKeywords": ["small_container", "large_container", "bright_light"],
+      "title": "Pot size and light modify pothos drying direction",
+      "content": "Small pots generally dry faster than large pots, while larger volumes can stay wet longer. Brighter light also tends to increase drying compared with lower light. Use these as directional reasons to choose the earlier or later part of a supported one-to-two-day recheck window; they do not replace a new soil reading or justify a fixed watering schedule.",
+      "cautions": [
+        "Pot material, drainage, potting mix, temperature, humidity, roots, and season can reverse an assumed drying rate.",
+        "Do not lengthen the snake-plant-specific dry-down threshold for pothos."
+      ],
+      "sourceIds": [
+        "iowa_houseplant_care",
+        "illinois_houseplant_care",
+        "maryland_container_vegetables"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "snake_plant",
+      "commonName": "Snake plant",
+      "scientificName": "Dracaena trifasciata",
+      "aliases": [
+        "Snake plant",
+        "Mother-in-law's tongue",
+        "Sansevieria trifasciata"
+      ],
+      "category": "watering",
+      "issueKey": "adaptive_recheck_context",
+      "environment": ["indoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": ["vegetative", "mature"],
+      "symptomKeywords": ["soil_moisture", "watering_history"],
+      "title": "Current snake plant soil moisture outweighs watering history",
+      "content": "Use the current finger test rather than elapsed time to decide whether a snake plant needs water. A prior watering record is context only because light, temperature, pot size, potting mix, roots, and season change drying. Wet or moist soil requires waiting; checking again in one or two days confirms direction without weakening the plant's need for more complete drying.",
+      "cautions": [
+        "A dry reading still follows the snake plant's lower-frequency threshold; dry alone does not mean water now.",
+        "A missing or old watering record does not establish need."
+      ],
+      "sourceIds": [
+        "iowa_houseplant_care",
+        "illinois_houseplant_care",
+        "ncsu_snake_plant"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "snake_plant",
+      "commonName": "Snake plant",
+      "scientificName": "Dracaena trifasciata",
+      "aliases": [
+        "Snake plant",
+        "Mother-in-law's tongue",
+        "Sansevieria trifasciata"
+      ],
+      "category": "watering",
+      "issueKey": "container_drying_modifiers",
+      "environment": ["indoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": ["vegetative", "mature"],
+      "symptomKeywords": ["small_container", "large_container", "bright_light"],
+      "title": "Pot size and light modify snake plant drying direction",
+      "content": "Small pots generally dry faster than large pots, while larger volumes can stay wet longer. Brighter light also tends to increase drying compared with lower light. Use these as directional reasons to choose the earlier or later part of a supported one-to-two-day recheck window, never to bypass the snake plant's more complete dry-down threshold or schedule watering automatically.",
+      "cautions": [
+        "Pot material, drainage, potting mix, temperature, roots, and season can reverse an assumed drying rate.",
+        "Persistent moisture is a greater snake plant risk than a longer dry interval."
+      ],
+      "sourceIds": [
+        "iowa_houseplant_care",
+        "illinois_houseplant_care",
+        "maryland_container_vegetables",
+        "ncsu_snake_plant"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "peace_lily",
+      "commonName": "Peace lily",
+      "scientificName": "Spathiphyllum wallisii",
+      "aliases": ["Peace lily", "Spathe flower", "White sails"],
+      "category": "watering",
+      "issueKey": "adaptive_recheck_context",
+      "environment": ["indoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": ["vegetative", "flowering", "mature"],
+      "symptomKeywords": ["soil_moisture", "watering_history"],
+      "title": "Current peace lily soil moisture outweighs watering history",
+      "content": "Use the current finger test rather than elapsed time to decide whether a peace lily needs water. A prior watering record is context only because light, temperature, humidity, pot size, potting mix, roots, and season change drying. When soil is wet, wait and check again in one or two days; do not convert that recheck window into an automatic watering date.",
+      "cautions": [
+        "Wet or moist soil remains a reason to wait even when the last recorded watering is old.",
+        "Wilting can occur with dry roots or roots damaged by persistent wetness."
+      ],
+      "sourceIds": [
+        "iowa_houseplant_care",
+        "illinois_houseplant_care",
+        "ncsu_peace_lily"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "schemaVersion": 1,
+      "canonicalPlantKey": "peace_lily",
+      "commonName": "Peace lily",
+      "scientificName": "Spathiphyllum wallisii",
+      "aliases": ["Peace lily", "Spathe flower", "White sails"],
+      "category": "watering",
+      "issueKey": "container_drying_modifiers",
+      "environment": ["indoor"],
+      "affectedParts": ["root", "whole_plant"],
+      "growthStages": ["vegetative", "flowering", "mature"],
+      "symptomKeywords": ["small_container", "large_container", "bright_light"],
+      "title": "Pot size and light modify peace lily drying direction",
+      "content": "Small pots generally dry faster than large pots, while larger volumes can stay wet longer. Brighter light also tends to increase drying compared with lower light. Use these as directional reasons to choose the earlier or later part of a supported one-to-two-day recheck window; the current soil reading and the peace lily's moist-but-not-soggy preference remain controlling.",
+      "cautions": [
+        "Pot material, drainage, potting mix, temperature, humidity, roots, and season can reverse an assumed drying rate.",
+        "Do not let a large pot or low light turn a recheck window into permission to leave saturated soil unmanaged."
+      ],
+      "sourceIds": [
+        "iowa_houseplant_care",
+        "illinois_houseplant_care",
+        "maryland_container_vegetables",
+        "ncsu_peace_lily"
+      ],
+      "reviewStatus": "reviewed",
+      "datasetVersion": "2026-09-05-v3-candidate",
+      "createdAt": "2026-09-05T00:00:00.000Z",
+      "updatedAt": "2026-09-05T00:00:00.000Z"
+    }
+  ]
+}

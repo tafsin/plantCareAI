@@ -180,13 +180,21 @@ abstract final class PlantDiagnosisCodec {
       maxShortTextLength,
     ).toSet();
     final sources = _idList(data, 'sourceIds', 5, maxShortTextLength);
+    final datasetVersion = _plainString(
+      data,
+      'datasetVersion',
+      maxShortTextLength,
+    );
+    if (!KnowledgeVersions.supportedDatasets.contains(datasetVersion)) {
+      throw const FormatException('Unsupported diagnosis dataset.');
+    }
     final retrieval = KnowledgeRetrievalResult(
       canonicalPlantKey: _plainString(
         data,
         'canonicalPlantKey',
         maxShortTextLength,
       ),
-      datasetVersion: _plainString(data, 'datasetVersion', maxShortTextLength),
+      datasetVersion: datasetVersion,
       algorithmVersion: _plainString(
         data,
         'retrievalAlgorithmVersion',

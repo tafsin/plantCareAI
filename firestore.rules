@@ -224,7 +224,7 @@ service cloud.firestore {
         ]
         && validIdList(data.evidenceChunkIds, 1)
         && validIdList(data.sourceIds, 1)
-        && data.datasetVersion == '2026-09-03-v2'
+        && data.datasetVersion in ['2026-09-03-v2', '2026-09-05-v3']
         && data.retrievalAlgorithmVersion == 'metadata-v1'
         && data.modelName == 'gemini-3.5-flash-lite'
         && data.source == 'firebase_ai_client_grounded'
@@ -605,6 +605,16 @@ service cloud.firestore {
     match /knowledgeSources/{sourceId} {
       allow read: if request.auth != null;
       allow create, update, delete: if false;
+    }
+
+    match /knowledgeDatasets/{datasetVersion} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if false;
+
+      match /{knowledgeDocument=**} {
+        allow read: if request.auth != null;
+        allow create, update, delete: if false;
+      }
     }
 
     match /{document=**} {

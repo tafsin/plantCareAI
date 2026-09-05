@@ -222,7 +222,7 @@ and avoid action must cite at least one supplied chunkId. Return JSON only.
         'Insufficient evidence for a grounded diagnosis.',
       );
     }
-    if (result.datasetVersion != KnowledgeVersions.dataset ||
+    if (!KnowledgeVersions.diagnosisDatasets.contains(result.datasetVersion) ||
         result.algorithmVersion != KnowledgeVersions.algorithm) {
       throw const PlantDiagnosisFailure(
         PlantDiagnosisFailureType.malformedSources,

@@ -123,6 +123,39 @@ void main() {
     expect(calls, 0);
   });
 
+  test(
+    'accepts complete v3 evidence and rejects mixed-version evidence',
+    () async {
+      var calls = 0;
+      final service = FirebaseAiPlantDiagnosisService.forTest(
+        isAuthenticated: () => true,
+        generateResponse: (_) async {
+          calls++;
+          return jsonEncode(_validJson());
+        },
+        environmentConfig: const _Environment(),
+      );
+      final v3Chunk = _knowledgeChunk(KnowledgeVersions.preferredDataset);
+      final v3Source = _knowledgeSource(KnowledgeVersions.preferredDataset);
+      final v3 = _requestWithEvidence(v3Chunk, v3Source);
+      final result = await service.generate(v3);
+      expect(result.datasetVersion, KnowledgeVersions.preferredDataset);
+      expect(calls, 1);
+
+      await expectLater(
+        service.generate(_requestWithEvidence(v3Chunk, sampleKnowledgeSource)),
+        throwsA(
+          isA<PlantDiagnosisFailure>().having(
+            (error) => error.type,
+            'type',
+            PlantDiagnosisFailureType.malformedSources,
+          ),
+        ),
+      );
+      expect(calls, 1);
+    },
+  );
+
   test('maps auth, App Check, model, quota, safety and network errors', () {
     final cases = {
       '401 unauthenticated': PlantDiagnosisFailureType.unauthenticated,
@@ -161,6 +194,51 @@ DiagnosisRequest _request() => DiagnosisRequest(
     ],
     warnings: [],
   ),
+);
+
+DiagnosisRequest _requestWithEvidence(
+  KnowledgeChunk chunk,
+  KnowledgeSource source,
+) => DiagnosisRequest(
+  plant: _plant,
+  observation: _observation,
+  retrieval: KnowledgeRetrievalResult(
+    canonicalPlantKey: 'tomato',
+    datasetVersion: chunk.datasetVersion,
+    algorithmVersion: KnowledgeVersions.algorithm,
+    rankedMatches: [
+      RankedKnowledgeMatch(
+        chunk: chunk,
+        score: 20,
+        matchedSignals: const ['matched symptom'],
+        sources: [source],
+      ),
+    ],
+    warnings: const [],
+  ),
+);
+
+KnowledgeChunk _knowledgeChunk(String version) => KnowledgeChunk(
+  id: sampleKnowledgeChunk.id,
+  canonicalPlantKey: sampleKnowledgeChunk.canonicalPlantKey,
+  category: sampleKnowledgeChunk.category,
+  environment: sampleKnowledgeChunk.environment,
+  affectedParts: sampleKnowledgeChunk.affectedParts,
+  growthStages: sampleKnowledgeChunk.growthStages,
+  symptomKeywords: sampleKnowledgeChunk.symptomKeywords,
+  title: sampleKnowledgeChunk.title,
+  content: sampleKnowledgeChunk.content,
+  cautions: sampleKnowledgeChunk.cautions,
+  sourceIds: sampleKnowledgeChunk.sourceIds,
+  datasetVersion: version,
+);
+
+KnowledgeSource _knowledgeSource(String version) => KnowledgeSource(
+  id: sampleKnowledgeSource.id,
+  title: sampleKnowledgeSource.title,
+  publisher: sampleKnowledgeSource.publisher,
+  url: sampleKnowledgeSource.url,
+  datasetVersion: version,
 );
 
 const _plant = Plant(

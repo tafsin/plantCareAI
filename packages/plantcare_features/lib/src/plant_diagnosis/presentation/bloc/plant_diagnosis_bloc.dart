@@ -179,14 +179,14 @@ final class PlantDiagnosisBloc
       ),
     );
     try {
-      final chunks = await _knowledgeRepository.loadChunksForPlant(
+      final evidence = await _knowledgeRepository.loadPreferredEvidenceForPlant(
         canonicalKey,
       );
       final ranked = _ranker.rank(
         canonicalPlantKey: canonicalKey,
         plant: request.plant,
         observation: request.observation,
-        chunks: chunks.items,
+        chunks: evidence.chunks,
       );
       if (ranked.isEmpty) {
         emit(
@@ -194,10 +194,10 @@ final class PlantDiagnosisBloc
             status: PlantDiagnosisStatus.insufficientEvidence,
             retrieval: KnowledgeRetrievalResult(
               canonicalPlantKey: canonicalKey,
-              datasetVersion: KnowledgeVersions.dataset,
+              datasetVersion: evidence.datasetVersion,
               algorithmVersion: KnowledgeVersions.algorithm,
               rankedMatches: const [],
-              warnings: chunks.warnings,
+              warnings: evidence.warnings,
             ),
           ),
         );
@@ -206,13 +206,10 @@ final class PlantDiagnosisBloc
       final requestedSourceIds = ranked
           .expand((match) => match.chunk.sourceIds)
           .toSet();
-      final sources = await _knowledgeRepository.loadSources(
-        requestedSourceIds,
-      );
       final sourceById = {
-        for (final source in sources.items) source.id: source,
+        for (final source in evidence.sources) source.id: source,
       };
-      if (sources.warnings.isNotEmpty ||
+      if (evidence.warnings.isNotEmpty ||
           !sourceById.keys.toSet().containsAll(requestedSourceIds)) {
         throw const PlantDiagnosisFailure(
           PlantDiagnosisFailureType.malformedSources,
@@ -221,7 +218,7 @@ final class PlantDiagnosisBloc
       }
       final result = KnowledgeRetrievalResult(
         canonicalPlantKey: canonicalKey,
-        datasetVersion: KnowledgeVersions.dataset,
+        datasetVersion: evidence.datasetVersion,
         algorithmVersion: KnowledgeVersions.algorithm,
         rankedMatches: ranked
             .map(
@@ -232,7 +229,7 @@ final class PlantDiagnosisBloc
               ),
             )
             .toList(growable: false),
-        warnings: chunks.warnings,
+        warnings: evidence.warnings,
       );
       emit(
         PlantDiagnosisState(

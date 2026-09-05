@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_data/src/knowledge_retrieval/models/knowledge_document_codec.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 
 void main() {
   test('parses a valid chunk without exposing Firestore types', () {
@@ -9,14 +10,45 @@ void main() {
     expect(chunk.symptomKeywords, ['yellowing']);
   });
 
-  test('reads historical v1 and active v2 knowledge metadata', () {
+  test('reads historical v1, active v2, and compatible v3 metadata', () {
     final historical = KnowledgeDocumentCodec.chunk('v1', _chunkData());
     final current = KnowledgeDocumentCodec.chunk(
       'v2',
       _chunkData()..['datasetVersion'] = '2026-09-03-v2',
     );
+    final compatible = KnowledgeDocumentCodec.chunk(
+      'v3',
+      _chunkData()..['datasetVersion'] = KnowledgeVersions.preferredDataset,
+    );
     expect(historical.datasetVersion, '2026-09-03-v1');
     expect(current.datasetVersion, '2026-09-03-v2');
+    expect(compatible.datasetVersion, '2026-09-05-v3');
+  });
+
+  test('accepts only the exact complete v3 release manifest', () {
+    final valid = _releaseData();
+    expect(KnowledgeDocumentCodec.isCompletePreferredRelease(valid), isTrue);
+    expect(
+      KnowledgeDocumentCodec.isCompletePreferredRelease({
+        ...valid,
+        'expectedChunkCount': 59,
+      }),
+      isFalse,
+    );
+    expect(
+      KnowledgeDocumentCodec.isCompletePreferredRelease({
+        ...valid,
+        'status': 'uploading',
+      }),
+      isFalse,
+    );
+    expect(
+      KnowledgeDocumentCodec.isCompletePreferredRelease({
+        ...valid,
+        'unexpected': true,
+      }),
+      isFalse,
+    );
   });
 
   test('rejects malformed and unsupported chunk documents', () {
@@ -113,4 +145,14 @@ Map<String, dynamic> _sourceData() => {
   'accessedAt': Timestamp.fromDate(DateTime.utc(2026, 9, 3)),
   'sourceType': 'university_extension',
   'datasetVersion': '2026-09-03-v1',
+};
+
+Map<String, dynamic> _releaseData() => {
+  'schemaVersion': 1,
+  'datasetVersion': KnowledgeVersions.preferredDataset,
+  'status': 'complete',
+  'expectedSourceCount': KnowledgeDatasetInventory.preferredSourceCount,
+  'expectedChunkCount': KnowledgeDatasetInventory.preferredChunkCount,
+  'chunksPerPlant': KnowledgeDatasetInventory.preferredChunksPerPlant,
+  'verifiedAt': Timestamp.fromDate(DateTime.utc(2026, 9, 5)),
 };

@@ -41,6 +41,26 @@ final class FakeKnowledgeRepository implements KnowledgeRepository {
   Set<String>? requestedSourceIds;
 
   @override
+  Future<KnowledgeEvidenceSet> loadPreferredEvidenceForPlant(
+    String canonicalPlantKey,
+  ) async {
+    final loadedChunks = await loadChunksForPlant(canonicalPlantKey);
+    final ids = loadedChunks.items.expand((chunk) => chunk.sourceIds).toSet();
+    final loadedSources = ids.isEmpty
+        ? const KnowledgeDocuments<KnowledgeSource>(items: [])
+        : await loadSources(ids);
+    return KnowledgeEvidenceSet(
+      datasetVersion: loadedChunks.items.isEmpty
+          ? KnowledgeVersions.dataset
+          : loadedChunks.items.first.datasetVersion,
+      canonicalPlantKey: canonicalPlantKey,
+      chunks: loadedChunks.items,
+      sources: loadedSources.items,
+      warnings: [...loadedChunks.warnings, ...loadedSources.warnings],
+    );
+  }
+
+  @override
   Future<KnowledgeDocuments<KnowledgeChunk>> loadChunksForPlant(
     String canonicalPlantKey,
   ) {

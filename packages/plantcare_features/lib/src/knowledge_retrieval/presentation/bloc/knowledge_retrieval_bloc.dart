@@ -145,21 +145,19 @@ final class KnowledgeRetrievalBloc
       const KnowledgeRetrievalState(status: KnowledgeRetrievalStatus.loading),
     );
     try {
-      final documents = await _repository.loadChunksForPlant(canonicalKey);
+      final evidence = await _repository.loadPreferredEvidenceForPlant(
+        canonicalKey,
+      );
       final ranked = _ranker.rank(
         canonicalPlantKey: canonicalKey,
         plant: request.plant,
         observation: request.observation,
-        chunks: documents.items,
+        chunks: evidence.chunks,
       );
-      final sourceIds = ranked.expand((match) => match.chunk.sourceIds).toSet();
-      final sourceDocuments = sourceIds.isEmpty
-          ? const KnowledgeDocuments<KnowledgeSource>(items: [])
-          : await _repository.loadSources(sourceIds);
       final sourceById = {
-        for (final source in sourceDocuments.items) source.id: source,
+        for (final source in evidence.sources) source.id: source,
       };
-      final warnings = [...documents.warnings, ...sourceDocuments.warnings];
+      final warnings = [...evidence.warnings];
       final matches = ranked
           .map((match) {
             final sources = match.chunk.sourceIds
@@ -178,7 +176,7 @@ final class KnowledgeRetrievalBloc
           .toList(growable: false);
       final result = KnowledgeRetrievalResult(
         canonicalPlantKey: canonicalKey,
-        datasetVersion: KnowledgeVersions.dataset,
+        datasetVersion: evidence.datasetVersion,
         algorithmVersion: KnowledgeVersions.algorithm,
         rankedMatches: matches,
         warnings: warnings,

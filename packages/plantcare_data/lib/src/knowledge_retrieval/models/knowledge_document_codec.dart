@@ -188,6 +188,46 @@ abstract final class KnowledgeDocumentCodec {
     return KnowledgeDocuments(items: items, warnings: warnings);
   }
 
+  static bool isCompletePreferredRelease(Map<String, dynamic> data) {
+    const required = {
+      'schemaVersion',
+      'datasetVersion',
+      'status',
+      'expectedSourceCount',
+      'expectedChunkCount',
+      'chunksPerPlant',
+      'verifiedAt',
+    };
+    if (data.keys.toSet().difference(required).isNotEmpty ||
+        !data.keys.toSet().containsAll(required) ||
+        data['schemaVersion'] != KnowledgeVersions.schema ||
+        data['datasetVersion'] != KnowledgeVersions.preferredDataset ||
+        data['status'] != 'complete' ||
+        data['expectedSourceCount'] !=
+            KnowledgeDatasetInventory.preferredSourceCount ||
+        data['expectedChunkCount'] !=
+            KnowledgeDatasetInventory.preferredChunkCount ||
+        data['verifiedAt'] is! Timestamp) {
+      return false;
+    }
+    final counts = data['chunksPerPlant'];
+    if (counts is! Map<String, dynamic> ||
+        counts.keys
+            .toSet()
+            .difference(
+              KnowledgeDatasetInventory.preferredChunksPerPlant.keys.toSet(),
+            )
+            .isNotEmpty ||
+        !counts.keys.toSet().containsAll(
+          KnowledgeDatasetInventory.preferredChunksPerPlant.keys,
+        )) {
+      return false;
+    }
+    return KnowledgeDatasetInventory.preferredChunksPerPlant.entries.every(
+      (entry) => counts[entry.key] == entry.value,
+    );
+  }
+
   static void _version(Map<String, dynamic> data) {
     if (data['schemaVersion'] != KnowledgeVersions.schema) {
       throw const FormatException('Unsupported knowledge schema version.');

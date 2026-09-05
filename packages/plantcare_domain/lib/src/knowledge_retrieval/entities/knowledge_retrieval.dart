@@ -3,8 +3,29 @@ import 'package:equatable/equatable.dart';
 abstract final class KnowledgeVersions {
   static const schema = 1;
   static const dataset = '2026-09-03-v2';
-  static const supportedDatasets = {'2026-09-03-v1', dataset};
+  static const preferredDataset = '2026-09-05-v3';
+  static const supportedDatasets = {'2026-09-03-v1', dataset, preferredDataset};
+  static const diagnosisDatasets = {dataset, preferredDataset};
   static const algorithm = 'metadata-v1';
+}
+
+abstract final class KnowledgeDatasetInventory {
+  static const preferredSourceCount = 19;
+  static const preferredChunkCount = 60;
+  static const productionChunksPerPlant = {
+    'tomato': 10,
+    'pumpkin': 11,
+    'pothos': 10,
+    'snake_plant': 10,
+    'peace_lily': 9,
+  };
+  static const preferredChunksPerPlant = {
+    'tomato': 12,
+    'pumpkin': 13,
+    'pothos': 12,
+    'snake_plant': 12,
+    'peace_lily': 11,
+  };
 }
 
 final class KnowledgeChunk extends Equatable {
@@ -80,6 +101,96 @@ final class KnowledgeDocuments<T extends Equatable> extends Equatable {
 
   @override
   List<Object?> get props => [items, warnings];
+}
+
+final class KnowledgeEvidenceSet extends Equatable {
+  const KnowledgeEvidenceSet({
+    required this.datasetVersion,
+    required this.canonicalPlantKey,
+    required this.chunks,
+    required this.sources,
+    this.warnings = const [],
+  });
+
+  final String datasetVersion;
+  final String canonicalPlantKey;
+  final List<KnowledgeChunk> chunks;
+  final List<KnowledgeSource> sources;
+  final List<String> warnings;
+
+  @override
+  List<Object?> get props => [
+    datasetVersion,
+    canonicalPlantKey,
+    chunks,
+    sources,
+    warnings,
+  ];
+}
+
+final class KnowledgeDatasetCompatibilitySelector {
+  const KnowledgeDatasetCompatibilitySelector();
+
+  KnowledgeEvidenceSet select({
+    required KnowledgeEvidenceSet fallback,
+    KnowledgeEvidenceSet? preferred,
+  }) {
+    if (preferred != null &&
+        _isComplete(
+          preferred,
+          KnowledgeVersions.preferredDataset,
+          KnowledgeDatasetInventory.preferredChunksPerPlant,
+        )) {
+      return preferred;
+    }
+    if (_isComplete(
+      fallback,
+      KnowledgeVersions.dataset,
+      KnowledgeDatasetInventory.productionChunksPerPlant,
+    )) {
+      return fallback;
+    }
+    return KnowledgeEvidenceSet(
+      datasetVersion: KnowledgeVersions.dataset,
+      canonicalPlantKey: fallback.canonicalPlantKey,
+      chunks: const [],
+      sources: const [],
+      warnings: [
+        ...fallback.warnings,
+        'The complete production knowledge dataset is unavailable.',
+      ],
+    );
+  }
+
+  bool _isComplete(
+    KnowledgeEvidenceSet evidence,
+    String version,
+    Map<String, int> expectedChunksPerPlant,
+  ) {
+    final expectedCount = expectedChunksPerPlant[evidence.canonicalPlantKey];
+    if (expectedCount == null ||
+        evidence.datasetVersion != version ||
+        evidence.warnings.isNotEmpty ||
+        evidence.chunks.length != expectedCount) {
+      return false;
+    }
+    final chunkIds = evidence.chunks.map((chunk) => chunk.id).toSet();
+    final sourcesById = {
+      for (final source in evidence.sources) source.id: source,
+    };
+    if (chunkIds.length != evidence.chunks.length ||
+        sourcesById.length != evidence.sources.length) {
+      return false;
+    }
+    return evidence.chunks.every(
+          (chunk) =>
+              chunk.canonicalPlantKey == evidence.canonicalPlantKey &&
+              chunk.datasetVersion == version &&
+              chunk.sourceIds.isNotEmpty &&
+              chunk.sourceIds.every(sourcesById.containsKey),
+        ) &&
+        evidence.sources.every((source) => source.datasetVersion == version);
+  }
 }
 
 final class RankedKnowledgeMatch extends Equatable {
