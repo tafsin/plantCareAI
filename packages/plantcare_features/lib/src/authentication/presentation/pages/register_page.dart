@@ -167,7 +167,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: isSubmitting
                         ? null
                         : () => context.go(
-                            AppRoutes.signInLocation(widget.redirect),
+                            AppRoutes.signInLocation(
+                              widget.redirect,
+                              email: true,
+                            ),
                           ),
                     child: const Text('Already have an account? Sign in'),
                   ),

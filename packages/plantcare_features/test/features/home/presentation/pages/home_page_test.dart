@@ -29,6 +29,41 @@ final class _FakeReminderRepository implements ReminderRepository {
 }
 
 void main() {
+  for (final size in [const Size(390, 600), const Size(1200, 300)]) {
+    testWidgets('home content scrolls to the actions at $size', (tester) async {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        BlocProvider(
+          create: (_) => RemindersBloc(_FakeReminderRepository()),
+          child: MaterialApp(
+            theme: ThemeData(useMaterial3: true),
+            home: const Scaffold(body: HomePage()),
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      final welcome = find.text('Welcome to PlantCare AI');
+      final initialWelcomeY = tester.getTopLeft(welcome).dy;
+      expect(find.text('Reminders').hitTestable(), findsNothing);
+
+      await tester.drag(
+        find.byKey(const ValueKey('home-page')),
+        const Offset(0, -500),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.getTopLeft(welcome).dy, lessThan(initialWelcomeY));
+      expect(find.text('My Plants').hitTestable(), findsOneWidget);
+      expect(find.text('Reminders').hitTestable(), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('dashboard cards have the same size when a label wraps', (
     tester,
   ) async {

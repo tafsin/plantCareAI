@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     final bloc = context.read<RemindersBloc?>();
     return Center(
       key: const ValueKey('home-page'),
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,

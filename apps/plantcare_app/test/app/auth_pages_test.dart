@@ -14,6 +14,37 @@ import '../helpers/fake_authentication_repository.dart';
 import '../helpers/fake_plant_repository.dart';
 
 void main() {
+  testWidgets('Google authentication preserves the protected destination', (
+    tester,
+  ) async {
+    final harness = await _signedOutHarness(
+      tester,
+      initialLocation: AppRoutes.plants,
+    );
+    expect(find.byType(TextFormField), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('continue-with-google')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(harness.repository.googleCalls, 1);
+    expect(harness.router.state.uri.path, AppRoutes.plants);
+  });
+
+  testWidgets('Google cancellation is a notice with email still available', (
+    tester,
+  ) async {
+    final harness = await _signedOutHarness(tester);
+    harness.repository.googleCancelled = true;
+    await tester.tap(find.byKey(const ValueKey('continue-with-google')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('auth-error')), findsNothing);
+    expect(find.byKey(const ValueKey('auth-notice')), findsOneWidget);
+    expect(harness.router.state.uri.path, AppRoutes.signIn);
+    await tester.ensureVisible(find.text('Continue with email'));
+    await tester.tap(find.text('Continue with email'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('sign-in-email')), findsOneWidget);
+  });
+
   testWidgets('successful sign-in continues to the protected destination', (
     tester,
   ) async {
@@ -22,6 +53,9 @@ void main() {
       initialLocation: AppRoutes.plants,
     );
 
+    await tester.ensureVisible(find.text('Continue with email'));
+    await tester.tap(find.text('Continue with email'));
+    await tester.pumpAndSettle();
     await tester.enterText(
       find.byKey(const ValueKey('sign-in-email')),
       'user@test.com',
@@ -30,6 +64,7 @@ void main() {
       find.byKey(const ValueKey('sign-in-password')),
       'plant123',
     );
+    await tester.ensureVisible(find.byKey(const ValueKey('sign-in-submit')));
     await tester.tap(find.byKey(const ValueKey('sign-in-submit')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
@@ -45,6 +80,9 @@ void main() {
       'We couldn\'t sign you in. Check your email and password and try again.',
     );
 
+    await tester.ensureVisible(find.text('Continue with email'));
+    await tester.tap(find.text('Continue with email'));
+    await tester.pumpAndSettle();
     await tester.enterText(
       find.byKey(const ValueKey('sign-in-email')),
       'user@test.com',
@@ -53,6 +91,7 @@ void main() {
       find.byKey(const ValueKey('sign-in-password')),
       'wrong123',
     );
+    await tester.ensureVisible(find.byKey(const ValueKey('sign-in-submit')));
     await tester.tap(find.byKey(const ValueKey('sign-in-submit')));
     await tester.pumpAndSettle();
 
@@ -111,6 +150,7 @@ void main() {
     expect(harness.repository.passwordResetCalls, 1);
     expect(harness.router.state.uri.path, AppRoutes.signIn);
     expect(find.text(passwordResetSuccessMessage), findsOneWidget);
+    expect(find.byKey(const ValueKey('sign-in-email')), findsOneWidget);
   });
 }
 

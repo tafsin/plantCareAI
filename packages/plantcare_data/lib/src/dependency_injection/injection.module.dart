@@ -11,6 +11,8 @@ import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:plantcare_data/src/authentication/repositories/firebase_authentication_repository.dart'
     as _i903;
+import 'package:plantcare_data/src/authentication/services/native_google_identity.dart'
+    as _i430;
 import 'package:plantcare_data/src/care_history/repositories/firebase_care_log_repository.dart'
     as _i146;
 import 'package:plantcare_data/src/fertilizer_assessment/repositories/firebase_fertilizer_assessment_repository.dart'
@@ -21,6 +23,8 @@ import 'package:plantcare_data/src/plant_diagnosis/repositories/firebase_plant_d
     as _i331;
 import 'package:plantcare_data/src/plant_diagnosis/services/firebase_ai_plant_diagnosis_service.dart'
     as _i3;
+import 'package:plantcare_data/src/plant_identification/firebase_ai_plant_identification_service.dart'
+    as _i388;
 import 'package:plantcare_data/src/plant_observation/repositories/firebase_plant_observation_repository.dart'
     as _i149;
 import 'package:plantcare_data/src/plant_observation/services/firebase_ai_plant_observation_service.dart'
@@ -44,6 +48,7 @@ import 'package:plantcare_domain/care_history.dart' as _i82;
 import 'package:plantcare_domain/fertilizer_assessment.dart' as _i726;
 import 'package:plantcare_domain/knowledge_retrieval.dart' as _i941;
 import 'package:plantcare_domain/plant_diagnosis.dart' as _i823;
+import 'package:plantcare_domain/plant_identification.dart' as _i132;
 import 'package:plantcare_domain/plant_observation.dart' as _i449;
 import 'package:plantcare_domain/plants.dart' as _i867;
 import 'package:plantcare_domain/reminders.dart' as _i412;
@@ -63,6 +68,12 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
     gh.lazySingleton<_i449.PlantImageProcessor>(
       () => const _i490.LocalPlantImageProcessor(),
     );
+    gh.lazySingleton<_i430.NativeGoogleIdentity>(
+      () => _i430.SdkNativeGoogleIdentity(),
+    );
+    gh.lazySingleton<_i132.PlantIdentificationService>(
+      () => _i388.FirebaseAiPlantIdentificationService(gh<_i59.FirebaseAuth>()),
+    );
     gh.lazySingleton<_i823.PlantDiagnosisRepository>(
       () => _i331.FirebasePlantDiagnosisRepository(
         gh<_i974.FirebaseFirestore>(),
@@ -80,9 +91,6 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
         gh<_i59.FirebaseAuth>(),
         gh<_i515.EnvironmentConfig>(),
       ),
-    );
-    gh.lazySingleton<_i521.AuthenticationRepository>(
-      () => _i903.FirebaseAuthenticationRepository(gh<_i59.FirebaseAuth>()),
     );
     gh.lazySingleton<_i658.SoilCheckRepository>(
       () => _i327.FirebaseSoilCheckRepository(
@@ -127,6 +135,12 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
       () => _i208.FirebaseReminderRepository(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
+      ),
+    );
+    gh.lazySingleton<_i521.AuthenticationRepository>(
+      () => _i903.FirebaseAuthenticationRepository(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i430.NativeGoogleIdentity>(),
       ),
     );
   }

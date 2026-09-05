@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_domain/authentication.dart';
@@ -13,6 +15,84 @@ void main() {
 
     setUp(() => repository = FakeAuthenticationRepository());
     tearDown(() => repository.close());
+
+    blocTest<SignInBloc, SignInState>(
+      'Google succeeds without email validation or separate registration',
+      build: () => SignInBloc(repository),
+      act: (bloc) => bloc.add(const GoogleSignInRequested()),
+      expect: () => [
+        const SignInSubmitting(isGoogle: true),
+        SignInSuccess(repository.signInUser),
+      ],
+      verify: (_) {
+        expect(repository.googleCalls, 1);
+        expect(repository.registerCalls, 0);
+        expect(repository.signInCalls, 0);
+      },
+    );
+
+    blocTest<SignInBloc, SignInState>(
+      'cancel is neutral and a subsequent attempt can succeed',
+      setUp: () => repository.googleCancelled = true,
+      build: () => SignInBloc(repository),
+      act: (bloc) async {
+        bloc.add(const GoogleSignInRequested());
+        await bloc.stream.firstWhere((state) => state is SignInCancelled);
+        repository.googleCancelled = false;
+        bloc.add(const GoogleSignInRequested());
+      },
+      expect: () => [
+        const SignInSubmitting(isGoogle: true),
+        const SignInCancelled(),
+        const SignInSubmitting(isGoogle: true),
+        SignInSuccess(repository.signInUser),
+      ],
+    );
+
+    for (final type in [
+      AuthenticationFailureType.popupBlocked,
+      AuthenticationFailureType.accountConflict,
+      AuthenticationFailureType.network,
+    ]) {
+      blocTest<SignInBloc, SignInState>(
+        'Google surfaces $type and permits retry',
+        setUp: () => repository.googleError = AuthenticationFailure(
+          type,
+          'Safe recovery instructions',
+        ),
+        build: () => SignInBloc(repository),
+        act: (bloc) async {
+          bloc.add(const GoogleSignInRequested());
+          await bloc.stream.firstWhere((state) => state is SignInFailure);
+          repository.googleError = null;
+          bloc.add(const GoogleSignInRequested());
+        },
+        expect: () => [
+          const SignInSubmitting(isGoogle: true),
+          const SignInFailure('Safe recovery instructions'),
+          const SignInSubmitting(isGoogle: true),
+          SignInSuccess(repository.signInUser),
+        ],
+      );
+    }
+
+    test('pending Google authentication rejects concurrent email and Google submissions', () async {
+      final pending = Completer<void>();
+      repository.googlePending = pending.future;
+      final bloc = SignInBloc(repository);
+      bloc.add(const GoogleSignInRequested());
+      await bloc.stream.firstWhere((state) => state is SignInSubmitting);
+      bloc.add(const GoogleSignInRequested());
+      bloc.add(
+        const SignInSubmitted(email: 'user@test.com', password: 'plant123'),
+      );
+      await Future<void>.delayed(Duration.zero);
+      expect(repository.googleCalls, 1);
+      expect(repository.signInCalls, 0);
+      pending.complete();
+      await bloc.stream.firstWhere((state) => state is SignInSuccess);
+      await bloc.close();
+    });
 
     blocTest<SignInBloc, SignInState>(
       'emits success after valid credentials are accepted',

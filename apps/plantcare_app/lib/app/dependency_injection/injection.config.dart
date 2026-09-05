@@ -33,6 +33,7 @@ import 'package:plantcare_features/features_module.dart' as _i30;
 import 'package:plantcare_features/fertilizer_assessment.dart' as _i60;
 import 'package:plantcare_features/knowledge_retrieval.dart' as _i499;
 import 'package:plantcare_features/plant_diagnosis.dart' as _i407;
+import 'package:plantcare_features/plant_identification.dart' as _i698;
 import 'package:plantcare_features/plant_observation.dart' as _i840;
 import 'package:plantcare_features/plants.dart' as _i311;
 import 'package:plantcare_features/reminders.dart' as _i847;
@@ -57,14 +58,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i515.EnvironmentConfig>(
       () => appModule.environmentConfig,
     );
-    gh.lazySingleton<_i767.FirebaseAppCheckActivator>(
-      () => appModule.firebaseAppCheckActivator(gh<_i515.EnvironmentConfig>()),
-    );
     gh.lazySingleton<_i583.GoRouter>(
       () => appModule.router(
         gh<_i712.AuthSessionBloc>(),
         gh<_i712.AuthenticationBlocFactory>(),
         gh<_i311.PlantBlocFactory>(),
+        gh<_i698.PlantIdentificationBlocFactory>(),
         gh<_i840.PlantObservationBlocFactory>(),
         gh<_i499.KnowledgeRetrievalBlocFactory>(),
         gh<_i407.PlantDiagnosisBlocFactory>(),
@@ -73,6 +72,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i60.FertilizerAssessmentBlocFactory>(),
         gh<_i847.ReminderBlocFactory>(),
       ),
+    );
+    gh.lazySingleton<_i767.FirebaseAppCheckActivator>(
+      () => appModule.firebaseAppCheckActivator(gh<_i515.EnvironmentConfig>()),
     );
     gh.lazySingleton<_i521.AuthenticationSession>(
       () =>

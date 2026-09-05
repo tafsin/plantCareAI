@@ -13,6 +13,7 @@ import 'package:plantcare_domain/care_history.dart';
 import 'package:plantcare_domain/fertilizer_assessment.dart';
 import 'package:plantcare_domain/knowledge_retrieval.dart';
 import 'package:plantcare_domain/plant_diagnosis.dart';
+import 'package:plantcare_domain/plant_identification.dart';
 import 'package:plantcare_domain/plant_observation.dart';
 import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_domain/reminders.dart';
@@ -22,6 +23,7 @@ import 'package:plantcare_features/care_history.dart';
 import 'package:plantcare_features/fertilizer_assessment.dart';
 import 'package:plantcare_features/knowledge_retrieval.dart';
 import 'package:plantcare_features/plant_diagnosis.dart';
+import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
 import 'package:plantcare_features/reminders.dart';
@@ -59,6 +61,7 @@ void main() {
         getIt.isRegistered<PlantObservationRepository>(),
         getIt.isRegistered<PlantObservationService>(),
         getIt.isRegistered<PlantRepository>(),
+        getIt.isRegistered<PlantIdentificationService>(),
         getIt.isRegistered<NotificationIdStore>(),
         getIt.isRegistered<NotificationScheduler>(),
         getIt.isRegistered<ReminderRepository>(),
@@ -99,6 +102,8 @@ void main() {
       expectLazy<PlantObservationRepository>();
       expectLazy<PlantObservationService>();
       expectLazy<PlantRepository>();
+      expectLazy<PlantIdentificationService>();
+      expectLazy<PlantIdentificationBlocFactory>();
       expectLazy<NotificationIdStore>();
       expectLazy<NotificationScheduler>();
       expectLazy<ReminderRepository>();

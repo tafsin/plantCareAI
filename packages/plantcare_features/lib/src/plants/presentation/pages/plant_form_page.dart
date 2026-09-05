@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:plantcare_domain/knowledge_retrieval.dart';
 import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_features/src/navigation/app_routes.dart';
 import 'package:plantcare_features/src/plants/presentation/bloc/plant_details_bloc.dart';
@@ -8,7 +9,16 @@ import 'package:plantcare_features/src/plants/presentation/bloc/plant_form_bloc.
 import 'package:plantcare_features/src/plants/presentation/widgets/plant_labels.dart';
 
 class PlantFormPage extends StatefulWidget {
-  const PlantFormPage({this.initialPlant, super.key});
+  const PlantFormPage({
+    this.initialPlant,
+    this.initialDraft,
+    this.onReview,
+    this.onBack,
+    super.key,
+  });
+  final PlantDraft? initialDraft;
+  final ValueChanged<PlantDraft>? onReview;
+  final VoidCallback? onBack;
   final Plant? initialPlant;
 
   @override
@@ -29,7 +39,11 @@ class _PlantFormPageState extends State<PlantFormPage> {
   @override
   void initState() {
     super.initState();
-    final plant = widget.initialPlant;
+    final plant =
+        widget.initialDraft ??
+        (widget.initialPlant == null
+            ? null
+            : PlantDraft.fromPlant(widget.initialPlant!));
     _commonNameController = TextEditingController(text: plant?.commonName);
     _scientificNameController = TextEditingController(
       text: plant?.scientificName,
@@ -55,28 +69,32 @@ class _PlantFormPageState extends State<PlantFormPage> {
 
   void _submit() {
     if (!(_formKey.currentState?.validate() ?? false)) return;
-    context.read<PlantFormBloc>().add(
-      PlantFormSubmitted(
-        plantId: widget.initialPlant?.id,
-        draft: PlantDraft(
-          commonName: _commonNameController.text,
-          scientificName: _scientificNameController.text,
-          environment: _environment,
-          growingMedium: _growingMedium,
-          potSizeLiters: _growingMedium == GrowingMedium.pot
-              ? double.tryParse(_potSizeController.text.trim())
-              : null,
-          sunlight: _sunlight,
-          growthStage: _growthStage,
-          notes: _notesController.text,
-        ),
-      ),
+    final draft = PlantDraft(
+      commonName: _commonNameController.text,
+      scientificName: _scientificNameController.text,
+      environment: _environment,
+      growingMedium: _growingMedium,
+      potSizeLiters: _growingMedium == GrowingMedium.pot
+          ? double.tryParse(_potSizeController.text.trim())
+          : null,
+      sunlight: _sunlight,
+      growthStage: _growthStage,
+      notes: _notesController.text,
     );
+    if (widget.onReview != null) {
+      widget.onReview!(draft);
+    } else {
+      context.read<PlantFormBloc>().add(
+        PlantFormSubmitted(plantId: widget.initialPlant?.id, draft: draft),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isEditing = widget.initialPlant != null;
+    if (widget.onReview != null) {
+      return _buildForm(context, const PlantFormState());
+    }
     return BlocConsumer<PlantFormBloc, PlantFormState>(
       listener: (context, state) {
         if ((state.status == PlantFormStatus.created ||
@@ -85,179 +103,220 @@ class _PlantFormPageState extends State<PlantFormPage> {
           context.go(AppRoutes.plantDetails(state.plantId!));
         }
       },
-      builder: (context, state) {
-        final submitting = state.status == PlantFormStatus.submitting;
-        return Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 680),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+      builder: _buildForm,
+    );
+  }
+
+  Widget _buildForm(BuildContext context, PlantFormState state) {
+    final isEditing = widget.initialPlant != null;
+    final submitting = state.status == PlantFormStatus.submitting;
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          tooltip: 'Back to plants',
-                          onPressed: submitting
-                              ? null
-                              : () => context.go(
+                    IconButton(
+                      tooltip: 'Back to plants',
+                      onPressed: submitting
+                          ? null
+                          : widget.onBack ??
+                                () => context.go(
                                   isEditing
                                       ? AppRoutes.plantDetails(
                                           widget.initialPlant!.id,
                                         )
                                       : AppRoutes.plants,
                                 ),
-                          icon: const Icon(Icons.arrow_back),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          isEditing ? 'Edit plant' : 'Add plant',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ],
+                      icon: const Icon(Icons.arrow_back),
                     ),
-                    const SizedBox(height: 24),
-                    TextFormField(
-                      key: const ValueKey('plant-common-name'),
-                      controller: _commonNameController,
-                      enabled: !submitting,
-                      textInputAction: TextInputAction.next,
-                      maxLength: PlantValidationLimits.commonNameMaxLength,
-                      decoration: const InputDecoration(
-                        labelText: 'Common name',
-                        border: OutlineInputBorder(),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        widget.onReview != null
+                            ? 'Confirm plant profile'
+                            : isEditing
+                            ? 'Edit plant'
+                            : 'Add plant',
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
-                      validator: PlantValidator.commonName,
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
-                      key: const ValueKey('plant-scientific-name'),
-                      controller: _scientificNameController,
-                      enabled: !submitting,
-                      textInputAction: TextInputAction.next,
-                      maxLength: PlantValidationLimits.scientificNameMaxLength,
-                      decoration: const InputDecoration(
-                        labelText: 'Scientific name (optional)',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: PlantValidator.scientificName,
-                    ),
-                    const SizedBox(height: 12),
-                    _EnumDropdown<PlantEnvironment>(
-                      fieldKey: const ValueKey('plant-environment'),
-                      label: 'Environment',
-                      value: _environment,
-                      values: PlantEnvironment.values,
-                      itemLabel: (value) => value.label,
-                      enabled: !submitting,
-                      onChanged: (value) =>
-                          setState(() => _environment = value),
-                    ),
-                    const SizedBox(height: 20),
-                    _EnumDropdown<GrowingMedium>(
-                      fieldKey: const ValueKey('plant-growing-medium'),
-                      label: 'Growing medium',
-                      value: _growingMedium,
-                      values: GrowingMedium.values,
-                      itemLabel: (value) => value.label,
-                      enabled: !submitting,
-                      onChanged: (value) {
-                        setState(() {
-                          _growingMedium = value;
-                          if (value == GrowingMedium.ground) {
-                            _potSizeController.clear();
-                          }
-                        });
-                      },
-                    ),
-                    if (_growingMedium == GrowingMedium.pot) ...[
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        key: const ValueKey('plant-pot-size'),
-                        controller: _potSizeController,
-                        enabled: !submitting,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        textInputAction: TextInputAction.next,
-                        decoration: const InputDecoration(
-                          labelText: 'Pot size in liters (optional)',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (value) =>
-                            PlantValidator.potSize(value, _growingMedium),
-                      ),
-                    ],
-                    const SizedBox(height: 20),
-                    _EnumDropdown<Sunlight>(
-                      fieldKey: const ValueKey('plant-sunlight'),
-                      label: 'Sunlight',
-                      value: _sunlight,
-                      values: Sunlight.values,
-                      itemLabel: (value) => value.label,
-                      enabled: !submitting,
-                      onChanged: (value) => setState(() => _sunlight = value),
-                    ),
-                    const SizedBox(height: 20),
-                    _EnumDropdown<GrowthStage>(
-                      fieldKey: const ValueKey('plant-growth-stage'),
-                      label: 'Growth stage',
-                      value: _growthStage,
-                      values: GrowthStage.values,
-                      itemLabel: (value) => value.label,
-                      enabled: !submitting,
-                      onChanged: (value) =>
-                          setState(() => _growthStage = value),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      key: const ValueKey('plant-notes'),
-                      controller: _notesController,
-                      enabled: !submitting,
-                      minLines: 3,
-                      maxLines: 6,
-                      maxLength: PlantValidationLimits.notesMaxLength,
-                      decoration: const InputDecoration(
-                        labelText: 'Notes (optional)',
-                        alignLabelWithHint: true,
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: PlantValidator.notes,
-                    ),
-                    if (state.status == PlantFormStatus.failure) ...[
-                      const SizedBox(height: 8),
-                      Semantics(
-                        liveRegion: true,
-                        child: Text(
-                          state.errorMessage ?? 'Couldn\'t save this plant.',
-                          key: const ValueKey('plant-form-error'),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 20),
-                    FilledButton(
-                      key: const ValueKey('plant-form-submit'),
-                      onPressed: submitting ? null : _submit,
-                      child: submitting
-                          ? const SizedBox.square(
-                              dimension: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Text(isEditing ? 'Save changes' : 'Add plant'),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 24),
+                if (widget.onReview != null) ...[
+                  const Text(
+                    'Step 4 of 5 · Confirm the names and growing conditions.',
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                TextFormField(
+                  key: const ValueKey('plant-common-name'),
+                  controller: _commonNameController,
+                  enabled: !submitting,
+                  textInputAction: TextInputAction.next,
+                  maxLength: PlantValidationLimits.commonNameMaxLength,
+                  decoration: const InputDecoration(
+                    labelText: 'Common name',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: PlantValidator.commonName,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  key: const ValueKey('plant-scientific-name'),
+                  controller: _scientificNameController,
+                  enabled: !submitting,
+                  textInputAction: TextInputAction.next,
+                  maxLength: PlantValidationLimits.scientificNameMaxLength,
+                  decoration: const InputDecoration(
+                    labelText: 'Scientific name (optional)',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: PlantValidator.scientificName,
+                ),
+                const SizedBox(height: 12),
+                _EnumDropdown<PlantEnvironment>(
+                  fieldKey: const ValueKey('plant-environment'),
+                  label: 'Environment',
+                  value: _environment,
+                  values: PlantEnvironment.values,
+                  itemLabel: (value) => value.label,
+                  enabled: !submitting,
+                  onChanged: (value) => setState(() => _environment = value),
+                ),
+                const SizedBox(height: 20),
+                _EnumDropdown<GrowingMedium>(
+                  fieldKey: const ValueKey('plant-growing-medium'),
+                  label: 'Growing medium',
+                  value: _growingMedium,
+                  values: GrowingMedium.values,
+                  itemLabel: (value) => value.label,
+                  enabled: !submitting,
+                  onChanged: (value) {
+                    setState(() {
+                      _growingMedium = value;
+                      if (value == GrowingMedium.ground) {
+                        _potSizeController.clear();
+                      }
+                    });
+                  },
+                ),
+                if (_growingMedium == GrowingMedium.pot) ...[
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    key: const ValueKey('plant-pot-size'),
+                    controller: _potSizeController,
+                    enabled: !submitting,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                      labelText: 'Pot size in liters (optional)',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) =>
+                        PlantValidator.potSize(value, _growingMedium),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                _EnumDropdown<Sunlight>(
+                  fieldKey: const ValueKey('plant-sunlight'),
+                  label: 'Sunlight',
+                  value: _sunlight,
+                  values: Sunlight.values,
+                  itemLabel: (value) => value.label,
+                  enabled: !submitting,
+                  onChanged: (value) => setState(() => _sunlight = value),
+                ),
+                const SizedBox(height: 20),
+                _EnumDropdown<GrowthStage>(
+                  fieldKey: const ValueKey('plant-growth-stage'),
+                  label: 'Growth stage',
+                  value: _growthStage,
+                  values:
+                      widget.onReview != null &&
+                          const {
+                            'pothos',
+                            'snake_plant',
+                            'peace_lily',
+                          }.contains(
+                            canonicalPlantKeyFor(
+                                  _scientificNameController.text,
+                                ) ??
+                                canonicalPlantKeyFor(
+                                  _commonNameController.text,
+                                ),
+                          )
+                      ? GrowthStage.values
+                            .where(
+                              (stage) =>
+                                  stage != GrowthStage.fruiting ||
+                                  stage == _growthStage,
+                            )
+                            .toList()
+                      : GrowthStage.values,
+                  itemLabel: (value) => value.label,
+                  enabled: !submitting,
+                  onChanged: (value) => setState(() => _growthStage = value),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  key: const ValueKey('plant-notes'),
+                  controller: _notesController,
+                  enabled: !submitting,
+                  minLines: 3,
+                  maxLines: 6,
+                  maxLength: PlantValidationLimits.notesMaxLength,
+                  decoration: const InputDecoration(
+                    labelText: 'Notes (optional)',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: PlantValidator.notes,
+                ),
+                if (state.status == PlantFormStatus.failure) ...[
+                  const SizedBox(height: 8),
+                  Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      state.errorMessage ?? 'Couldn\'t save this plant.',
+                      key: const ValueKey('plant-form-error'),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                FilledButton(
+                  key: const ValueKey('plant-form-submit'),
+                  onPressed: submitting ? null : _submit,
+                  child: submitting
+                      ? const SizedBox.square(
+                          dimension: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(
+                          widget.onReview != null
+                              ? 'Review plant'
+                              : isEditing
+                              ? 'Save changes'
+                              : 'Add plant',
+                        ),
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

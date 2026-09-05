@@ -7,6 +7,9 @@ abstract interface class AuthenticationRepository
 
   Future<AppUser> signIn({required String email, required String password});
 
+  /// Returns null when the user dismisses Google authentication.
+  Future<AppUser?> continueWithGoogle();
+
   Future<void> sendPasswordResetEmail({required String email});
 
   Future<void> signOut();

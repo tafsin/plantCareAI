@@ -7,6 +7,7 @@ import 'package:plantcare_features/features_module.dart';
 import 'package:plantcare_features/fertilizer_assessment.dart';
 import 'package:plantcare_features/knowledge_retrieval.dart';
 import 'package:plantcare_features/plant_diagnosis.dart';
+import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
 import 'package:plantcare_features/reminders.dart';
@@ -28,6 +29,7 @@ void main() {
       expect(container.isRegistered<PlantDiagnosisBlocFactory>(), isTrue);
       expect(container.isRegistered<PlantObservationBlocFactory>(), isTrue);
       expect(container.isRegistered<PlantBlocFactory>(), isTrue);
+      expect(container.isRegistered<PlantIdentificationBlocFactory>(), isTrue);
       expect(container.isRegistered<ReminderBlocFactory>(), isTrue);
       expect(container.isRegistered<SoilCheckBlocFactory>(), isTrue);
     },

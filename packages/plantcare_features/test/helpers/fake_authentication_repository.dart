@@ -17,6 +17,10 @@ final class FakeAuthenticationRepository implements AuthenticationRepository {
     uid: 'registered',
     email: 'new@test.com',
   );
+  Object? googleError;
+  bool googleCancelled = false;
+  Future<void>? googlePending;
+  int googleCalls = 0;
   Object? signInError;
   Object? registerError;
   Object? passwordResetError;
@@ -87,6 +91,16 @@ final class FakeAuthenticationRepository implements AuthenticationRepository {
     if (emitSessionOnSignOut) {
       _controller.add(null);
     }
+  }
+
+  @override
+  Future<AppUser?> continueWithGoogle() async {
+    googleCalls++;
+    await googlePending;
+    if (googleError case final Object error) throw error;
+    if (googleCancelled) return null;
+    emitAuthState(signInUser);
+    return signInUser;
   }
 
   Future<void> close() => _controller.close();

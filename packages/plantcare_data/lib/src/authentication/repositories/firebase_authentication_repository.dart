@@ -1,13 +1,18 @@
 import 'dart:developer' as developer;
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_domain/authentication.dart';
+
+import '../services/native_google_identity.dart';
 
 @LazySingleton(as: AuthenticationRepository)
 final class FirebaseAuthenticationRepository
     implements AuthenticationRepository {
-  FirebaseAuthenticationRepository(this._firebaseAuth);
+  FirebaseAuthenticationRepository(this._firebaseAuth, this._googleIdentity);
+
+  final NativeGoogleIdentity _googleIdentity;
 
   final FirebaseAuth _firebaseAuth;
 
@@ -63,6 +68,38 @@ final class FirebaseAuthenticationRepository
       throw const AuthenticationFailure(
         AuthenticationFailureType.unknown,
         'Couldn\'t sign you in. Please try again.',
+      );
+    }
+  }
+
+  @override
+  Future<AppUser?> continueWithGoogle() async {
+    try {
+      final UserCredential credential;
+      if (kIsWeb) {
+        credential = await _firebaseAuth.signInWithPopup(
+          GoogleAuthProvider()
+            ..setCustomParameters({'prompt': 'select_account'}),
+        );
+      } else {
+        final token = await _googleIdentity.authenticate();
+        if (token == null) return null;
+        credential = await _firebaseAuth.signInWithCredential(
+          GoogleAuthProvider.credential(idToken: token),
+        );
+      }
+      return _requiredUser(credential.user);
+    } on FirebaseAuthException catch (error, stackTrace) {
+      if (isGoogleCancellation(error.code)) return null;
+      _logFirebaseError('continue with Google', error, stackTrace);
+      throw mapFirebaseAuthException(error);
+    } on AuthenticationFailure {
+      rethrow;
+    } catch (error, stackTrace) {
+      _logUnexpectedError('continue with Google', error, stackTrace);
+      throw const AuthenticationFailure(
+        AuthenticationFailureType.unknown,
+        'Couldn’t continue with Google. Please try again or continue with email.',
       );
     }
   }
@@ -143,8 +180,24 @@ final class FirebaseAuthenticationRepository
   }
 }
 
+bool isGoogleCancellation(String code) => const {
+  'popup-closed-by-user',
+  'cancelled-popup-request',
+  'web-context-cancelled',
+  'user-cancelled',
+}.contains(code);
+
 AuthenticationFailure mapFirebaseAuthException(FirebaseAuthException error) {
   return switch (error.code) {
+    'popup-blocked' => const AuthenticationFailure(
+      AuthenticationFailureType.popupBlocked,
+      'Your browser blocked Google’s sign-in window. Allow popups for this site and try again, or continue with email.',
+    ),
+    'account-exists-with-different-credential' ||
+    'credential-already-in-use' => const AuthenticationFailure(
+      AuthenticationFailureType.accountConflict,
+      'This email is already associated with another sign-in method. Use your existing method to access your account. Accounts have not been merged.',
+    ),
     'invalid-email' => const AuthenticationFailure(
       AuthenticationFailureType.invalidEmail,
       'Enter a valid email address.',

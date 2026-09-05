@@ -8,6 +8,8 @@ enum AuthenticationFailureType {
   userDisabled,
   tooManyRequests,
   network,
+  popupBlocked,
+  accountConflict,
   unknown,
 }
 

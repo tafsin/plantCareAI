@@ -12,6 +12,7 @@ import 'package:plantcare_domain/care_history.dart' as _i82;
 import 'package:plantcare_domain/fertilizer_assessment.dart' as _i726;
 import 'package:plantcare_domain/knowledge_retrieval.dart' as _i941;
 import 'package:plantcare_domain/plant_diagnosis.dart' as _i823;
+import 'package:plantcare_domain/plant_identification.dart' as _i132;
 import 'package:plantcare_domain/plant_observation.dart' as _i449;
 import 'package:plantcare_domain/plants.dart' as _i867;
 import 'package:plantcare_domain/reminders.dart' as _i412;
@@ -28,6 +29,8 @@ import 'package:plantcare_features/src/knowledge_retrieval/presentation/bloc/kno
     as _i1060;
 import 'package:plantcare_features/src/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc_factory.dart'
     as _i287;
+import 'package:plantcare_features/src/plant_identification/plant_identification_bloc_factory.dart'
+    as _i959;
 import 'package:plantcare_features/src/plant_observation/presentation/bloc/plant_observation_bloc_factory.dart'
     as _i30;
 import 'package:plantcare_features/src/plants/presentation/bloc/plant_bloc_factory.dart'
@@ -47,6 +50,14 @@ class PlantcareFeaturesPackageModule extends _i526.MicroPackageModule {
     gh.lazySingleton<_i384.AuthenticationBlocFactory>(
       () =>
           _i384.AuthenticationBlocFactory(gh<_i521.AuthenticationRepository>()),
+    );
+    gh.lazySingleton<_i959.PlantIdentificationBlocFactory>(
+      () => _i959.PlantIdentificationBlocFactory(
+        gh<_i449.PlantImagePicker>(),
+        gh<_i449.PlantImageProcessor>(),
+        gh<_i132.PlantIdentificationService>(),
+        gh<_i867.PlantRepository>(),
+      ),
     );
     gh.lazySingleton<_i401.FertilizerAssessmentBlocFactory>(
       () => _i401.FertilizerAssessmentBlocFactory(

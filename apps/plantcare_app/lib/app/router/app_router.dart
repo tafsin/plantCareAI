@@ -12,6 +12,7 @@ import 'package:plantcare_features/information.dart';
 import 'package:plantcare_features/knowledge_retrieval.dart';
 import 'package:plantcare_features/navigation.dart';
 import 'package:plantcare_features/plant_diagnosis.dart';
+import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
 import 'package:plantcare_features/reminders.dart';
@@ -67,7 +68,8 @@ String? validatedProtectedDestination(String? candidate) {
 bool _isProtectedPath(String path) {
   if (path == AppRoutes.home ||
       path == AppRoutes.plants ||
-      path == AppRoutes.newPlant) {
+      path == AppRoutes.newPlant ||
+      path == AppRoutes.manualPlant) {
     return true;
   }
   if (path == AppRoutes.reminders || path == AppRoutes.privacySafety) {
@@ -123,6 +125,7 @@ GoRouter createAppRouter({
   required AuthSessionBloc authSessionBloc,
   required AuthenticationBlocFactory authenticationBlocFactory,
   required PlantBlocFactory plantBlocFactory,
+  PlantIdentificationBlocFactory? plantIdentificationBlocFactory,
   PlantObservationBlocFactory? plantObservationBlocFactory,
   KnowledgeRetrievalBlocFactory? knowledgeRetrievalBlocFactory,
   PlantDiagnosisBlocFactory? plantDiagnosisBlocFactory,
@@ -170,6 +173,7 @@ GoRouter createAppRouter({
         builder: (context, state) => BlocProvider(
           create: (_) => authenticationBlocFactory.createSignInBloc(),
           child: SignInPage(
+            showEmail: state.uri.queryParameters['method'] == 'email',
             redirect: validatedProtectedDestination(
               state.uri.queryParameters['redirect'],
             ),
@@ -245,6 +249,18 @@ GoRouter createAppRouter({
           ),
           GoRoute(
             path: AppRoutes.newPlant,
+            builder: (context, state) => plantIdentificationBlocFactory == null
+                ? BlocProvider(
+                    create: (_) => plantBlocFactory.createPlantFormBloc(),
+                    child: const PlantFormPage(),
+                  )
+                : BlocProvider(
+                    create: (_) => plantIdentificationBlocFactory.create(),
+                    child: const PlantOnboardingPage(),
+                  ),
+          ),
+          GoRoute(
+            path: AppRoutes.manualPlant,
             builder: (context, state) => BlocProvider(
               create: (_) => plantBlocFactory.createPlantFormBloc(),
               child: const PlantFormPage(),

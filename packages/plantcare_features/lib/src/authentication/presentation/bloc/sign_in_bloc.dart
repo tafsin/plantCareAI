@@ -25,6 +25,14 @@ final class SignInSubmitted extends SignInEvent {
   List<Object?> get props => [email, password];
 }
 
+final class GoogleSignInRequested extends SignInEvent {
+  const GoogleSignInRequested();
+}
+
+final class SignInCancelled extends SignInState {
+  const SignInCancelled();
+}
+
 sealed class SignInState extends Equatable {
   const SignInState();
 
@@ -37,7 +45,12 @@ final class SignInInitial extends SignInState {
 }
 
 final class SignInSubmitting extends SignInState {
-  const SignInSubmitting();
+  const SignInSubmitting({this.isGoogle = false});
+
+  final bool isGoogle;
+
+  @override
+  List<Object?> get props => [isGoogle];
 }
 
 final class SignInSuccess extends SignInState {
@@ -62,14 +75,36 @@ final class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc(this._repository) : super(const SignInInitial()) {
     on<SignInInputChanged>(_onInputChanged);
     on<SignInSubmitted>(_onSubmitted);
+    on<GoogleSignInRequested>(_onGoogleRequested);
   }
 
   final AuthenticationRepository _repository;
   var _submissionInProgress = false;
 
   void _onInputChanged(SignInInputChanged event, Emitter<SignInState> emit) {
-    if (state is SignInFailure) {
+    if (state is SignInFailure || state is SignInCancelled) {
       emit(const SignInInitial());
+    }
+  }
+
+  Future<void> _onGoogleRequested(
+    GoogleSignInRequested event,
+    Emitter<SignInState> emit,
+  ) async {
+    if (_submissionInProgress) return;
+    _submissionInProgress = true;
+    emit(const SignInSubmitting(isGoogle: true));
+    try {
+      final user = await _repository.continueWithGoogle();
+      emit(user == null ? const SignInCancelled() : SignInSuccess(user));
+    } on AppError catch (error) {
+      emit(SignInFailure(error.message));
+    } catch (_) {
+      emit(
+        const SignInFailure('Couldn’t continue with Google. Please try again.'),
+      );
+    } finally {
+      _submissionInProgress = false;
     }
   }
 

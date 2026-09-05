@@ -43,7 +43,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         listener: (context, state) {
           if (state is PasswordResetSuccess) {
             context.go(
-              AppRoutes.signInLocation(widget.redirect),
+              AppRoutes.signInLocation(widget.redirect, email: true),
               extra: passwordResetSuccessMessage,
             );
           }
@@ -92,7 +92,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     onPressed: isSubmitting
                         ? null
                         : () => context.go(
-                            AppRoutes.signInLocation(widget.redirect),
+                            AppRoutes.signInLocation(
+                              widget.redirect,
+                              email: true,
+                            ),
                           ),
                     child: const Text('Back to sign in'),
                   ),

@@ -2,6 +2,7 @@ import 'package:plantcare_domain/care_history.dart';
 import 'package:plantcare_domain/reminders.dart';
 
 abstract final class AppRoutes {
+  static const manualPlant = '/plants/new/manual';
   static const home = '/';
   static const plants = '/plants';
   static const newPlant = '/plants/new';
@@ -92,8 +93,10 @@ abstract final class AppRoutes {
   ) =>
       '${diagnosisHistory(plantId, observationId)}/${Uri.encodeComponent(diagnosisId)}';
 
-  static String signInLocation(String? redirect) =>
-      _authLocation(signIn, redirect);
+  static String signInLocation(String? redirect, {bool email = false}) => Uri(
+    path: signIn,
+    queryParameters: {'redirect': ?redirect, if (email) 'method': 'email'},
+  ).toString();
 
   static String registerLocation(String? redirect) =>
       _authLocation(register, redirect);
