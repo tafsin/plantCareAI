@@ -881,3 +881,66 @@ exact fertilizer dosage, server-guaranteed notifications, account deletion, or
 full data export. Images are analyzed transiently and remain absent from
 history and details. Lists intentionally load the most recent bounded V1
 history; pagination is deferred.
+
+### Google-first authentication
+
+The entry page presents one **Continue with Google** action for both new and
+returning users. **Continue with email**, below an “or” divider, reveals email
+sign-in with password visibility, validation, reset, and email registration.
+Returning from reset or registration opens email sign-in directly; a bookmarked
+`/sign-in?method=email` does the same. Protected destinations survive either flow.
+Phones use a scrollable single column; wide web windows use a centered bounded
+card. Provider requests disable both methods until they finish.
+
+Web uses Firebase Auth's Google popup; Android and iOS use the official
+`google_sign_in` plugin (7.2.x) to obtain an ID token, exchanged only in the data
+layer for a Firebase credential. The plugin is the only new direct dependency.
+The button uses official Google artwork and Google Sans with the prescribed
+light theme: [Google branding guidelines](https://developers.google.com/identity/branding-guidelines).
+Closing consent is a neutral cancellation with retry/email options. Blocked
+popups instruct users to allow popups or use email; connection failures offer
+retry. Account conflicts direct users to their existing method. The app does
+not merge accounts or look up providers from a submitted email.
+
+Google and email can resolve to the same Firebase UID when Firebase's trusted
+provider rules safely match the verified email. Matching text alone is not proof
+of account ownership. Existing email users can continue directly with their
+password. This is conditional account resolution, not a promise that every pair
+of matching emails is automatically linked. See [Firebase Google authentication](https://firebase.google.com/docs/auth/flutter/federated-auth)
+and [account-conflict handling](https://firebase.google.com/docs/auth/web/google-signin).
+
+The development Firebase project now has Google Authentication enabled. Its
+Android debug SHA-1 and SHA-256 certificates are registered, the refreshed
+Android and iOS Firebase configuration files contain their OAuth clients, and
+the iOS app manifest contains the Firebase-provided client ID and callback URL
+scheme. For another Firebase project or a future release signing certificate:
+
+1. Enable Google in Firebase Authentication, configure the project's support
+   email, and verify the intended one-account-per-email setting. Enable Email/
+   Password as before. Allow each web deployment/test domain in Auth settings.
+2. Android: register the actual app ID and signing SHA fingerprints in Firebase.
+   Download updated `google-services.json` into `apps/plantcare_app/android/app/`;
+   it must include a web OAuth client (`client_type: 3`). Existing Gradle Google
+   Services configuration supplies the native SDK's server client ID.
+3. iOS: obtain the actual OAuth `CLIENT_ID` and `REVERSED_CLIENT_ID` from the
+   updated Firebase configuration. Set `GIDClientID` and the corresponding
+   `CFBundleURLTypes`/`CFBundleURLSchemes` in
+   `apps/plantcare_app/ios/Runner/Info.plist`, following the
+   [official plugin setup](https://pub.dev/packages/google_sign_in_ios).
+   Use only the identifiers supplied by Firebase.
+4. Test new and existing accounts, same verified email resolution, account
+   conflicts, cancellation, blocked web popups, offline failure, sign-out and
+   retry on configured Android, iOS, and web builds. Unit/widget tests use fakes
+   and do not prove live OAuth configuration or Firebase account-linking behavior.
+
+Native setup details: [Android plugin](https://pub.dev/packages/google_sign_in_android).
+On Android, a misconfigured OAuth client can be reported by the platform as
+cancellation; verify configuration if account selection repeatedly dismisses.
+
+### V2 photo identification and guided onboarding
+
+Add Plant now offers photo identification (with explicit Firebase AI consent)
+followed by identity confirmation, profile questions and final review. Manual
+entry remains available. The workflow is transient; only the confirmed plant
+profile is saved through the existing repository. See
+[the V2 flow, schema, privacy and verification notes](docs/photo-identification-v2.md).
