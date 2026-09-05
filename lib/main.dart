@@ -9,8 +9,8 @@ import 'package:plantcare_ai/app/bootstrap/app_initializer.dart';
 import 'package:plantcare_ai/app/dependency_injection/injection.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
 import 'package:plantcare_ai/app/theme/theme_bloc.dart';
-import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
 import 'package:plantcare_domain/reminders.dart';
+import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_shared/environment.dart';
 
 void main() {

@@ -24,6 +24,7 @@ environment:
 workspace:
   - packages/plantcare_data
   - packages/plantcare_domain
+  - packages/plantcare_features
   - packages/plantcare_shared
 
 # Dependencies specify other packages that your package needs in order to work.
@@ -35,6 +36,8 @@ workspace:
 dependencies:
   plantcare_data:
     path: packages/plantcare_data
+  plantcare_features:
+    path: packages/plantcare_features
   plantcare_domain:
     path: packages/plantcare_domain
   flutter:

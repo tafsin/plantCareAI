@@ -10,18 +10,17 @@ import 'package:plantcare_ai/app/bootstrap/firebase_app_initializer.dart';
 import 'package:plantcare_ai/app/bootstrap/firebase_auth_emulator.dart';
 import 'package:plantcare_ai/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_ai/app/router/app_router.dart';
-import 'package:plantcare_ai/features/authentication/presentation/bloc/auth_session_bloc.dart';
-import 'package:plantcare_ai/features/authentication/presentation/bloc/authentication_bloc_factory.dart';
-import 'package:plantcare_ai/features/care_history/presentation/bloc/care_log_bloc_factory.dart';
-import 'package:plantcare_ai/features/fertilizer_assessment/presentation/bloc/fertilizer_assessment_bloc_factory.dart';
-import 'package:plantcare_ai/features/knowledge_retrieval/presentation/bloc/knowledge_retrieval_bloc_factory.dart';
-import 'package:plantcare_ai/features/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc_factory.dart';
-import 'package:plantcare_ai/features/plant_observation/presentation/bloc/plant_observation_bloc_factory.dart';
-import 'package:plantcare_ai/features/plants/presentation/bloc/plant_bloc_factory.dart';
-import 'package:plantcare_ai/features/reminders/presentation/bloc/reminder_bloc_factory.dart';
-import 'package:plantcare_ai/features/soil_check/presentation/bloc/soil_check_bloc_factory.dart';
 import 'package:plantcare_ai/firebase_options.dart';
 import 'package:plantcare_domain/authentication.dart';
+import 'package:plantcare_features/authentication.dart';
+import 'package:plantcare_features/care_history.dart';
+import 'package:plantcare_features/fertilizer_assessment.dart';
+import 'package:plantcare_features/knowledge_retrieval.dart';
+import 'package:plantcare_features/plant_diagnosis.dart';
+import 'package:plantcare_features/plant_observation.dart';
+import 'package:plantcare_features/plants.dart';
+import 'package:plantcare_features/reminders.dart';
+import 'package:plantcare_features/soil_check.dart';
 import 'package:plantcare_shared/environment.dart';
 
 @module
