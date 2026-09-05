@@ -16,6 +16,7 @@ const _commonForbiddenImports = <String>[
   'package:shared_preferences/',
   'package:plantcare_data/',
   'package:plantcare_features/',
+  'package:plantcare_app/',
   'package:plantcare_ai/',
 ];
 
@@ -46,6 +47,11 @@ const _presentationForbiddenImports = <String>[
 
 void main() {
   final violations = <String>[];
+  for (final obsoletePath in ['lib', 'android', 'ios', 'web']) {
+    if (Directory(obsoletePath).existsSync()) {
+      violations.add('$obsoletePath/: obsolete executable root directory');
+    }
+  }
   _checkPackage(
     Directory('packages/plantcare_domain/lib'),
     _commonForbiddenImports,

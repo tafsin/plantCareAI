@@ -44,26 +44,23 @@ Build the application incrementally. Implement only the milestone explicitly req
 
 Follow the architecture already present in the repository. Inspect existing patterns before introducing new ones.
 
-Use this high-level Flutter structure when applicable:
+The root is orchestration-only. Production Dart code is owned by five workspace packages:
 
-    lib/
-    ├── app/
-    │   ├── router/
-    │   ├── theme/
-    │   └── dependency_injection/
-    ├── core/
-    │   ├── constants/
-    │   ├── errors/
-    │   ├── extensions/
-    │   ├── utils/
-    │   └── widgets/
-    └── features/
-        └── feature_name/
-            ├── data/
-            ├── domain/
-            └── presentation/
+    apps/plantcare_app/             executable, bootstrap, routing, theme, final DI
+    packages/plantcare_features/    pages, widgets, BLoCs, feature navigation APIs
+    packages/plantcare_data/        Firebase and device/plugin implementations
+    packages/plantcare_domain/      entities, contracts, validators, deterministic policies
+    packages/plantcare_shared/      minimal pure-Dart errors and environment abstractions
 
-Repository interfaces belong in the domain layer. Firebase implementations belong in the data layer. BLoCs and UI belong in the presentation layer.
+Dependencies flow downward: app to features/data/domain/shared; features to
+domain/shared; data to domain/shared; domain to shared. Shared has no internal
+dependency. Never import another package's `lib/src`, another package's test
+directory, or the obsolete `package:plantcare_ai` package.
+
+Repository interfaces belong in `plantcare_domain`. Firebase and platform
+implementations belong in `plantcare_data`. BLoCs and feature UI belong in
+`plantcare_features`. App bootstrap, GoRouter composition, application-wide
+theme/shell, and final GetIt ownership belong in `plantcare_app`.
 
 Do not create empty layers or files merely to satisfy the directory structure. Add a layer only when it has a real responsibility.
 
@@ -278,10 +275,11 @@ For every implementation task:
 
 Before declaring completion, run applicable checks:
 
-    dart run build_runner build --delete-conflicting-outputs
-    dart format --output=none --set-exit-if-changed .
-    flutter analyze
-    flutter test
+    melos run generate
+    melos run format
+    melos run analyze
+    melos run test
+    melos run boundaries
 
 If a check is not applicable or cannot run, state that clearly in the completion report.
 
@@ -289,7 +287,8 @@ If a check is not applicable or cannot run, state that clearly in the completion
 
 - Do not edit generated files by hand.
 - Change the annotated source and regenerate outputs instead.
-- Run `dart run build_runner build --delete-conflicting-outputs` after changing code that uses code generation.
+- Run `melos run generate` after changing injectable code. It generates data,
+  then features, then the application graph.
 - Commit generated files only when the repository’s existing convention requires them.
 - Review generated diffs and ensure they contain only expected changes.
 
@@ -320,4 +319,6 @@ When completing a task:
 - Call out assumptions, limitations, follow-up work, or checks that were not run.
 - Do not claim that code, tests, builds, or integrations work unless they were actually verified.
 
-If blocked, explain the blocker and provide the exact next action. Never fabricate a successful implementation.
+If blocked, explain the blocker and provide the exact next action.
+
+Never fabricate a successful implementation.
