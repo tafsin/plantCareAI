@@ -14,12 +14,14 @@ class PlantFormPage extends StatefulWidget {
     this.initialDraft,
     this.onReview,
     this.onBack,
+    this.showHeader = true,
     super.key,
   });
   final PlantDraft? initialDraft;
   final ValueChanged<PlantDraft>? onReview;
   final VoidCallback? onBack;
   final Plant? initialPlant;
+  final bool showHeader;
 
   @override
   State<PlantFormPage> createState() => _PlantFormPageState();
@@ -120,36 +122,38 @@ class _PlantFormPageState extends State<PlantFormPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    IconButton(
-                      tooltip: 'Back to plants',
-                      onPressed: submitting
-                          ? null
-                          : widget.onBack ??
-                                () => context.go(
-                                  isEditing
-                                      ? AppRoutes.plantDetails(
-                                          widget.initialPlant!.id,
-                                        )
-                                      : AppRoutes.plants,
-                                ),
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        widget.onReview != null
-                            ? 'Confirm plant profile'
-                            : isEditing
-                            ? 'Edit plant'
-                            : 'Add plant',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                if (widget.showHeader) ...[
+                  Row(
+                    children: [
+                      IconButton(
+                        tooltip: 'Back to plants',
+                        onPressed: submitting
+                            ? null
+                            : widget.onBack ??
+                                  () => context.go(
+                                    isEditing
+                                        ? AppRoutes.plantDetails(
+                                            widget.initialPlant!.id,
+                                          )
+                                        : AppRoutes.plants,
+                                  ),
+                        icon: const Icon(Icons.arrow_back),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          widget.onReview != null
+                              ? 'Confirm plant profile'
+                              : isEditing
+                              ? 'Edit plant'
+                              : 'Add plant',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                ],
                 if (widget.onReview != null) ...[
                   const Text(
                     'Step 4 of 5 · Confirm the names and growing conditions.',
