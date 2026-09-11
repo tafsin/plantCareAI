@@ -20,6 +20,7 @@ dependencies:
   image: ^4.9.2
   image_picker: ^1.2.3
   injectable: ^3.0.0
+  path_provider: ^2.1.5
   plantcare_domain:
     path: ../plantcare_domain
   plantcare_shared:
