@@ -8,7 +8,7 @@ opens `/plants/new/manual` with the existing manual form and save behavior.
 
 Photo selection runs the existing JPEG/PNG validation and in-memory processing
 pipeline (10 MB input, at most 2 MB processed JPEG). Processing alone does not
-send a request. The explicit **Agree & identify** action sends the processed
+send a request. The explicit **Identify plant** action sends the processed
 image to Firebase AI. No plant is created by identification.
 
 Candidates require explicit confirmation before their two names prefill the
@@ -21,8 +21,10 @@ remains representable. Other identities show the existing full lifecycle list.
 Manual entry keeps its original fields and options.
 
 The final review lists the normalized plant draft, allows editing, and saves
-only after **Save plant**. Save failures retain that draft and retry the existing
-repository save without re-running AI. Successful save opens plant details.
+only after **Save plant**. Save failures retain that draft and the processed
+image, then retry the existing repository save without re-running AI. After a
+successful plant save, the processed image is saved automatically as a local
+cover image. A local-write failure does not roll back the plant.
 
 ## Strict identification response
 
@@ -108,12 +110,12 @@ No knowledge chunks, curated support, or care recommendations were added.
   `/plants/new` and `/plants/new/manual` routes inside the existing adaptive shell.
 
 Intermediate steps share `/plants/new` rather than encoding names, candidates,
-consent or images into URLs or route extras. Refresh therefore restarts at method
+local image identifiers or images into URLs or route extras. Refresh therefore restarts at method
 selection. External redirect URLs and query-carried onboarding data are rejected.
 The bottom navigation and wide-screen navigation rail remain unchanged.
 
-Handled UI states: selecting/processing, cancelled picker, consent/cancelled
-consent, AI loading/cancellation, no plant, poor quality, low confidence,
+Handled UI states: selecting/processing, cancelled picker, preview/submission,
+AI loading/cancellation, no plant, poor quality, low confidence,
 candidates/rejection, safe AI failure, profile validation, review/edit, saving,
 retained-draft save failure and successful navigation. Epoch checks ignore late
 picker/AI responses after cancellation, replacement or route disposal. Submission
@@ -126,11 +128,15 @@ The existing plant schema, Firestore paths and Security Rules are unchanged.
 No Storage, Cloud Functions, vector retrieval, grounding, notifications, weather,
 sensors, or new care features were added.
 
-PlantCare does not persist the original/processed image, base64, filename/path,
-URL, raw response, prompt, unconfirmed candidates, confidence, evidence, ambiguity
-notes, or consent. Image bytes are private BLoC resources, excluded from emitted
-state and events. Owned original and processed buffers are zeroed/released on
-completion, rejection, cancellation and disposal. Candidate state is dropped on
+PlantCare never persists the untouched original, Base64, source filename/path,
+URL, raw response, prompt, unconfirmed candidates, confidence, evidence, or
+ambiguity notes. Processed image bytes are private BLoC resources, excluded from
+emitted state and events. After plant creation, those processed bytes are copied
+to an opaque JPEG in account-isolated application-private storage on Android/iOS,
+or session-only memory on web. Local paths and image IDs never enter Firestore.
+The local copy does not synchronize and may be lost after uninstall or clearing
+app/browser data. Owned original and transient buffers are zeroed/released after
+local-save attempt, cancellation and disposal. Candidate state is dropped on
 confirmation/reset/disposal; the saved draft contains only ordinary plant fields.
 Managed-runtime, operating-system and Firebase SDK copies are outside this
 best-effort buffer cleanup. A request already sent cannot be retracted; cancelling
@@ -163,29 +169,25 @@ Automated verification completed successfully:
 | Check | Outcome |
 | --- | --- |
 | `melos run generate` | Passed for data, features and app; generated diffs reviewed |
-| `melos run format` | Passed: 304 Dart files, zero formatting changes |
+| `melos run format` | Passed: 338 Dart files, zero formatting changes |
 | `melos run analyze` | Passed: no issues |
-| `melos run test` | Passed: 358 tests (shared 3, domain 74, data 91, features 140, app 50) |
+| `melos run test` | Passed across shared, domain, data, features and app packages |
 | Final targeted verification | Passed: identification domain 7, data 49, features 33; the 3 onboarding route tests also passed, including in the full app suite |
-| `npm run test:rules` | Passed: 48 tests across 8 suites in the Firestore emulator |
-| Knowledge `npm test` | Passed: 17 tests across 4 suites |
-| `melos run boundaries` | Passed after backing up obsolete generated root platform artifacts |
+| `npm run test:rules` | Passed: 79 tests across 8 suites in the Firestore emulator |
+| Knowledge `npm test` | Passed: 23 tests across 5 suites |
+| `melos run boundaries` | Passed |
 | `flutter build web --release --no-wasm-dry-run` | Passed; output `apps/plantcare_app/build/web` |
+| `flutter build apk --debug` | Passed |
+| `flutter build ios --debug --no-codesign` | Passed |
 | `git diff --check` | Passed |
 
-There are 92 identification/onboarding tests across domain, data, features and
-app routing. Seven were added after the full workspace run and passed in the
-final focused runs. Thus 365 distinct workspace tests were exercised across
-the full run and targeted verification; counts for reruns are not added twice.
-
-The initial default web build was stopped during its optional WebAssembly
-compatibility probe after further source changes. The final JavaScript release
-build succeeded with that probe disabled; WebAssembly compatibility is not
-claimed. Flutter emitted a nonblocking warning about a referenced CupertinoIcons
-font not present in the asset set. The release build still completed; native
-platform builds and physical-device icon checks were not performed.
+The final JavaScript web release build used the WebAssembly probe-disabled mode;
+WebAssembly compatibility is not claimed. Flutter emitted a nonblocking warning
+about a referenced CupertinoIcons font not present in the asset set. Android
+debug and iOS no-codesign device builds completed; physical-device checks and
+signed release builds were not performed.
 Tests cover strict decoding, domain bounds, confidence bands, service error
-mapping/auth changes, consent, cancellation/stale requests, duplicates, candidate
+mapping/auth changes, submission, cancellation/stale requests, duplicates, candidate
 confirmation/rejection, unsupported warnings, form conditions, review/edit,
 retained-draft retries, buffer cleanup, fresh workflow reset, protected routes,
 adaptive layouts and DI registration. Tests use injected fakes, not live AI.
@@ -196,7 +198,7 @@ Before release, manually check on a signed-in device and web session:
 2. Real Firebase AI responses for the five supported plants, an unsupported
    plant, a non-plant photo and a blurry photo.
 3. Project quota, Auth, configured App Check and safety/error behavior.
-4. Consent wording and no request before consent using the network inspector;
+4. Informational privacy wording and no request before explicit submit using the network inspector;
    cancellation after send ignores the result.
 5. Live Firestore save and retry, confirming only the existing plant fields
    exist and no image/candidate metadata is written.

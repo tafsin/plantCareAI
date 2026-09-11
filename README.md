@@ -2,7 +2,7 @@
 
 PlantCare AI is a Flutter mobile and web application for plant health and care.
 Spark V1 includes Firebase email/password authentication, user-owned plant
-profiles, transient Firebase AI image observation, deterministic metadata
+profiles, Firebase AI image observation with private local image retention, deterministic metadata
 retrieval over reviewed knowledge, source-grounded diagnosis, manual soil
 checks, deterministic watering and fertilizer guidance, factual care history,
 and best-effort local reminders.
@@ -17,7 +17,7 @@ for compatibility; new grounded diagnoses, soil checks, and fertilizer
 assessments require v2 evidence.
 
 The in-app **Privacy & Safety** page records the release disclosure: selected
-images are sent to Firebase AI for analysis but are not saved by PlantCare AI;
+images are sent to Firebase AI only after explicit submit and processed copies are then retained automatically in private native app storage or temporary web-session memory;
 structured user records are stored in Firestore; AI output is uncertain and
 informational; local reminders are best-effort; web reminders work only while
 the app is open; and account deletion and full data export are not V1 features.
@@ -48,8 +48,9 @@ Validated diagnoses are immutable at:
 users/{uid}/plants/{plantId}/observations/{observationId}/diagnoses/{diagnosisId}
 ```
 
-Only structured output and grounding metadata are stored. Prompts, raw
-responses, chunk content, images, URLs, and credentials are never stored. The
+Only structured output and grounding metadata are stored in diagnosis records.
+Prompts, raw responses, chunk content, images, URLs, and credentials are never
+stored in those records or elsewhere in Firestore. The
 repository derives `uid` from Firebase Authentication. Rules permit owner-only
 create, read, and delete, deny updates, validate a strict field allowlist and
 bounds, require both parent documents, and require a server timestamp. Rules
@@ -71,7 +72,8 @@ persisted.
 
 This is a temporary client-side grounded-generation slice compatible with the
 Spark plan. It is not final server-side vector RAG: there are no embeddings,
-vector search, Cloud Functions, Storage, or image persistence.
+vector search, Cloud Functions, or Firebase Storage. Processed images are kept
+only in local native storage or web-session memory and are never diagnosis inputs.
 
 ## Supported platforms
 
@@ -939,8 +941,9 @@ cancellation; verify configuration if account selection repeatedly dismisses.
 
 ### V2 photo identification and guided onboarding
 
-Add Plant now offers photo identification (with explicit Firebase AI consent)
+Add Plant now offers photo identification with an explicit submit action
 followed by identity confirmation, profile questions and final review. Manual
-entry remains available. The workflow is transient; only the confirmed plant
-profile is saved through the existing repository. See
+entry remains available. The processed image stays temporary until plant
+creation succeeds, then is saved automatically as a private local cover image.
+Only the confirmed plant profile is saved through the existing cloud repository. See
 [the V2 flow, schema, privacy and verification notes](docs/photo-identification-v2.md).

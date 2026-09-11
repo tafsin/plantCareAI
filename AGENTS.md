@@ -122,7 +122,7 @@ Use this separation consistently:
 ## AI and RAG
 
 - Separate image observation from diagnosis.
-- While the project remains on Spark, plant images are processed locally and sent directly for observation but are never persisted by PlantCare AI.
+- While the project remains on Spark, processed plant images are sent directly for observation and may be retained only in account-isolated local device storage; never persist them in Firebase Storage or Firestore.
 - Client-originated AI observations are untrusted records, not backend attestations, even when their schema is validated.
 - The observation step should describe visible evidence without prematurely selecting a disease.
 - The diagnosis step should use the plant profile, observations, and retrieved knowledge.
