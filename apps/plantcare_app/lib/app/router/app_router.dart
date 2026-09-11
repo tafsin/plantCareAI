@@ -271,7 +271,7 @@ GoRouter createAppRouter({
             builder: (context, state) => plantIdentificationBlocFactory == null
                 ? BlocProvider(
                     create: (_) => plantBlocFactory.createPlantFormBloc(),
-                    child: const PlantFormPage(),
+                    child: const PlantFormPage(showHeader: false),
                   )
                 : BlocProvider(
                     create: (_) => plantIdentificationBlocFactory.create(),
@@ -282,7 +282,7 @@ GoRouter createAppRouter({
             path: AppRoutes.manualPlant,
             builder: (context, state) => BlocProvider(
               create: (_) => plantBlocFactory.createPlantFormBloc(),
-              child: const PlantFormPage(),
+              child: const PlantFormPage(showHeader: false),
             ),
           ),
           GoRoute(

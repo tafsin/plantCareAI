@@ -115,6 +115,61 @@ void main() {
       expect(plants.watchCalls, 2);
     },
   );
+
+  test('reminder lifecycle contains background stream errors', () async {
+    final session = FakeAuthenticationRepository()
+      ..currentUser = const AppUser(uid: 'user-1', email: null);
+    final reminders = _ReminderRepository();
+    final plants = _PlantRepository();
+    final scheduler = _RecordingScheduler();
+    final uncaughtErrors = <Object>[];
+    addTearDown(session.close);
+    addTearDown(reminders.close);
+    addTearDown(plants.close);
+
+    await runZonedGuarded(() async {
+      final service = ReminderLifecycleService(
+        session,
+        reminders,
+        plants,
+        scheduler,
+      );
+      await service.start();
+
+      reminders.emitError(StateError('reminders unavailable'));
+      plants.emitError(StateError('plants unavailable'));
+      await Future<void>.delayed(Duration.zero);
+    }, (error, _) => uncaughtErrors.add(error));
+
+    expect(uncaughtErrors, isEmpty);
+  });
+
+  test('reminder lifecycle contains scheduler reconciliation errors', () async {
+    final session = FakeAuthenticationRepository()
+      ..currentUser = const AppUser(uid: 'user-1', email: null);
+    final reminders = _ReminderRepository();
+    final plants = _PlantRepository();
+    final scheduler = _RecordingScheduler()..reconcileError = StateError('no');
+    final uncaughtErrors = <Object>[];
+    addTearDown(session.close);
+    addTearDown(reminders.close);
+    addTearDown(plants.close);
+
+    await runZonedGuarded(() async {
+      final service = ReminderLifecycleService(
+        session,
+        reminders,
+        plants,
+        scheduler,
+      );
+      await service.start();
+
+      reminders.emit(const []);
+      await Future<void>.delayed(Duration.zero);
+    }, (error, _) => uncaughtErrors.add(error));
+
+    expect(uncaughtErrors, isEmpty);
+  });
 }
 
 final class _ReminderRepository implements ReminderRepository {
@@ -128,6 +183,8 @@ final class _ReminderRepository implements ReminderRepository {
   }
 
   void emit(List<Reminder> reminders) => _controller.add(reminders);
+
+  void emitError(Object error) => _controller.addError(error);
 
   Future<void> close() => _controller.close();
 
@@ -163,6 +220,8 @@ final class _PlantRepository implements PlantRepository {
 
   void emit(List<Plant> plants) => _controller.add(plants);
 
+  void emitError(Object error) => _controller.addError(error);
+
   Future<void> close() => _controller.close();
 
   @override
@@ -185,6 +244,7 @@ final class _RecordingScheduler implements NotificationScheduler {
   String? lastUserId;
   List<Reminder> lastReminders = const [];
   Map<String, String> lastPlantNames = const {};
+  Object? reconcileError;
 
   @override
   bool get isSupported => true;
@@ -202,6 +262,8 @@ final class _RecordingScheduler implements NotificationScheduler {
     required Map<String, String> plantNames,
     required DateTime now,
   }) async {
+    final error = reconcileError;
+    if (error != null) throw error;
     lastUserId = userId;
     lastReminders = reminders;
     lastPlantNames = plantNames;

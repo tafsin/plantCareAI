@@ -25,6 +25,48 @@ class AppShell extends StatelessWidget {
     });
   }
 
+  bool get _isAddPlant =>
+      location == AppRoutes.newPlant || location == AppRoutes.manualPlant;
+
+  bool get _isHealthCheck => location.endsWith('/health-check');
+
+  String? _title({required bool isWide}) {
+    if (_isAddPlant) return 'Add plant';
+    if (_isHealthCheck) return 'Plant Health Check';
+    return switch (_selectedIndex) {
+      0 when location == AppRoutes.privacySafety => 'Privacy & Safety',
+      0 => 'Home',
+      1 when !isWide && location == AppRoutes.plants => null,
+      1 => 'My Plants',
+      _ => 'Reminders',
+    };
+  }
+
+  String? get _plantId {
+    final segments = Uri.parse(location).pathSegments;
+    if (segments.length < 2 || segments.first != 'plants') return null;
+    return segments[1];
+  }
+
+  Widget? _leading(BuildContext context) {
+    if (_isAddPlant) {
+      return IconButton(
+        tooltip: 'Back to plants',
+        onPressed: () => context.go(AppRoutes.plants),
+        icon: const Icon(Icons.arrow_back),
+      );
+    }
+    final plantId = _plantId;
+    if (_isHealthCheck && plantId != null) {
+      return IconButton(
+        tooltip: 'Back to plant',
+        onPressed: () => context.go(AppRoutes.plantDetails(plantId)),
+        icon: const Icon(Icons.arrow_back),
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthSessionBloc, AuthSessionState>(
@@ -50,16 +92,13 @@ class AppShell extends StatelessWidget {
           builder: (context, constraints) {
             final isWide =
                 constraints.maxWidth >= AppConstants.wideLayoutBreakpoint;
-            final title = switch (_selectedIndex) {
-              0 when location == AppRoutes.privacySafety => 'Privacy & Safety',
-              0 => 'Home',
-              1 => 'My Plants',
-              _ => 'Reminders',
-            };
+            final title = _title(isWide: isWide);
 
             return Scaffold(
               appBar: AppBar(
-                title: Text(title),
+                automaticallyImplyLeading: false,
+                leading: _leading(context),
+                title: title == null ? null : Text(title),
                 actions: [
                   IconButton(
                     key: const ValueKey('privacy-safety-button'),

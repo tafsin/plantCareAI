@@ -37,7 +37,7 @@ void main() {
 
 void _reportUncaughtError(Object error, StackTrace stackTrace) {
   if (kDebugMode) {
-    debugPrint('Uncaught PlantCare AI error: ${error.runtimeType}');
+    debugPrint('Uncaught PlantCare AI error: $error');
     debugPrintStack(stackTrace: stackTrace);
   }
 }

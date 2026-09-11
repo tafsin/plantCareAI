@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_domain/authentication.dart';
@@ -45,17 +47,55 @@ final class ReminderLifecycleService with WidgetsBindingObserver {
     _plantItems = const [];
     _userId = user?.uid;
     if (previous != null && previous != user?.uid) {
-      unawaited(_scheduler.clearUser(previous));
+      unawaited(_clearUserSafely(previous));
     }
     if (user == null) return;
-    _reminderSubscription = _reminders.watchAll().listen((items) {
-      _items = items;
-      unawaited(_reconcile());
-    });
-    _plantSubscription = _plants.watchPlants().listen((items) {
-      _plantItems = items;
-      unawaited(_reconcile());
-    });
+    _reminderSubscription = _reminders.watchAll().listen(
+      (items) {
+        _items = items;
+        unawaited(_reconcileSafely());
+      },
+      onError: (Object error, StackTrace stackTrace) =>
+          _reportBackgroundError('watch reminders', error, stackTrace),
+    );
+    _plantSubscription = _plants.watchPlants().listen(
+      (items) {
+        _plantItems = items;
+        unawaited(_reconcileSafely());
+      },
+      onError: (Object error, StackTrace stackTrace) =>
+          _reportBackgroundError('watch plants', error, stackTrace),
+    );
+  }
+
+  Future<void> _clearUserSafely(String userId) async {
+    try {
+      await _scheduler.clearUser(userId);
+    } catch (error, stackTrace) {
+      _reportBackgroundError('clear notifications', error, stackTrace);
+    }
+  }
+
+  Future<void> _reconcileSafely() async {
+    try {
+      await _reconcile();
+    } catch (error, stackTrace) {
+      _reportBackgroundError('reconcile notifications', error, stackTrace);
+    }
+  }
+
+  void _reportBackgroundError(
+    String operation,
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    if (!kDebugMode) return;
+    developer.log(
+      'Reminder lifecycle failed to $operation',
+      name: 'plantcare_ai.reminders',
+      error: error,
+      stackTrace: stackTrace,
+    );
   }
 
   Future<void> _reconcile() async {
@@ -72,7 +112,7 @@ final class ReminderLifecycleService with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      unawaited(_reconcile());
+      unawaited(_reconcileSafely());
     }
   }
 }

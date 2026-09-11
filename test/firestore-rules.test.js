@@ -504,6 +504,50 @@ describe('diagnosis ownership, immutability, and validation', () => {
     ));
   });
 
+  for (const field of ['possibleIssues', 'recommendedActions', 'avoidActions']) {
+    const cases = [
+      ['field absent', (data) => { delete data[field]; }, false],
+      ['field explicitly null', (data) => { data[field] = null; }, false],
+      ['empty list (absent map entries)', (data) => {
+        data[field] = [];
+        if (field === 'possibleIssues') data.status = 'healthy_appearance';
+      }, true],
+      ['valid map', () => {}, true],
+    ];
+    for (const [label, change] of [
+      ['explicitly null map', () => null],
+      ['empty map', () => ({})],
+      ['malformed map', (item) => ({ ...item, evidenceChunkIds: 'invalid' })],
+      ['extra nested fields', (item) => ({ ...item, unexpected: true })],
+      ['missing nested field', (item) => {
+        const copy = { ...item };
+        delete copy.evidenceChunkIds;
+        return copy;
+      }],
+      ['scalar instead of map', () => 'invalid'],
+    ]) {
+      cases.push([label, (data) => {
+        data[field] = [change(data[field][0])];
+      }, false]);
+    }
+    for (const [label, change, allowed] of cases) {
+      test(`${field}: ${label}`, async () => {
+        const alice = testEnv.authenticatedContext('alice');
+        await createObservation(alice);
+        const data = validDiagnosis({
+          status: field === 'possibleIssues' ? 'possible_issues_found' : 'healthy_appearance',
+          possibleIssues: [],
+          recommendedActions: [],
+          avoidActions: [],
+          [field]: validDiagnosis()[field],
+        });
+        change(data);
+        const write = setDoc(diagnosisRef(alice), data);
+        await (allowed ? assertSucceeds(write) : assertFails(write));
+      });
+    }
+  }
+
   test('accepts v2 and v3 grounding while rejecting unsupported metadata', async () => {
     const alice = testEnv.authenticatedContext('alice');
     await createObservation(alice);

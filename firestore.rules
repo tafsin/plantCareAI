@@ -119,7 +119,7 @@ service cloud.firestore {
     }
 
     function validDiagnosisIssue(items, index) {
-      let item = items.size() > index ? items[index] : null;
+      let item = items.size() > index ? items[index] : {};
       return items.size() <= index || (
         item is map
         && item.keys().hasOnly([
@@ -143,7 +143,7 @@ service cloud.firestore {
     }
 
     function validDiagnosisAction(items, index) {
-      let item = items.size() > index ? items[index] : null;
+      let item = items.size() > index ? items[index] : {};
       return items.size() <= index || (
         item is map
         && item.keys().hasOnly([
@@ -161,7 +161,7 @@ service cloud.firestore {
     }
 
     function validDiagnosisAvoidAction(items, index) {
-      let item = items.size() > index ? items[index] : null;
+      let item = items.size() > index ? items[index] : {};
       return items.size() <= index || (
         item is map
         && item.keys().hasOnly([

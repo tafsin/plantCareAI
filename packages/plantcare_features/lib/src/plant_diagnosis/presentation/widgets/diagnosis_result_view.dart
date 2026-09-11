@@ -67,12 +67,10 @@ class DiagnosisResultView extends StatelessWidget {
                       issue.name,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Text(
-                      '${_label(issue.likelihood.name)} • ${_label(issue.evidenceStrength.name)} evidence',
-                    ),
+                    Text('${_label(issue.likelihood.name)} possible cause'),
                     const SizedBox(height: 10),
                     const Text(
-                      'What the image observation showed',
+                      'What the photo shows',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     ...issue.supportingObservations.map(
@@ -80,14 +78,10 @@ class DiagnosisResultView extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'What Gemini cautiously inferred',
+                      'Why this may fit',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(issue.reasoning),
-                    Text(
-                      'Evidence: ${issue.evidenceChunkIds.join(', ')}',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
                   ],
                 ),
               ),
@@ -96,11 +90,11 @@ class DiagnosisResultView extends StatelessWidget {
         ],
         if (diagnosis.recommendedActions.isNotEmpty)
           _TextSection(
-            title: 'Recommended low-risk actions',
+            title: 'Recommended next steps',
             children: diagnosis.recommendedActions
                 .map(
                   (item) =>
-                      '${_label(item.priority.name)} — ${item.action}\n${item.reason}',
+                      '${_label(item.priority.name)}: ${item.action}\n${item.reason}',
                 )
                 .toList(),
           ),
@@ -132,10 +126,7 @@ class DiagnosisResultView extends StatelessWidget {
             diagnosis.followUp.professionalHelpReason ?? 'Consider consulting a local horticultural or agricultural professional.',
           ),
         const SizedBox(height: 20),
-        Text(
-          'What the sources state',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('Trusted sources', style: Theme.of(context).textTheme.titleLarge),
         if (retrieval != null)
           ...retrieval!.rankedMatches.map(
             (match) => Padding(
@@ -144,15 +135,6 @@ class DiagnosisResultView extends StatelessWidget {
             ),
           ),
         const SizedBox(height: 8),
-        Text(
-          'Evidence used: ${diagnosis.evidenceChunkIds.join(', ')}',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Trusted source attribution',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
         ...trustedSources.map(
           (source) => Align(
             alignment: Alignment.centerLeft,
@@ -165,11 +147,6 @@ class DiagnosisResultView extends StatelessWidget {
               label: Text('${source.publisher} — ${source.title}'),
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'Dataset ${diagnosis.datasetVersion} • Retrieval ${diagnosis.retrievalAlgorithmVersion} • Model ${diagnosis.modelName}',
-          style: Theme.of(context).textTheme.bodySmall,
         ),
       ],
     );

@@ -37,11 +37,11 @@ void main() {
       ),
     );
     expect(find.textContaining('AI-assisted, not guaranteed'), findsOneWidget);
-    expect(find.text('What the image observation showed'), findsOneWidget);
-    expect(find.text('What Gemini cautiously inferred'), findsOneWidget);
-    expect(find.text('What the sources state'), findsOneWidget);
-    expect(find.text('Recommended low-risk actions'), findsOneWidget);
+    expect(find.text('What the photo shows'), findsOneWidget);
+    expect(find.text('Why this may fit'), findsOneWidget);
+    expect(find.text('Trusted sources'), findsOneWidget);
+    expect(find.text('Recommended next steps'), findsOneWidget);
     expect(find.text('Actions to avoid'), findsOneWidget);
-    expect(find.textContaining('Dataset 2026-09-03-v1'), findsOneWidget);
+    expect(find.textContaining('Dataset 2026-09-03-v1'), findsNothing);
   });
 }
