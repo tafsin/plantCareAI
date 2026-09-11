@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_app/core/widgets/app_shell.dart';
 import 'package:plantcare_domain/care_history.dart';
+import 'package:plantcare_domain/local_plant_images.dart';
 import 'package:plantcare_domain/reminders.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/care_history.dart';
@@ -10,8 +11,10 @@ import 'package:plantcare_features/fertilizer_assessment.dart';
 import 'package:plantcare_features/home.dart';
 import 'package:plantcare_features/information.dart';
 import 'package:plantcare_features/knowledge_retrieval.dart';
+import 'package:plantcare_features/local_plant_images.dart';
 import 'package:plantcare_features/navigation.dart';
 import 'package:plantcare_features/plant_diagnosis.dart';
+import 'package:plantcare_features/plant_health_check.dart';
 import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
@@ -86,11 +89,18 @@ bool _isProtectedPath(String path) {
             'edit',
             'observe',
             'observations',
+            'health-check',
+            'health-history',
             'soil-checks',
             'fertilizer-assessments',
             'care',
             'reminders',
           }.contains(segments[2]) ||
+      segments.length == 4 &&
+          segments.first == 'plants' &&
+          segments[1].isNotEmpty &&
+          segments[2] == 'health-history' &&
+          segments[3].isNotEmpty ||
       segments.length == 4 &&
           segments.first == 'plants' &&
           segments[1].isNotEmpty &&
@@ -129,6 +139,8 @@ GoRouter createAppRouter({
   PlantObservationBlocFactory? plantObservationBlocFactory,
   KnowledgeRetrievalBlocFactory? knowledgeRetrievalBlocFactory,
   PlantDiagnosisBlocFactory? plantDiagnosisBlocFactory,
+  PlantHealthCheckBlocFactory? plantHealthCheckBlocFactory,
+  LocalPlantImagesBlocFactory? localPlantImagesBlocFactory,
   SoilCheckBlocFactory? soilCheckBlocFactory,
   CareLogBlocFactory? careLogBlocFactory,
   FertilizerAssessmentBlocFactory? fertilizerAssessmentBlocFactory,
@@ -228,7 +240,14 @@ GoRouter createAppRouter({
           ),
           GoRoute(
             path: AppRoutes.privacySafety,
-            builder: (context, state) => const PrivacySafetyPage(),
+            builder: (context, state) => localPlantImagesBlocFactory == null
+                ? const PrivacySafetyPage()
+                : BlocProvider<LocalPlantImagesBloc>(
+                    create: (_) =>
+                        localPlantImagesBlocFactory.create()
+                          ..add(const LocalPlantImagesRequested()),
+                    child: const PrivacySafetyPage(enableLocalImages: true),
+                  ),
           ),
           if (reminderBlocFactory != null)
             GoRoute(
@@ -305,6 +324,13 @@ GoRouter createAppRouter({
                           reminderBlocFactory.createListBloc()
                             ..add(RemindersWatchRequested(plantId)),
                     ),
+                  if (localPlantImagesBlocFactory != null)
+                    BlocProvider<LocalPlantImagesBloc>(
+                      create: (_) => localPlantImagesBlocFactory.create(
+                        plantId: plantId,
+                        purpose: LocalPlantImagePurpose.plantIdentification,
+                      )..add(const LocalPlantImagesRequested()),
+                    ),
                 ],
                 child: PlantDetailsPage(
                   plantId: plantId,
@@ -313,6 +339,7 @@ GoRouter createAppRouter({
                   enableFertilizerAssessments:
                       fertilizerAssessmentBlocFactory != null,
                   enableReminders: reminderBlocFactory != null,
+                  enableLocalImages: localPlantImagesBlocFactory != null,
                 ),
               );
             },
@@ -337,6 +364,94 @@ GoRouter createAppRouter({
             },
           ),
           if (plantObservationBlocFactory != null) ...[
+            if (plantDiagnosisBlocFactory != null &&
+                plantHealthCheckBlocFactory != null) ...[
+              GoRoute(
+                path: '/plants/:plantId/health-check',
+                builder: (context, state) {
+                  final plantId = state.pathParameters['plantId'] ?? '';
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) =>
+                            plantBlocFactory.createPlantDetailsBloc()
+                              ..add(PlantDetailsWatchRequested(plantId)),
+                      ),
+                      BlocProvider<PlantHealthCheckBloc>(
+                        create: (_) =>
+                            plantHealthCheckBlocFactory.createCheckBloc(),
+                      ),
+                    ],
+                    child: PlantHealthCheckPage(plantId: plantId),
+                  );
+                },
+              ),
+              GoRoute(
+                path: '/plants/:plantId/health-history',
+                builder: (context, state) {
+                  final plantId = state.pathParameters['plantId'] ?? '';
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) =>
+                            plantBlocFactory.createPlantDetailsBloc()
+                              ..add(PlantDetailsWatchRequested(plantId)),
+                      ),
+                      BlocProvider<PlantHealthHistoryBloc>(
+                        create: (_) =>
+                            plantHealthCheckBlocFactory.createHistoryBloc()
+                              ..add(PlantHealthHistoryWatchRequested(plantId)),
+                      ),
+                    ],
+                    child: PlantHealthHistoryPage(plantId: plantId),
+                  );
+                },
+              ),
+              GoRoute(
+                path: '/plants/:plantId/health-history/:observationId',
+                builder: (context, state) {
+                  final plantId = state.pathParameters['plantId'] ?? '';
+                  final observationId =
+                      state.pathParameters['observationId'] ?? '';
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (_) =>
+                            plantBlocFactory.createPlantDetailsBloc()
+                              ..add(PlantDetailsWatchRequested(plantId)),
+                      ),
+                      BlocProvider<PlantHealthAssessmentBloc>(
+                        create: (_) =>
+                            plantHealthCheckBlocFactory.createAssessmentBloc()
+                              ..add(
+                                PlantHealthAssessmentWatchRequested(
+                                  plantId,
+                                  observationId,
+                                ),
+                              ),
+                      ),
+                      BlocProvider<PlantHealthCheckBloc>(
+                        create: (_) =>
+                            plantHealthCheckBlocFactory.createCheckBloc(),
+                      ),
+                      if (localPlantImagesBlocFactory != null)
+                        BlocProvider<LocalPlantImagesBloc>(
+                          create: (_) => localPlantImagesBlocFactory.create(
+                            plantId: plantId,
+                            observationId: observationId,
+                            purpose: LocalPlantImagePurpose.healthCheck,
+                          )..add(const LocalPlantImagesRequested()),
+                        ),
+                    ],
+                    child: PlantHealthAssessmentPage(
+                      plantId: plantId,
+                      observationId: observationId,
+                      enableLocalImages: localPlantImagesBlocFactory != null,
+                    ),
+                  );
+                },
+              ),
+            ],
             GoRoute(
               path: '/plants/:plantId/observe',
               builder: (context, state) {

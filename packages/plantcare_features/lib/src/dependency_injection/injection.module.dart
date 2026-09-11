@@ -11,6 +11,7 @@ import 'package:plantcare_domain/authentication.dart' as _i521;
 import 'package:plantcare_domain/care_history.dart' as _i82;
 import 'package:plantcare_domain/fertilizer_assessment.dart' as _i726;
 import 'package:plantcare_domain/knowledge_retrieval.dart' as _i941;
+import 'package:plantcare_domain/local_plant_images.dart' as _i544;
 import 'package:plantcare_domain/plant_diagnosis.dart' as _i823;
 import 'package:plantcare_domain/plant_identification.dart' as _i132;
 import 'package:plantcare_domain/plant_observation.dart' as _i449;
@@ -27,8 +28,12 @@ import 'package:plantcare_features/src/fertilizer_assessment/presentation/bloc/f
     as _i401;
 import 'package:plantcare_features/src/knowledge_retrieval/presentation/bloc/knowledge_retrieval_bloc_factory.dart'
     as _i1060;
+import 'package:plantcare_features/src/local_plant_images/presentation/bloc/local_plant_images_bloc_factory.dart'
+    as _i958;
 import 'package:plantcare_features/src/plant_diagnosis/presentation/bloc/plant_diagnosis_bloc_factory.dart'
     as _i287;
+import 'package:plantcare_features/src/plant_health_check/presentation/bloc/plant_health_check_bloc_factory.dart'
+    as _i794;
 import 'package:plantcare_features/src/plant_identification/plant_identification_bloc_factory.dart'
     as _i959;
 import 'package:plantcare_features/src/plant_observation/presentation/bloc/plant_observation_bloc_factory.dart'
@@ -51,14 +56,6 @@ class PlantcareFeaturesPackageModule extends _i526.MicroPackageModule {
       () =>
           _i384.AuthenticationBlocFactory(gh<_i521.AuthenticationRepository>()),
     );
-    gh.lazySingleton<_i959.PlantIdentificationBlocFactory>(
-      () => _i959.PlantIdentificationBlocFactory(
-        gh<_i449.PlantImagePicker>(),
-        gh<_i449.PlantImageProcessor>(),
-        gh<_i132.PlantIdentificationService>(),
-        gh<_i867.PlantRepository>(),
-      ),
-    );
     gh.lazySingleton<_i401.FertilizerAssessmentBlocFactory>(
       () => _i401.FertilizerAssessmentBlocFactory(
         gh<_i867.PlantRepository>(),
@@ -73,6 +70,13 @@ class PlantcareFeaturesPackageModule extends _i526.MicroPackageModule {
     );
     gh.lazySingleton<_i870.CareLogBlocFactory>(
       () => _i870.CareLogBlocFactory(gh<_i82.CareLogRepository>()),
+    );
+    gh.lazySingleton<_i958.LocalPlantImagesBlocFactory>(
+      () => _i958.LocalPlantImagesBlocFactory(
+        gh<_i544.LocalPlantImageRepository>(),
+        gh<_i449.PlantImagePicker>(),
+        gh<_i449.PlantImageProcessor>(),
+      ),
     );
     gh.lazySingleton<_i287.PlantDiagnosisBlocFactory>(
       () => _i287.PlantDiagnosisBlocFactory(
@@ -89,8 +93,26 @@ class PlantcareFeaturesPackageModule extends _i526.MicroPackageModule {
         gh<_i449.PlantObservationRepository>(),
       ),
     );
-    gh.lazySingleton<_i942.PlantBlocFactory>(
-      () => _i942.PlantBlocFactory(gh<_i867.PlantRepository>()),
+    gh.lazySingleton<_i794.PlantHealthCheckBlocFactory>(
+      () => _i794.PlantHealthCheckBlocFactory(
+        gh<_i449.PlantImagePicker>(),
+        gh<_i449.PlantImageProcessor>(),
+        gh<_i449.PlantObservationService>(),
+        gh<_i449.PlantObservationRepository>(),
+        gh<_i941.KnowledgeRepository>(),
+        gh<_i823.PlantDiagnosisRepository>(),
+        gh<_i823.PlantDiagnosisService>(),
+        gh<_i544.LocalPlantImageRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i959.PlantIdentificationBlocFactory>(
+      () => _i959.PlantIdentificationBlocFactory(
+        gh<_i449.PlantImagePicker>(),
+        gh<_i449.PlantImageProcessor>(),
+        gh<_i132.PlantIdentificationService>(),
+        gh<_i867.PlantRepository>(),
+        gh<_i544.LocalPlantImageRepository>(),
+      ),
     );
     gh.lazySingleton<_i497.SoilCheckBlocFactory>(
       () => _i497.SoilCheckBlocFactory(
@@ -104,6 +126,12 @@ class PlantcareFeaturesPackageModule extends _i526.MicroPackageModule {
         gh<_i412.ReminderRepository>(),
         gh<_i412.NotificationScheduler>(),
         gh<_i521.AuthenticationSession>(),
+      ),
+    );
+    gh.lazySingleton<_i942.PlantBlocFactory>(
+      () => _i942.PlantBlocFactory(
+        gh<_i867.PlantRepository>(),
+        gh<_i544.LocalPlantImageRepository>(),
       ),
     );
   }

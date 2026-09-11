@@ -17,7 +17,9 @@ void main() {
 
     expect(find.text('Privacy & Safety'), findsOneWidget);
     expect(find.textContaining('sent to Firebase AI'), findsOneWidget);
-    expect(find.textContaining('does not save the photo'), findsOneWidget);
+    expect(find.textContaining('automatically keeps'), findsOneWidget);
+    expect(find.textContaining('metadata'), findsOneWidget);
+    expect(find.textContaining('browser session'), findsOneWidget);
     expect(find.textContaining('can be wrong'), findsOneWidget);
     expect(find.textContaining('not guaranteed by a server'), findsOneWidget);
 

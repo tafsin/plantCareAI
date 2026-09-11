@@ -15,6 +15,8 @@ import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:go_router/go_router.dart' as _i583;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:plantcare_app/app/application/local_plant_image_lifecycle_service.dart'
+    as _i854;
 import 'package:plantcare_app/app/application/reminder_lifecycle_service.dart'
     as _i745;
 import 'package:plantcare_app/app/bootstrap/app_initializer.dart' as _i484;
@@ -25,6 +27,7 @@ import 'package:plantcare_app/app/dependency_injection/app_module.dart'
 import 'package:plantcare_app/app/theme/theme_bloc.dart' as _i393;
 import 'package:plantcare_data/data_module.dart' as _i74;
 import 'package:plantcare_domain/authentication.dart' as _i521;
+import 'package:plantcare_domain/local_plant_images.dart' as _i544;
 import 'package:plantcare_domain/plants.dart' as _i867;
 import 'package:plantcare_domain/reminders.dart' as _i412;
 import 'package:plantcare_features/authentication.dart' as _i712;
@@ -32,7 +35,9 @@ import 'package:plantcare_features/care_history.dart' as _i323;
 import 'package:plantcare_features/features_module.dart' as _i30;
 import 'package:plantcare_features/fertilizer_assessment.dart' as _i60;
 import 'package:plantcare_features/knowledge_retrieval.dart' as _i499;
+import 'package:plantcare_features/local_plant_images.dart' as _i665;
 import 'package:plantcare_features/plant_diagnosis.dart' as _i407;
+import 'package:plantcare_features/plant_health_check.dart' as _i514;
 import 'package:plantcare_features/plant_identification.dart' as _i698;
 import 'package:plantcare_features/plant_observation.dart' as _i840;
 import 'package:plantcare_features/plants.dart' as _i311;
@@ -67,6 +72,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i840.PlantObservationBlocFactory>(),
         gh<_i499.KnowledgeRetrievalBlocFactory>(),
         gh<_i407.PlantDiagnosisBlocFactory>(),
+        gh<_i514.PlantHealthCheckBlocFactory>(),
+        gh<_i665.LocalPlantImagesBlocFactory>(),
         gh<_i852.SoilCheckBlocFactory>(),
         gh<_i323.CareLogBlocFactory>(),
         gh<_i60.FertilizerAssessmentBlocFactory>(),
@@ -86,6 +93,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i767.FirebaseAppCheckActivator>(),
       ),
     );
+    gh.lazySingleton<_i544.LocalPlantImageRepository>(
+      () => appModule.localPlantImageRepository(
+        gh<_i521.AuthenticationSession>(),
+      ),
+    );
     gh.lazySingleton<_i745.ReminderLifecycleService>(
       () => _i745.ReminderLifecycleService(
         gh<_i521.AuthenticationSession>(),
@@ -93,6 +105,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i867.PlantRepository>(),
         gh<_i412.NotificationScheduler>(),
       ),
+    );
+    gh.lazySingleton<_i854.LocalPlantImageLifecycleService>(
+      () => _i854.LocalPlantImageLifecycleService(
+        gh<_i521.AuthenticationSession>(),
+        gh<_i544.LocalPlantImageRepository>(),
+      ),
+      dispose: (i) => i.dispose(),
     );
     return this;
   }

@@ -13,6 +13,7 @@ import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plants.dart';
 
 import '../helpers/fake_authentication_repository.dart';
+import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_repository.dart';
 
 class _Images implements PlantImagePicker, PlantImageProcessor {
@@ -45,12 +46,16 @@ void main() {
       final router = createAppRouter(
         authSessionBloc: session,
         authenticationBlocFactory: AuthenticationBlocFactory(auth),
-        plantBlocFactory: PlantBlocFactory(plants),
+        plantBlocFactory: PlantBlocFactory(
+          plants,
+          FakeLocalPlantImageRepository(),
+        ),
         plantIdentificationBlocFactory: PlantIdentificationBlocFactory(
           images,
           images,
           _Service(),
           plants,
+          FakeLocalPlantImageRepository(),
         ),
         initialLocation: path,
       );

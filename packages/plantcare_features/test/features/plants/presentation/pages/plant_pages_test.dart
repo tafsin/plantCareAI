@@ -126,8 +126,12 @@ void main() {
     await tester.pump();
     await tester.tap(find.byKey(const ValueKey('delete-plant')));
     await tester.pumpAndSettle();
+    expect(find.text('Delete, keep local images'), findsOneWidget);
+    expect(find.text('Delete plant and local images'), findsOneWidget);
     expect(
-      find.text('Delete Monstera? This cannot be undone.'),
+      find.textContaining(
+        'Delete Monstera? Cloud records cannot be recovered.',
+      ),
       findsOneWidget,
     );
 

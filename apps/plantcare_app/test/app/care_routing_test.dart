@@ -14,6 +14,7 @@ import 'package:plantcare_features/plants.dart';
 
 import '../helpers/fake_authentication_repository.dart';
 import '../helpers/fake_care_log_dependencies.dart';
+import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_repository.dart';
 
 void main() {
@@ -82,7 +83,7 @@ _pump(WidgetTester tester, String location) async {
   final router = createAppRouter(
     authSessionBloc: session,
     authenticationBlocFactory: AuthenticationBlocFactory(auth),
-    plantBlocFactory: PlantBlocFactory(plants),
+    plantBlocFactory: PlantBlocFactory(plants, FakeLocalPlantImageRepository()),
     careLogBlocFactory: CareLogBlocFactory(care),
     initialLocation: location,
   );

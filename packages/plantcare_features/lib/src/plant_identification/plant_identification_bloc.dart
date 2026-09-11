@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plantcare_domain/local_plant_images.dart';
 import 'package:plantcare_domain/plant_identification.dart';
 import 'package:plantcare_domain/plant_observation.dart';
 import 'package:plantcare_domain/plants.dart';
@@ -18,8 +21,8 @@ final class IdentificationPhotoRequested extends PlantIdentificationEvent {
   List<Object?> get props => [source];
 }
 
-final class IdentificationConsentGranted extends PlantIdentificationEvent {
-  const IdentificationConsentGranted();
+final class IdentificationSubmitted extends PlantIdentificationEvent {
+  const IdentificationSubmitted();
 }
 
 final class IdentificationReset extends PlantIdentificationEvent {
@@ -51,7 +54,7 @@ final class OnboardingSaveRequested extends PlantIdentificationEvent {
 enum PlantOnboardingStep {
   method,
   picking,
-  consent,
+  preview,
   identifying,
   candidates,
   profile,
@@ -86,9 +89,10 @@ final class PlantIdentificationBloc
     this._processor,
     this._service,
     this._repository,
+    this._localImageRepository,
   ) : super(const PlantIdentificationState()) {
     on<IdentificationPhotoRequested>(_pick);
-    on<IdentificationConsentGranted>(_identify);
+    on<IdentificationSubmitted>(_identify);
     on<IdentificationReset>((event, emit) {
       if (state.step == PlantOnboardingStep.saving) return;
       _epoch++;
@@ -158,9 +162,11 @@ final class PlantIdentificationBloc
   final PlantImageProcessor _processor;
   final PlantIdentificationService _service;
   final PlantRepository _repository;
+  final LocalPlantImageRepository _localImageRepository;
   SelectedPlantImage? _image;
   var _epoch = 0;
   bool get supportsCamera => _picker.supportsCamera;
+  Uint8List? get selectedImageBytes => _image?.bytes;
 
   bool _active(int epoch) => !isClosed && epoch == _epoch;
   void _releaseImage() {
@@ -177,7 +183,7 @@ final class PlantIdentificationBloc
     if (!{
       PlantOnboardingStep.method,
       PlantOnboardingStep.candidates,
-      PlantOnboardingStep.consent,
+      PlantOnboardingStep.preview,
     }.contains(state.step)) {
       return;
     }
@@ -199,7 +205,7 @@ final class PlantIdentificationBloc
       if (!_active(epoch)) return;
       _image = processed;
       processed = null;
-      emit(const PlantIdentificationState(step: PlantOnboardingStep.consent));
+      emit(const PlantIdentificationState(step: PlantOnboardingStep.preview));
     } on AppError catch (error) {
       if (_active(epoch)) {
         emit(PlantIdentificationState(message: error.message));
@@ -221,10 +227,10 @@ final class PlantIdentificationBloc
   }
 
   Future<void> _identify(
-    IdentificationConsentGranted event,
+    IdentificationSubmitted event,
     Emitter<PlantIdentificationState> emit,
   ) async {
-    if (state.step != PlantOnboardingStep.consent || _image == null) return;
+    if (state.step != PlantOnboardingStep.preview || _image == null) return;
     final epoch = _epoch;
     final image = _image!;
     emit(const PlantIdentificationState(step: PlantOnboardingStep.identifying));
@@ -240,20 +246,23 @@ final class PlantIdentificationBloc
       }
     } on AppError catch (error) {
       if (_active(epoch)) {
-        emit(PlantIdentificationState(message: error.message));
+        emit(
+          PlantIdentificationState(
+            step: PlantOnboardingStep.preview,
+            message: error.message,
+          ),
+        );
       }
     } catch (_) {
       if (_active(epoch)) {
         emit(
           const PlantIdentificationState(
+            step: PlantOnboardingStep.preview,
             message:
                 'Could not identify this plant. Try again or add manually.',
           ),
         );
       }
-    } finally {
-      image.bytes.fillRange(0, image.bytes.length, 0);
-      if (identical(_image, image)) _image = null;
     }
   }
 
@@ -268,11 +277,28 @@ final class PlantIdentificationBloc
     );
     try {
       final id = await _repository.addPlant(draft);
+      String? localImageWarning;
+      final image = _image;
+      if (image != null) {
+        try {
+          await _localImageRepository.save(
+            purpose: LocalPlantImagePurpose.plantIdentification,
+            plantId: id,
+            bytes: image.bytes,
+            createdAt: DateTime.now().toUtc(),
+          );
+        } catch (_) {
+          localImageWarning =
+              'Plant saved, but its photo could not be saved on this device.';
+        }
+      }
+      _releaseImage();
       if (!isClosed) {
         emit(
           PlantIdentificationState(
             step: PlantOnboardingStep.saved,
             plantId: id,
+            message: localImageWarning,
           ),
         );
       }

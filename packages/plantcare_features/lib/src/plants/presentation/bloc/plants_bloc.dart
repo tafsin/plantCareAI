@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plantcare_domain/local_plant_images.dart';
 import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_shared/errors.dart';
 
@@ -30,10 +31,11 @@ final class PlantsWatchFailed extends PlantsEvent {
 }
 
 final class PlantDeleteRequested extends PlantsEvent {
-  const PlantDeleteRequested(this.plantId);
+  const PlantDeleteRequested(this.plantId, {this.removeLocalImages = false});
   final String plantId;
+  final bool removeLocalImages;
   @override
-  List<Object?> get props => [plantId];
+  List<Object?> get props => [plantId, removeLocalImages];
 }
 
 enum PlantsStatus { initial, loading, empty, loaded, failure }
@@ -95,7 +97,8 @@ final class PlantsState extends Equatable {
 }
 
 final class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
-  PlantsBloc(this._repository) : super(const PlantsState()) {
+  PlantsBloc(this._repository, [this._localImageRepository])
+    : super(const PlantsState()) {
     on<PlantsWatchRequested>(_onWatchRequested);
     on<PlantsChanged>(_onChanged);
     on<PlantsWatchFailed>(_onWatchFailed);
@@ -103,6 +106,7 @@ final class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
   }
 
   final PlantRepository _repository;
+  final LocalPlantImageRepository? _localImageRepository;
   StreamSubscription<List<Plant>>? _subscription;
 
   Future<void> _onWatchRequested(
@@ -169,11 +173,21 @@ final class PlantsBloc extends Bloc<PlantsEvent, PlantsState> {
     );
     try {
       await _repository.deletePlant(event.plantId);
+      String? localCleanupWarning;
+      if (event.removeLocalImages && _localImageRepository != null) {
+        try {
+          await _localImageRepository.deletePlantImages(event.plantId);
+        } catch (_) {
+          localCleanupWarning =
+              'Plant deleted, but its local images could not be removed.';
+        }
+      }
       final deletingIds = {...state.deletingPlantIds}..remove(event.plantId);
       emit(
         state.copyWith(
           deletingPlantIds: deletingIds,
           deletedPlantId: event.plantId,
+          deleteFailureMessage: localCleanupWarning,
           actionRevision: state.actionRevision + 1,
         ),
       );

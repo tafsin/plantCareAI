@@ -7,6 +7,7 @@ import 'package:plantcare_domain/reminders.dart';
 import 'package:plantcare_features/src/care_history/presentation/bloc/care_history_bloc.dart';
 import 'package:plantcare_features/src/care_history/presentation/widgets/care_log_labels.dart';
 import 'package:plantcare_features/src/fertilizer_assessment/presentation/bloc/fertilizer_assessment_history_bloc.dart';
+import 'package:plantcare_features/src/local_plant_images/presentation/widgets/local_plant_images_panel.dart';
 import 'package:plantcare_features/src/navigation/app_routes.dart';
 import 'package:plantcare_features/src/plants/presentation/bloc/plant_details_bloc.dart';
 import 'package:plantcare_features/src/plants/presentation/bloc/plants_bloc.dart';
@@ -22,6 +23,7 @@ class PlantDetailsPage extends StatelessWidget {
     this.enableCareLogs = false,
     this.enableFertilizerAssessments = false,
     this.enableReminders = false,
+    this.enableLocalImages = false,
     super.key,
   });
   final String plantId;
@@ -29,6 +31,7 @@ class PlantDetailsPage extends StatelessWidget {
   final bool enableCareLogs;
   final bool enableFertilizerAssessments;
   final bool enableReminders;
+  final bool enableLocalImages;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,11 @@ class PlantDetailsPage extends StatelessWidget {
           current.actionRevision > previous.actionRevision,
       listener: (context, state) {
         if (state.deletedPlantId == plantId) {
+          if (state.deleteFailureMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.deleteFailureMessage!)),
+            );
+          }
           context.go(AppRoutes.plants);
         } else if (state.deleteFailureMessage != null) {
           ScaffoldMessenger.of(
@@ -67,6 +75,7 @@ class PlantDetailsPage extends StatelessWidget {
             enableCareLogs: enableCareLogs,
             enableFertilizerAssessments: enableFertilizerAssessments,
             enableReminders: enableReminders,
+            enableLocalImages: enableLocalImages,
           ),
         },
       ),
@@ -81,12 +90,14 @@ class _PlantDetails extends StatelessWidget {
     required this.enableCareLogs,
     required this.enableFertilizerAssessments,
     required this.enableReminders,
+    required this.enableLocalImages,
   });
   final Plant plant;
   final bool enableSoilChecks;
   final bool enableCareLogs;
   final bool enableFertilizerAssessments;
   final bool enableReminders;
+  final bool enableLocalImages;
 
   @override
   Widget build(BuildContext context) {
@@ -150,23 +161,27 @@ class _PlantDetails extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
+              if (enableLocalImages) ...[
+                const LocalPlantImagesPanel(title: 'Plant cover image'),
+                const SizedBox(height: 16),
+              ],
               Wrap(
                 spacing: 12,
                 runSpacing: 8,
                 children: [
                   FilledButton.icon(
-                    key: const ValueKey('observe-plant'),
+                    key: const ValueKey('check-plant-health'),
                     onPressed: () =>
-                        context.go(AppRoutes.observePlant(plant.id)),
-                    icon: const Icon(Icons.add_a_photo_outlined),
-                    label: const Text('Observe plant'),
+                        context.go(AppRoutes.healthCheck(plant.id)),
+                    icon: const Icon(Icons.health_and_safety_outlined),
+                    label: const Text('Check plant health'),
                   ),
                   OutlinedButton.icon(
-                    key: const ValueKey('observation-history'),
+                    key: const ValueKey('health-history'),
                     onPressed: () =>
-                        context.go(AppRoutes.observationHistory(plant.id)),
+                        context.go(AppRoutes.healthHistory(plant.id)),
                     icon: const Icon(Icons.history),
-                    label: const Text('Observation history'),
+                    label: const Text('Health history'),
                   ),
                 ],
               ),
@@ -281,26 +296,35 @@ class _PlantDetails extends StatelessWidget {
   }
 
   Future<void> _confirmDelete(BuildContext context) async {
-    final confirmed = await showDialog<bool>(
+    final removeLocalImages = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Delete plant?'),
-        content: Text('Delete ${plant.commonName}? This cannot be undone.'),
+        content: Text(
+          'Delete ${plant.commonName}? Cloud records cannot be recovered. You can keep or remove this plant’s local images.',
+        ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
+            onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Cancel'),
           ),
-          FilledButton(
+          TextButton(
             key: const ValueKey('confirm-delete-plant'),
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Delete, keep local images'),
+          ),
+          FilledButton(
+            key: const ValueKey('confirm-delete-plant-and-images'),
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete'),
+            child: const Text('Delete plant and local images'),
           ),
         ],
       ),
     );
-    if (confirmed == true && context.mounted) {
-      context.read<PlantsBloc>().add(PlantDeleteRequested(plant.id));
+    if (removeLocalImages != null && context.mounted) {
+      context.read<PlantsBloc>().add(
+        PlantDeleteRequested(plant.id, removeLocalImages: removeLocalImages),
+      );
     }
   }
 }

@@ -11,6 +11,7 @@ import 'package:plantcare_features/navigation.dart';
 import 'package:plantcare_features/plants.dart';
 
 import '../helpers/fake_authentication_repository.dart';
+import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_repository.dart';
 
 void main() {
@@ -173,7 +174,10 @@ _signedOutHarness(
   final router = createAppRouter(
     authSessionBloc: sessionBloc,
     authenticationBlocFactory: AuthenticationBlocFactory(repository),
-    plantBlocFactory: PlantBlocFactory(plantRepository),
+    plantBlocFactory: PlantBlocFactory(
+      plantRepository,
+      FakeLocalPlantImageRepository(),
+    ),
     initialLocation: initialLocation,
   );
   addTearDown(() async {

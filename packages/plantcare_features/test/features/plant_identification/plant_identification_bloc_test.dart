@@ -7,6 +7,7 @@ import 'package:plantcare_domain/plant_observation.dart';
 import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_features/plant_identification.dart';
 
+import '../../helpers/fake_local_plant_image_repository.dart';
 import '../../helpers/fake_plant_repository.dart';
 import 'fakes.dart';
 
@@ -16,13 +17,21 @@ void main() {
   late Processor processor;
   late IdentificationService service;
   late FakePlantRepository repository;
+  late FakeLocalPlantImageRepository localImages;
   late PlantIdentificationBloc bloc;
   setUp(() {
     picker = Picker();
     processor = Processor();
     service = IdentificationService();
     repository = FakePlantRepository();
-    bloc = PlantIdentificationBloc(picker, processor, service, repository);
+    localImages = FakeLocalPlantImageRepository();
+    bloc = PlantIdentificationBloc(
+      picker,
+      processor,
+      service,
+      repository,
+      localImages,
+    );
   });
   tearDown(() async {
     await bloc.close();
@@ -35,7 +44,7 @@ void main() {
 
   Future<void> identify() async {
     await pick();
-    bloc.add(const IdentificationConsentGranted());
+    bloc.add(const IdentificationSubmitted());
     await settle();
   }
 
@@ -47,20 +56,23 @@ void main() {
     await settle();
   }
 
-  test('consent required; picker cancellation sends nothing', () async {
-    bloc.add(const IdentificationConsentGranted());
-    await settle();
-    expect(service.calls, 0);
-    picker.image = null;
-    await pick();
-    expect(bloc.state.step, PlantOnboardingStep.method);
-    expect(service.calls, 0);
-  });
   test(
-    'processed image waits for consent, cancellation wipes buffers',
+    'submit requires a selected image; picker cancellation sends nothing',
+    () async {
+      bloc.add(const IdentificationSubmitted());
+      await settle();
+      expect(service.calls, 0);
+      picker.image = null;
+      await pick();
+      expect(bloc.state.step, PlantOnboardingStep.method);
+      expect(service.calls, 0);
+    },
+  );
+  test(
+    'processed image waits for submit and cancellation wipes buffers',
     () async {
       await pick();
-      expect(bloc.state.step, PlantOnboardingStep.consent);
+      expect(bloc.state.step, PlantOnboardingStep.preview);
       expect(service.calls, 0);
       expect(picker.image!.bytes, everyElement(0));
       bloc.add(const IdentificationReset());
@@ -78,13 +90,13 @@ void main() {
     picker.pending!.complete(picker.image);
     await settle();
     service.pending = Completer();
-    bloc.add(const IdentificationConsentGranted());
-    bloc.add(const IdentificationConsentGranted());
+    bloc.add(const IdentificationSubmitted());
+    bloc.add(const IdentificationSubmitted());
     await settle();
     expect(service.calls, 1);
     service.pending!.complete(result());
     await settle();
-    expect(processor.last!.bytes, everyElement(0));
+    expect(processor.last!.bytes, isNot(everyElement(0)));
   });
   for (final confidence in [0.2, 0.7, 0.9]) {
     test('confidence $confidence confirmation policy', () async {
@@ -131,19 +143,19 @@ void main() {
     });
   }
   for (final type in PlantIdentificationFailureType.values) {
-    test('safe AI failure ${type.name} releases image', () async {
+    test('safe AI failure ${type.name} retains image for retry', () async {
       service.error = PlantIdentificationFailure(type, 'Try again');
       await identify();
       expect(bloc.state.message, 'Try again');
-      expect(bloc.state.step, PlantOnboardingStep.method);
-      expect(processor.last!.bytes, everyElement(0));
+      expect(bloc.state.step, PlantOnboardingStep.preview);
+      expect(processor.last!.bytes, isNot(everyElement(0)));
       expect(repository.addCalls, 0);
     });
   }
   test('cancellation during AI ignores late success', () async {
     service.pending = Completer();
     await pick();
-    bloc.add(const IdentificationConsentGranted());
+    bloc.add(const IdentificationSubmitted());
     await settle();
     bloc.add(const IdentificationReset());
     await settle();
@@ -200,8 +212,31 @@ void main() {
       expect(bloc.state.draft, isNull);
       expect(repository.addCalls, 2);
       expect(service.calls, 1);
+      expect(localImages.saveCalls, 1);
+      expect(localImages.images.single.plantId, 'new-plant');
     },
   );
+  test('plant save failure creates no local image', () async {
+    await review();
+    repository.addError = Exception('offline');
+    bloc.add(const OnboardingSaveRequested());
+    await settle();
+    expect(bloc.state.step, PlantOnboardingStep.review);
+    expect(localImages.saveCalls, 0);
+    expect(processor.last!.bytes, isNot(everyElement(0)));
+  });
+  test('local write failure keeps created plant and releases image', () async {
+    await review();
+    localImages.saveError = Exception('disk full');
+    bloc.add(const OnboardingSaveRequested());
+    await settle();
+    expect(bloc.state.step, PlantOnboardingStep.saved);
+    expect(bloc.state.plantId, 'new-plant');
+    expect(bloc.state.message, contains('photo could not be saved'));
+    expect(repository.addCalls, 1);
+    expect(localImages.saveCalls, 1);
+    expect(processor.last!.bytes, everyElement(0));
+  });
   test('name conflicts stop review and no save before review', () async {
     bloc.add(const OnboardingSaveRequested());
     await settle();
@@ -238,7 +273,7 @@ void main() {
       expect(picker.image!.bytes, everyElement(0));
       processor.error = null;
       await pick();
-      expect(bloc.state.step, PlantOnboardingStep.consent);
+      expect(bloc.state.step, PlantOnboardingStep.preview);
     },
   );
   test('factory creates isolated workflow instances', () async {
@@ -247,13 +282,14 @@ void main() {
       processor,
       service,
       repository,
+      localImages,
     );
     final first = factory.create();
     final second = factory.create();
     expect(identical(first, second), isFalse);
     first.add(const IdentificationPhotoRequested(PlantImageSource.gallery));
     await settle();
-    expect(first.state.step, PlantOnboardingStep.consent);
+    expect(first.state.step, PlantOnboardingStep.preview);
     expect(second.state.step, PlantOnboardingStep.method);
     await first.close();
     await second.close();

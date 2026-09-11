@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:plantcare_features/src/local_plant_images/presentation/widgets/local_plant_images_panel.dart';
 
 class PrivacySafetyPage extends StatelessWidget {
-  const PrivacySafetyPage({super.key});
+  const PrivacySafetyPage({this.enableLocalImages = false, super.key});
+
+  final bool enableLocalImages;
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +30,25 @@ class PrivacySafetyPage extends StatelessWidget {
                 const _InformationSection(
                   icon: Icons.photo_camera_outlined,
                   title: 'Plant photos',
-                  body: 'A photo you choose is processed in memory and sent to Firebase AI for visual analysis. PlantCare AI does not save the photo in this Spark V1. The submitted content may be processed under the configured Gemini Developer API terms.',
+                  body: 'When you explicitly submit a selected photo, its processed copy is sent to Firebase AI for visual analysis. After the related plant or photo findings are saved, PlantCare AI automatically keeps that processed copy privately on this device. The untouched original is not copied, and the processing pipeline removes image metadata. Web copies last only for the current browser session. Local images do not synchronize and may be lost if the app is removed or app/browser data is cleared.',
                 ),
                 const _InformationSection(
                   icon: Icons.storage_outlined,
                   title: 'Saved records',
-                  body: 'Structured visual observations, diagnoses, plant profiles, care logs, soil checks, fertilizer assessments, and reminders are stored in Firestore for your signed-in account. Image bytes, local image paths, prompts, and raw AI responses are not stored.',
+                  body: 'Structured visual observations, diagnoses, plant profiles, care logs, soil checks, fertilizer assessments, and reminders are stored in Firestore for your signed-in account. Image bytes, local image paths, local image IDs, prompts, and raw AI responses are not stored in Firestore or Firebase Storage.',
                 ),
                 const _InformationSection(
                   icon: Icons.health_and_safety_outlined,
                   title: 'AI and plant-care safety',
                   body: 'AI observations and diagnoses can be wrong. Results are informational, uncertain, and not guaranteed. For serious, uncertain, toxic, pesticide-related, or food-crop concerns, consult a qualified local horticultural, agricultural, poison-control, or other appropriate expert.',
                 ),
+                if (enableLocalImages) ...[
+                  const LocalPlantImagesPanel(
+                    showStorageSummary: true,
+                    showDeleteAll: true,
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 const _InformationSection(
                   icon: Icons.notifications_none,
                   title: 'Reminder limits',

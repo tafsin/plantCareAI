@@ -12,6 +12,7 @@ import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
 
 import '../helpers/fake_authentication_repository.dart';
+import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_observation_dependencies.dart';
 import '../helpers/fake_plant_repository.dart';
 
@@ -201,7 +202,10 @@ _pumpHarness(
   final router = createAppRouter(
     authSessionBloc: sessionBloc,
     authenticationBlocFactory: AuthenticationBlocFactory(repository),
-    plantBlocFactory: PlantBlocFactory(plantRepository),
+    plantBlocFactory: PlantBlocFactory(
+      plantRepository,
+      FakeLocalPlantImageRepository(),
+    ),
     plantObservationBlocFactory: observationFactory,
     initialLocation: initialLocation,
   );

@@ -74,6 +74,15 @@ abstract final class AppRoutes {
   static String observePlant(String plantId) =>
       '${plantDetails(plantId)}/observe';
 
+  static String healthCheck(String plantId) =>
+      '${plantDetails(plantId)}/health-check';
+
+  static String healthHistory(String plantId) =>
+      '${plantDetails(plantId)}/health-history';
+
+  static String healthAssessment(String plantId, String observationId) =>
+      '${healthHistory(plantId)}/${Uri.encodeComponent(observationId)}';
+
   static String observationHistory(String plantId) =>
       '${plantDetails(plantId)}/observations';
 

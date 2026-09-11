@@ -2,16 +2,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_features/src/plants/presentation/bloc/plants_bloc.dart';
 
+import '../../../../helpers/fake_local_plant_image_repository.dart';
 import '../../../../helpers/fake_plant_repository.dart';
 import '../../plant_test_data.dart';
 
 void main() {
   late FakePlantRepository repository;
   late PlantsBloc bloc;
+  late FakeLocalPlantImageRepository localImages;
 
   setUp(() {
     repository = FakePlantRepository();
-    bloc = PlantsBloc(repository);
+    localImages = FakeLocalPlantImageRepository();
+    bloc = PlantsBloc(repository, localImages);
   });
   tearDown(() async {
     await bloc.close();
@@ -78,5 +81,23 @@ void main() {
     expect(bloc.state.deleteFailureMessage, isNotNull);
     expect(bloc.state.plants, [samplePlant]);
     expect(bloc.state.deletingPlantIds, isEmpty);
+  });
+
+  test('optionally removes plant local images after cloud deletion', () async {
+    bloc.add(const PlantDeleteRequested('plant-1', removeLocalImages: true));
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+    expect(repository.deleteCalls, 1);
+    expect(localImages.deletePlantCalls, 1);
+    expect(bloc.state.deletedPlantId, 'plant-1');
+  });
+
+  test('local cleanup failure does not roll back cloud deletion', () async {
+    localImages.deleteError = Exception('disk unavailable');
+    bloc.add(const PlantDeleteRequested('plant-1', removeLocalImages: true));
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+    expect(bloc.state.deletedPlantId, 'plant-1');
+    expect(bloc.state.deleteFailureMessage, contains('local images'));
   });
 }

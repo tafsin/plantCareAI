@@ -7,6 +7,7 @@ import 'package:plantcare_domain/plant_observation.dart';
 import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plants.dart';
 
+import '../../helpers/fake_local_plant_image_repository.dart';
 import '../../helpers/fake_plant_repository.dart';
 import 'fakes.dart';
 
@@ -14,16 +15,24 @@ void main() {
   late PlantIdentificationBloc bloc;
   late FakePlantRepository repository;
   late IdentificationService service;
+  late FakeLocalPlantImageRepository localImages;
   setUp(() {
     repository = FakePlantRepository();
     service = IdentificationService();
+    localImages = FakeLocalPlantImageRepository();
   });
   tearDown(() async {
     await bloc.close();
     await repository.close();
   });
   Future<void> show(WidgetTester tester) async {
-    bloc = PlantIdentificationBloc(Picker(), Processor(), service, repository);
+    bloc = PlantIdentificationBloc(
+      Picker(),
+      Processor(),
+      service,
+      repository,
+      localImages,
+    );
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -39,7 +48,7 @@ void main() {
   Future<void> identify(WidgetTester tester) async {
     bloc.add(const IdentificationPhotoRequested(PlantImageSource.gallery));
     await tester.pumpAndSettle();
-    bloc.add(const IdentificationConsentGranted());
+    bloc.add(const IdentificationSubmitted());
     await tester.pumpAndSettle();
   }
 
@@ -53,11 +62,13 @@ void main() {
       expect(service.calls, 0);
       expect(
         bloc.state.step,
-        PlantOnboardingStep.consent,
+        PlantOnboardingStep.preview,
         reason: bloc.state.message,
       );
-      expect(find.text('Agree & identify'), findsOneWidget);
-      await tester.tap(find.text('Agree & identify'));
+      expect(find.text('Identify plant'), findsOneWidget);
+      expect(find.byType(Checkbox), findsNothing);
+      await tester.ensureVisible(find.text('Identify plant'));
+      await tester.tap(find.text('Identify plant'));
       await tester.pumpAndSettle();
       expect(find.text('Leading match · confirmation needed'), findsOneWidget);
       await tester.tap(find.text('Confirm Pothos'));
@@ -176,7 +187,13 @@ void main() {
   testWidgets('manual fallback opens unchanged plant form without AI', (
     tester,
   ) async {
-    bloc = PlantIdentificationBloc(Picker(), Processor(), service, repository);
+    bloc = PlantIdentificationBloc(
+      Picker(),
+      Processor(),
+      service,
+      repository,
+      localImages,
+    );
     final form = PlantFormBloc(repository);
     final router = GoRouter(
       initialLocation: '/plants/new',

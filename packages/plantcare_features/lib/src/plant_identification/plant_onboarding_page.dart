@@ -21,11 +21,7 @@ class PlantOnboardingPage extends StatelessWidget {
     }
 
     return BlocConsumer<PlantIdentificationBloc, PlantIdentificationState>(
-      listener: (context, state) {
-        if (state.step == PlantOnboardingStep.saved) {
-          context.go(AppRoutes.plantDetails(state.plantId!));
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         if (state.step == PlantOnboardingStep.profile) {
           return Column(
@@ -43,6 +39,7 @@ class PlantOnboardingPage extends StatelessWidget {
               Expanded(
                 child: PlantFormPage(
                   initialDraft: state.draft,
+                  showHeader: false,
                   onBack: reset,
                   onReview: (draft) =>
                       bloc.add(OnboardingReviewRequested(draft)),
@@ -52,7 +49,8 @@ class PlantOnboardingPage extends StatelessWidget {
           );
         }
         final saving = state.step == PlantOnboardingStep.saving;
-        return Center(
+        return Align(
+          alignment: Alignment.topCenter,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: ConstrainedBox(
@@ -60,24 +58,6 @@ class PlantOnboardingPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        tooltip: 'Back to plants',
-                        onPressed: saving
-                            ? null
-                            : () => context.go(AppRoutes.plants),
-                        icon: const Icon(Icons.arrow_back),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Add plant',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
                   if (state.message != null)
                     Semantics(
                       liveRegion: true,
@@ -132,26 +112,43 @@ class PlantOnboardingPage extends StatelessWidget {
                       const _Busy('Preparing your photo…'),
                       TextButton(onPressed: reset, child: const Text('Cancel')),
                     ],
-                    PlantOnboardingStep.consent => [
+                    PlantOnboardingStep.preview => [
                       const Text('Step 2 of 5 · Photo & privacy'),
+                      const SizedBox(height: 20),
+                      if (bloc.selectedImageBytes != null)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.memory(
+                            bloc.selectedImageBytes!,
+                            key: const ValueKey('identification-photo-preview'),
+                            height: 320,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, _, _) => const SizedBox(
+                              height: 160,
+                              child: Center(
+                                child: Text('Photo preview unavailable.'),
+                              ),
+                            ),
+                          ),
+                        ),
                       const SizedBox(height: 20),
                       const _Panel(
                         icon: Icons.privacy_tip_outlined,
                         title: 'Ready to identify?',
                         children: [
                           Text(
-                            'Your photo has been checked and prepared on this device. With your consent, it will be sent to Firebase AI to suggest possible plant identities.',
+                            'Your photo has been checked and prepared on this device. When you select Identify plant, it will be sent to Firebase AI to suggest possible plant identities.',
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'PlantCare does not save your photo. Identification can be wrong; you choose the plant before anything is saved.',
+                            'After you create the plant, the processed photo is saved automatically as a private local cover image. It is not uploaded to Firebase Storage or synchronized to other devices.',
                           ),
                         ],
                       ),
                       FilledButton(
                         onPressed: () =>
-                            bloc.add(const IdentificationConsentGranted()),
-                        child: const Text('Agree & identify'),
+                            bloc.add(const IdentificationSubmitted()),
+                        child: const Text('Identify plant'),
                       ),
                       TextButton(
                         onPressed: reset,
@@ -242,12 +239,39 @@ class PlantOnboardingPage extends StatelessWidget {
                         child: const Text('Edit details'),
                       ),
                     ],
-                    PlantOnboardingStep.profile ||
-                    PlantOnboardingStep.saved => [],
+                    PlantOnboardingStep.saved => [
+                      const Text('Saved'),
+                      const SizedBox(height: 20),
+                      const _Panel(
+                        icon: Icons.health_and_safety_outlined,
+                        title: 'Would you like to check this plant’s health?',
+                        children: [
+                          Text(
+                            'Identification photos are for confirming the plant. A health check works best with a close photo of the symptom area.',
+                          ),
+                        ],
+                      ),
+                      FilledButton.icon(
+                        key: const ValueKey('check-new-plant-health'),
+                        onPressed: () =>
+                            context.go(AppRoutes.healthCheck(state.plantId!)),
+                        icon: const Icon(Icons.add_a_photo_outlined),
+                        label: const Text('Check health'),
+                      ),
+                      TextButton(
+                        key: const ValueKey('not-now-health-check'),
+                        onPressed: () =>
+                            context.go(AppRoutes.plantDetails(state.plantId!)),
+                        child: const Text('Not now'),
+                      ),
+                    ],
+                    PlantOnboardingStep.profile => [],
                   },
                   const SizedBox(height: 24),
                   Text(
-                    'Your photo and unsaved progress are not stored. Leaving or refreshing this page starts over.',
+                    state.step == PlantOnboardingStep.saved
+                        ? 'The processed cover image is stored only on this device (or for this browser session on web) and may be deleted from the plant details page.'
+                        : 'Before plant creation, the photo and unsaved progress are temporary. Leaving or refreshing this page starts over.',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],

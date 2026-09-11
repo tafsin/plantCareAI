@@ -90,7 +90,7 @@ class ObservationHistoryPage extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(24),
                         child: Text(
-                          'No saved observations yet. Images are never stored, so history contains structured text only.',
+                          'No saved observations yet. Cloud history contains structured text only; newer health checks may also have a separate local image on this device.',
                         ),
                       ),
                     ),

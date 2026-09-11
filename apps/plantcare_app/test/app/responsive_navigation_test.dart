@@ -10,6 +10,7 @@ import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/plants.dart';
 
 import '../helpers/fake_authentication_repository.dart';
+import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_repository.dart';
 
 void main() {
@@ -23,7 +24,10 @@ void main() {
     final router = createAppRouter(
       authSessionBloc: sessionBloc,
       authenticationBlocFactory: AuthenticationBlocFactory(repository),
-      plantBlocFactory: PlantBlocFactory(plantRepository),
+      plantBlocFactory: PlantBlocFactory(
+        plantRepository,
+        FakeLocalPlantImageRepository(),
+      ),
     );
     addTearDown(() async {
       router.dispose();

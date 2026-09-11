@@ -5,6 +5,9 @@ import 'package:plantcare_features/navigation.dart';
 void main() {
   test('diagnosis routes are internal protected destinations', () {
     final paths = [
+      AppRoutes.healthCheck('plant 1'),
+      AppRoutes.healthHistory('plant 1'),
+      AppRoutes.healthAssessment('plant 1', 'observation 1'),
       AppRoutes.diagnoseObservation('plant 1', 'observation 1'),
       AppRoutes.diagnosisHistory('plant 1', 'observation 1'),
       AppRoutes.diagnosisDetails('plant 1', 'observation 1', 'diagnosis 1'),
