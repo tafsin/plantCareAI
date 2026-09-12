@@ -5,6 +5,7 @@ import 'package:plantcare_app/app/theme/app_theme.dart';
 import 'package:plantcare_app/app/theme/theme_bloc.dart';
 import 'package:plantcare_app/core/constants/app_constants.dart';
 import 'package:plantcare_features/authentication.dart';
+import 'package:plantcare_features/premium_subscriptions.dart';
 import 'package:plantcare_shared/environment.dart';
 
 class PlantCareApp extends StatelessWidget {
@@ -13,6 +14,7 @@ class PlantCareApp extends StatelessWidget {
     required this.themeBloc,
     required this.authSessionBloc,
     required this.environmentConfig,
+    this.premiumAccessBloc,
     super.key,
   });
 
@@ -20,6 +22,7 @@ class PlantCareApp extends StatelessWidget {
   final ThemeBloc themeBloc;
   final AuthSessionBloc authSessionBloc;
   final EnvironmentConfig environmentConfig;
+  final PremiumAccessBloc? premiumAccessBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,8 @@ class PlantCareApp extends StatelessWidget {
       providers: [
         BlocProvider.value(value: themeBloc),
         BlocProvider.value(value: authSessionBloc),
+        if (premiumAccessBloc != null)
+          BlocProvider.value(value: premiumAccessBloc!),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, themeState) {

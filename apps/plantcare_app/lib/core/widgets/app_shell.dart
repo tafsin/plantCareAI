@@ -33,6 +33,7 @@ class AppShell extends StatelessWidget {
   String? _title({required bool isWide}) {
     if (_isAddPlant) return 'Add plant';
     if (_isHealthCheck) return 'Plant Health Check';
+    if (location == AppRoutes.premium) return 'Premium';
     return switch (_selectedIndex) {
       0 when location == AppRoutes.privacySafety => 'Privacy & Safety',
       0 => 'Home',
@@ -100,6 +101,12 @@ class AppShell extends StatelessWidget {
                 leading: _leading(context),
                 title: title == null ? null : Text(title),
                 actions: [
+                  IconButton(
+                    key: const ValueKey('upgrade-premium-button'),
+                    tooltip: 'Upgrade to Premium',
+                    onPressed: () => context.go(AppRoutes.premium),
+                    icon: const Icon(Icons.workspace_premium_outlined),
+                  ),
                   IconButton(
                     key: const ValueKey('privacy-safety-button'),
                     tooltip: 'Privacy and safety',

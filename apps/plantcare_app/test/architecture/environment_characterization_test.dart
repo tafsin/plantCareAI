@@ -11,5 +11,15 @@ void main() {
     expect(config.useFirebaseAuthEmulator, isFalse);
     expect(config.useAppCheckDebug, isFalse);
     expect(config.appCheckRecaptchaEnterpriseSiteKey, isNull);
+    expect(config.premiumSubscription.canActivate, isFalse);
+    expect(config.premiumSubscription.privacyPolicyUrl, isNull);
+    expect(config.premiumSubscription.termsOfServiceUrl, isNull);
+  });
+
+  test('legal destinations accept only absolute HTTPS URLs', () {
+    expect(parseHttpsUrl('https://plantcare.example/privacy')?.scheme, 'https');
+    expect(parseHttpsUrl('http://plantcare.example/privacy'), isNull);
+    expect(parseHttpsUrl('/privacy'), isNull);
+    expect(parseHttpsUrl(''), isNull);
   });
 }

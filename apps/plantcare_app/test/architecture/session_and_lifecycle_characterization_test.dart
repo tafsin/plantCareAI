@@ -228,6 +228,9 @@ final class _PlantRepository implements PlantRepository {
   Future<String> addPlant(PlantDraft plant) => throw UnimplementedError();
 
   @override
+  Future<int> countPlants() => throw UnimplementedError();
+
+  @override
   Future<void> deletePlant(String plantId) => throw UnimplementedError();
 
   @override

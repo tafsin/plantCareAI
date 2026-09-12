@@ -286,7 +286,8 @@ class _PlantFormPageState extends State<PlantFormPage> {
                   ),
                   validator: PlantValidator.notes,
                 ),
-                if (state.status == PlantFormStatus.failure) ...[
+                if (state.status == PlantFormStatus.failure ||
+                    state.status == PlantFormStatus.plantLimitReached) ...[
                   const SizedBox(height: 8),
                   Semantics(
                     liveRegion: true,
@@ -297,6 +298,19 @@ class _PlantFormPageState extends State<PlantFormPage> {
                         color: Theme.of(context).colorScheme.error,
                       ),
                     ),
+                  ),
+                ],
+                if (state.status == PlantFormStatus.plantLimitReached) ...[
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    key: const ValueKey('plant-form-upgrade'),
+                    onPressed: () => context.go(
+                      AppRoutes.premiumLocation(
+                        returnTo: AppRoutes.manualPlant,
+                      ),
+                    ),
+                    icon: const Icon(Icons.workspace_premium_outlined),
+                    label: const Text('Upgrade to Premium'),
                   ),
                 ],
                 const SizedBox(height: 20),

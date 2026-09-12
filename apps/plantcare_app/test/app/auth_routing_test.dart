@@ -6,15 +6,18 @@ import 'package:plantcare_app/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_app/app/router/app_router.dart';
 import 'package:plantcare_app/app/theme/theme_bloc.dart';
 import 'package:plantcare_domain/authentication.dart';
+import 'package:plantcare_domain/plants.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/navigation.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
+import 'package:plantcare_features/premium_subscriptions.dart';
 
 import '../helpers/fake_authentication_repository.dart';
 import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_observation_dependencies.dart';
 import '../helpers/fake_plant_repository.dart';
+import '../helpers/fake_premium_dependencies.dart';
 
 void main() {
   testWidgets('shows loading and does not redirect during initial checking', (
@@ -52,6 +55,32 @@ void main() {
     expect(harness.router.state.uri.queryParameters['redirect'], location);
   });
 
+  testWidgets('premium route preserves redirect and renders after sign-in', (
+    tester,
+  ) async {
+    final harness = await _pumpHarness(
+      tester,
+      initialLocation: AppRoutes.premium,
+    );
+
+    harness.repository.emitAuthState(null);
+    await tester.pumpAndSettle();
+    expect(harness.router.state.uri.path, AppRoutes.signIn);
+    expect(
+      harness.router.state.uri.queryParameters['redirect'],
+      AppRoutes.premium,
+    );
+
+    harness.repository.emitAuthState(
+      const AppUser(uid: 'user-1', email: 'user@test.com'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(harness.router.state.uri.path, AppRoutes.premium);
+    expect(find.byKey(const ValueKey('premium-page')), findsOneWidget);
+    expect(find.text('Premium'), findsWidgets);
+  });
+
   testWidgets('invalid plant id shows not found on observation route', (
     tester,
   ) async {
@@ -67,6 +96,31 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Plant not found'), findsOneWidget);
+  });
+
+  testWidgets('Free over-limit accounts can still create AI observations', (
+    tester,
+  ) async {
+    final harness = await _pumpHarness(
+      tester,
+      initialLocation: AppRoutes.observePlant('plant-1'),
+    );
+    harness.repository.emitAuthState(
+      const AppUser(uid: 'user-1', email: 'user@test.com'),
+    );
+    await tester.pump();
+    harness.plantRepository
+      ..plantCount = 8
+      ..emitPlant('plant-1', _plant('plant-1'));
+    await tester.pumpAndSettle();
+
+    expect(harness.router.state.uri.path, AppRoutes.observePlant('plant-1'));
+    expect(
+      find.byKey(const ValueKey('plant-observation-page')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('pick-gallery')), findsOneWidget);
+    expect(find.text('Upgrade to Premium'), findsNothing);
   });
 
   testWidgets('redirects authenticated users away from auth routes', (
@@ -93,6 +147,9 @@ void main() {
     expect(validatedProtectedDestination('https://example.com'), isNull);
     expect(validatedProtectedDestination(AppRoutes.register), isNull);
     expect(validatedProtectedDestination(AppRoutes.plants), AppRoutes.plants);
+    expect(validatedProtectedDestination(AppRoutes.premium), AppRoutes.premium);
+    expect(validatedProtectedDestination('//example.com/premium'), isNull);
+    expect(validatedProtectedDestination('/premium#external'), isNull);
     expect(
       validatedProtectedDestination('/plants/plant-1/edit'),
       '/plants/plant-1/edit',
@@ -175,6 +232,15 @@ void main() {
   });
 }
 
+Plant _plant(String id) => Plant(
+  id: id,
+  commonName: 'Pothos',
+  environment: PlantEnvironment.indoor,
+  growingMedium: GrowingMedium.pot,
+  sunlight: Sunlight.partial,
+  growthStage: GrowthStage.vegetative,
+);
+
 Future<
   ({
     FakeAuthenticationRepository repository,
@@ -182,6 +248,7 @@ Future<
     ThemeBloc themeBloc,
     GoRouter router,
     FakePlantRepository plantRepository,
+    PremiumAccessBloc premiumAccessBloc,
   })
 >
 _pumpHarness(
@@ -197,6 +264,12 @@ _pumpHarness(
     FakePlantObservationService(),
     observationRepository,
   );
+  final premiumRepository = FakePremiumSubscriptionRepository();
+  final premiumFactory = PremiumBlocFactory(
+    premiumRepository,
+    FakePremiumDestinationLauncher(),
+  );
+  final premiumAccessBloc = premiumFactory.createAccessBloc();
   final sessionBloc = AuthSessionBloc(repository);
   final themeBloc = ThemeBloc();
   final router = createAppRouter(
@@ -205,8 +278,10 @@ _pumpHarness(
     plantBlocFactory: PlantBlocFactory(
       plantRepository,
       FakeLocalPlantImageRepository(),
+      premiumRepository,
     ),
     plantObservationBlocFactory: observationFactory,
+    premiumBlocFactory: premiumFactory,
     initialLocation: initialLocation,
   );
   addTearDown(() async {
@@ -216,6 +291,8 @@ _pumpHarness(
     await repository.close();
     await plantRepository.close();
     await observationRepository.close();
+    await premiumAccessBloc.close();
+    await premiumRepository.dispose();
   });
   await tester.pumpWidget(
     PlantCareApp(
@@ -223,6 +300,7 @@ _pumpHarness(
       themeBloc: themeBloc,
       authSessionBloc: sessionBloc,
       environmentConfig: const CompileTimeEnvironmentConfig(),
+      premiumAccessBloc: premiumAccessBloc,
     ),
   );
   await tester.pump();
@@ -232,5 +310,6 @@ _pumpHarness(
     themeBloc: themeBloc,
     router: router,
     plantRepository: plantRepository,
+    premiumAccessBloc: premiumAccessBloc,
   );
 }

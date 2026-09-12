@@ -8,6 +8,7 @@ abstract final class AppRoutes {
   static const newPlant = '/plants/new';
   static const reminders = '/reminders';
   static const privacySafety = '/privacy-safety';
+  static const premium = '/premium';
   static const signIn = '/sign-in';
   static const register = '/register';
   static const forgotPassword = '/forgot-password';
@@ -105,6 +106,11 @@ abstract final class AppRoutes {
   static String signInLocation(String? redirect, {bool email = false}) => Uri(
     path: signIn,
     queryParameters: {'redirect': ?redirect, if (email) 'method': 'email'},
+  ).toString();
+
+  static String premiumLocation({String? returnTo}) => Uri(
+    path: premium,
+    queryParameters: returnTo == null ? null : {'returnTo': returnTo},
   ).toString();
 
   static String registerLocation(String? redirect) =>

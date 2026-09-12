@@ -10,6 +10,7 @@ void main() {
     expect(AppRoutes.newPlant, '/plants/new');
     expect(AppRoutes.reminders, '/reminders');
     expect(AppRoutes.privacySafety, '/privacy-safety');
+    expect(AppRoutes.premium, '/premium');
     expect(AppRoutes.signIn, '/sign-in');
     expect(AppRoutes.register, '/register');
     expect(AppRoutes.forgotPassword, '/forgot-password');

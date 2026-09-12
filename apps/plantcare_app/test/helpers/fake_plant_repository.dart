@@ -13,6 +13,8 @@ final class FakePlantRepository implements PlantRepository {
   Object? deleteError;
   String addedPlantId = 'new-plant';
   int watchPlantsCalls = 0;
+  int countPlantsCalls = 0;
+  int plantCount = 0;
   int addCalls = 0;
   int updateCalls = 0;
   int deleteCalls = 0;
@@ -27,7 +29,11 @@ final class FakePlantRepository implements PlantRepository {
     return _plantsController.stream;
   }
 
-  void emitPlants(List<Plant> plants) => _plantsController.add(plants);
+  void emitPlants(List<Plant> plants) {
+    plantCount = plants.length;
+    _plantsController.add(plants);
+  }
+
   void emitPlantsError(Object error) => _plantsController.addError(error);
 
   @override
@@ -35,6 +41,13 @@ final class FakePlantRepository implements PlantRepository {
       (_plantControllers[plantId] ??= StreamController<Plant?>.broadcast(
         sync: true,
       )).stream;
+
+  @override
+  Future<int> countPlants() async {
+    countPlantsCalls++;
+    if (watchPlantsError case final Object error) throw error;
+    return plantCount;
+  }
 
   void emitPlant(String plantId, Plant? plant) =>
       (_plantControllers[plantId] ??= StreamController<Plant?>.broadcast(

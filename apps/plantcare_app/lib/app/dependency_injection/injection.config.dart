@@ -29,6 +29,7 @@ import 'package:plantcare_data/data_module.dart' as _i74;
 import 'package:plantcare_domain/authentication.dart' as _i521;
 import 'package:plantcare_domain/local_plant_images.dart' as _i544;
 import 'package:plantcare_domain/plants.dart' as _i867;
+import 'package:plantcare_domain/premium_subscriptions.dart' as _i902;
 import 'package:plantcare_domain/reminders.dart' as _i412;
 import 'package:plantcare_features/authentication.dart' as _i712;
 import 'package:plantcare_features/care_history.dart' as _i323;
@@ -41,6 +42,7 @@ import 'package:plantcare_features/plant_health_check.dart' as _i514;
 import 'package:plantcare_features/plant_identification.dart' as _i698;
 import 'package:plantcare_features/plant_observation.dart' as _i840;
 import 'package:plantcare_features/plants.dart' as _i311;
+import 'package:plantcare_features/premium_subscriptions.dart' as _i138;
 import 'package:plantcare_features/reminders.dart' as _i847;
 import 'package:plantcare_features/soil_check.dart' as _i852;
 import 'package:plantcare_shared/environment.dart' as _i515;
@@ -63,6 +65,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i515.EnvironmentConfig>(
       () => appModule.environmentConfig,
     );
+    gh.lazySingleton<_i902.PremiumSubscriptionConfiguration>(
+      () => appModule.premiumSubscriptionConfiguration,
+    );
     gh.lazySingleton<_i583.GoRouter>(
       () => appModule.router(
         gh<_i712.AuthSessionBloc>(),
@@ -78,10 +83,19 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i323.CareLogBlocFactory>(),
         gh<_i60.FertilizerAssessmentBlocFactory>(),
         gh<_i847.ReminderBlocFactory>(),
+        gh<_i138.PremiumBlocFactory>(),
+      ),
+    );
+    gh.lazySingleton<_i902.PremiumDestinationLauncher>(
+      () => appModule.premiumDestinationLauncher(
+        gh<_i902.PremiumSubscriptionConfiguration>(),
       ),
     );
     gh.lazySingleton<_i767.FirebaseAppCheckActivator>(
       () => appModule.firebaseAppCheckActivator(gh<_i515.EnvironmentConfig>()),
+    );
+    gh.lazySingleton<_i138.PremiumAccessBloc>(
+      () => appModule.premiumAccessBloc(gh<_i138.PremiumBlocFactory>()),
     );
     gh.lazySingleton<_i521.AuthenticationSession>(
       () =>
@@ -91,6 +105,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => appModule.appInitializer(
         gh<_i515.EnvironmentConfig>(),
         gh<_i767.FirebaseAppCheckActivator>(),
+      ),
+    );
+    gh.lazySingleton<_i902.PremiumSubscriptionRepository>(
+      () => appModule.premiumSubscriptionRepository(
+        gh<_i521.AuthenticationSession>(),
+        gh<_i902.PremiumSubscriptionConfiguration>(),
       ),
     );
     gh.lazySingleton<_i544.LocalPlantImageRepository>(

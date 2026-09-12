@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:plantcare_domain/premium_subscriptions.dart';
 import 'package:plantcare_shared/environment.dart';
 
 final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
@@ -14,6 +15,13 @@ final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
   static const _useAppCheckDebug = bool.fromEnvironment('USE_APP_CHECK_DEBUG');
   static const _appCheckRecaptchaEnterpriseSiteKey = String.fromEnvironment(
     'APP_CHECK_RECAPTCHA_ENTERPRISE_SITE_KEY',
+  );
+  static const _adaptyPublicSdkKey = String.fromEnvironment(
+    'ADAPTY_PUBLIC_SDK_KEY',
+  );
+  static const _privacyPolicyUrl = String.fromEnvironment('PRIVACY_POLICY_URL');
+  static const _termsOfServiceUrl = String.fromEnvironment(
+    'TERMS_OF_SERVICE_URL',
   );
 
   @override
@@ -38,4 +46,27 @@ final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
     final value = _appCheckRecaptchaEnterpriseSiteKey.trim();
     return value.isEmpty ? null : value;
   }
+
+  PremiumSubscriptionConfiguration get premiumSubscription =>
+      PremiumSubscriptionConfiguration(
+        publicSdkKey: _nonEmpty(_adaptyPublicSdkKey),
+        privacyPolicyUrl: parseHttpsUrl(_privacyPolicyUrl),
+        termsOfServiceUrl: parseHttpsUrl(_termsOfServiceUrl),
+      );
+
+  static String? _nonEmpty(String value) {
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
+  }
+}
+
+Uri? parseHttpsUrl(String value) {
+  final uri = Uri.tryParse(value.trim());
+  if (uri == null ||
+      uri.scheme != 'https' ||
+      uri.host.isEmpty ||
+      uri.userInfo.isNotEmpty) {
+    return null;
+  }
+  return uri;
 }

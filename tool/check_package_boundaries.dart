@@ -18,6 +18,7 @@ const _commonForbiddenImports = <String>[
   'package:plantcare_features/',
   'package:plantcare_app/',
   'package:plantcare_ai/',
+  'package:adapty_flutter/',
 ];
 
 const _dataForbiddenImports = <String>[
@@ -43,6 +44,7 @@ const _presentationForbiddenImports = <String>[
   'package:flutter_local_notifications/',
   'package:flutter_timezone/',
   'package:shared_preferences/',
+  'package:adapty_flutter/',
 ];
 
 void main() {
@@ -71,6 +73,9 @@ void main() {
     _presentationForbiddenImports,
     violations,
   );
+  _checkPackage(Directory('apps/plantcare_app/lib'), const [
+    'package:adapty_flutter/',
+  ], violations);
   _checkWorkspaceImports(Directory.current, violations);
 
   if (violations.isNotEmpty) {

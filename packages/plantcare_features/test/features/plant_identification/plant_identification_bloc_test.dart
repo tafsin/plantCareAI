@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_domain/plant_identification.dart';
 import 'package:plantcare_domain/plant_observation.dart';
 import 'package:plantcare_domain/plants.dart';
+import 'package:plantcare_domain/premium_subscriptions.dart';
 import 'package:plantcare_features/plant_identification.dart';
 
 import '../../helpers/fake_local_plant_image_repository.dart';
@@ -68,6 +69,66 @@ void main() {
       expect(service.calls, 0);
     },
   );
+  test('a Free user at the limit is stopped before photo selection', () async {
+    repository.plantCount = 3;
+
+    await pick();
+
+    expect(bloc.state.step, PlantOnboardingStep.method);
+    expect(bloc.state.plantLimitReached, isTrue);
+    expect(bloc.state.message, PlantCapabilityPolicy.plantLimitMessage);
+    expect(picker.calls, 0);
+    expect(service.calls, 0);
+  });
+  test('a Free user below the limit can identify and save', () async {
+    repository.plantCount = 2;
+
+    await review();
+    bloc.add(const OnboardingSaveRequested());
+    await settle();
+
+    expect(picker.calls, 1);
+    expect(service.calls, 1);
+    expect(repository.addCalls, 1);
+    expect(bloc.state.step, PlantOnboardingStep.saved);
+  });
+  test('final photo save rejects a stale Free count without writing', () async {
+    repository.plantCount = 2;
+    await review();
+    repository.plantCount = 3;
+
+    bloc.add(const OnboardingSaveRequested());
+    await settle();
+
+    expect(bloc.state.step, PlantOnboardingStep.review);
+    expect(bloc.state.plantLimitReached, isTrue);
+    expect(bloc.state.message, PlantCapabilityPolicy.plantLimitMessage);
+    expect(repository.addCalls, 0);
+    expect(processor.last!.bytes, isNot(everyElement(0)));
+  });
+  test('verified Premium can identify and save above the Free limit', () async {
+    await bloc.close();
+    repository.plantCount = 8;
+    bloc = PlantIdentificationBloc(
+      picker,
+      processor,
+      service,
+      repository,
+      localImages,
+      premiumAccess: () => const PremiumAccessSnapshot(
+        userId: 'user-1',
+        status: PremiumAccessStatus.active,
+      ),
+    );
+
+    await review();
+    bloc.add(const OnboardingSaveRequested());
+    await settle();
+
+    expect(service.calls, 1);
+    expect(repository.addCalls, 1);
+    expect(bloc.state.step, PlantOnboardingStep.saved);
+  });
   test(
     'processed image waits for submit and cancellation wipes buffers',
     () async {
