@@ -6,6 +6,7 @@ import 'package:plantcare_domain/local_plant_images.dart';
 import 'package:plantcare_domain/plant_identification.dart';
 import 'package:plantcare_domain/plant_observation.dart';
 import 'package:plantcare_domain/plants.dart';
+import 'package:plantcare_domain/premium_subscriptions.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class PlantIdentificationEvent extends Equatable {
@@ -70,14 +71,23 @@ final class PlantIdentificationState extends Equatable {
     this.draft,
     this.message,
     this.plantId,
+    this.plantLimitReached = false,
   });
   final PlantOnboardingStep step;
   final PlantIdentificationResult? result;
   final PlantDraft? draft;
   final String? message;
   final String? plantId;
+  final bool plantLimitReached;
   @override
-  List<Object?> get props => [step, result, draft, message, plantId];
+  List<Object?> get props => [
+    step,
+    result,
+    draft,
+    message,
+    plantId,
+    plantLimitReached,
+  ];
 }
 
 /// One route-scoped workflow owns identification, confirmation, review and save.
@@ -89,8 +99,11 @@ final class PlantIdentificationBloc
     this._processor,
     this._service,
     this._repository,
-    this._localImageRepository,
-  ) : super(const PlantIdentificationState()) {
+    this._localImageRepository, {
+    PremiumAccessSnapshot Function()? premiumAccess,
+  }) : _premiumAccess =
+           premiumAccess ?? (() => const PremiumAccessSnapshot.signedOut()),
+       super(const PlantIdentificationState()) {
     on<IdentificationPhotoRequested>(_pick);
     on<IdentificationSubmitted>(_identify);
     on<IdentificationReset>((event, emit) {
@@ -163,8 +176,10 @@ final class PlantIdentificationBloc
   final PlantIdentificationService _service;
   final PlantRepository _repository;
   final LocalPlantImageRepository _localImageRepository;
+  final PremiumAccessSnapshot Function() _premiumAccess;
   SelectedPlantImage? _image;
   var _epoch = 0;
+  var _pickInProgress = false;
   bool get supportsCamera => _picker.supportsCamera;
   Uint8List? get selectedImageBytes => _image?.bytes;
 
@@ -180,12 +195,38 @@ final class PlantIdentificationBloc
     IdentificationPhotoRequested event,
     Emitter<PlantIdentificationState> emit,
   ) async {
-    if (!{
-      PlantOnboardingStep.method,
-      PlantOnboardingStep.candidates,
-      PlantOnboardingStep.preview,
-    }.contains(state.step)) {
+    if (_pickInProgress ||
+        !{
+          PlantOnboardingStep.method,
+          PlantOnboardingStep.candidates,
+          PlantOnboardingStep.preview,
+        }.contains(state.step)) {
       return;
+    }
+    _pickInProgress = true;
+    try {
+      final capability = await _creationCapability();
+      if (!capability.allowed) {
+        emit(
+          PlantIdentificationState(
+            message: capability.message,
+            plantLimitReached: true,
+          ),
+        );
+        return;
+      }
+    } on AppError catch (error) {
+      emit(PlantIdentificationState(message: error.message));
+      return;
+    } catch (_) {
+      emit(
+        const PlantIdentificationState(
+          message: 'Could not check your plant allowance. Please try again.',
+        ),
+      );
+      return;
+    } finally {
+      _pickInProgress = false;
     }
     final epoch = ++_epoch;
     _releaseImage();
@@ -276,6 +317,18 @@ final class PlantIdentificationBloc
       PlantIdentificationState(step: PlantOnboardingStep.saving, draft: draft),
     );
     try {
+      final capability = await _creationCapability();
+      if (!capability.allowed) {
+        emit(
+          PlantIdentificationState(
+            step: PlantOnboardingStep.review,
+            draft: draft,
+            message: capability.message,
+            plantLimitReached: true,
+          ),
+        );
+        return;
+      }
       final id = await _repository.addPlant(draft);
       String? localImageWarning;
       final image = _image;
@@ -324,6 +377,12 @@ final class PlantIdentificationBloc
       }
     }
   }
+
+  Future<PlantCreationCapability> _creationCapability() async =>
+      PlantCapabilityPolicy.createSavedPlant(
+        savedPlantCount: await _repository.countPlants(),
+        premiumAccess: _premiumAccess(),
+      );
 
   @override
   Future<void> close() {

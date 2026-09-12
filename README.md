@@ -85,6 +85,69 @@ The app uses Material 3 with light and dark color schemes. Its responsive shell
 shows bottom navigation on narrow windows and a navigation rail at widths of
 840 logical pixels or greater.
 
+## Premium entitlement foundation
+
+The authenticated `/premium` page and central plant-capability policy enforce
+one Premium distinction: Free users may save up to three plants, while users
+with verified Premium access may save unlimited plants subject to existing
+technical limits. AI identification, visual observations, grounded diagnosis,
+knowledge retrieval, soil and fertilizer guidance, saved history, manual care
+logs, and reminders remain available on Free. Existing Free accounts above the
+limit keep every existing plant and all history; they may view, edit, diagnose,
+log care for, and delete those plants, but may not create another one.
+
+All manual, photo, and direct-route creation entry points check the allowance,
+and final submission checks the current saved count again. Photo creation is
+stopped before image selection when saving another plant is unavailable, with
+the explanation “Your free plan includes up to 3 plants. Upgrade to save
+unlimited plants.” A verified upgrade returns to the intended manual or photo
+creation flow. Unknown, checking, or temporarily unavailable subscription state
+retains all Free functionality and uses the Free saved-plant allowance.
+
+Android purchasing uses the published Adapty Flow at placement `main_paywall`,
+access level `premium`, and the Google Play product `plantcare_premium` with
+base plan `monthly`. The expected catalog has no free trial or introductory
+offer. Price and billing period are rendered only from localized Google Play
+product metadata.
+
+Adapty activates after Firebase bootstrap and App Check startup. When a
+Firebase user is already signed in, the UID is supplied during activation;
+otherwise, the SDK is identified after authentication. Paywall and product
+requests wait for that identity synchronization. A purchase is treated as
+Premium only after the returned or current Adapty profile confirms the
+`premium` access level. A later recoverable refresh or view error preserves a
+previously verified successful result and surfaces a warning.
+
+The following non-secret compile-time values must be provided by the release
+environment. Values are intentionally not checked into this repository:
+
+```text
+ADAPTY_PUBLIC_SDK_KEY
+PRIVACY_POLICY_URL
+TERMS_OF_SERVICE_URL
+```
+
+Both legal destinations must be absolute HTTPS URLs. A missing SDK key leaves
+the app usable and shows an unavailable/retry state on Android; a missing or
+invalid legal URL disables that legal action. For local or CI builds, forward
+release-environment variables without placing their values in source or shell
+history:
+
+```sh
+flutter build apk \
+  --dart-define=ADAPTY_PUBLIC_SDK_KEY="$ADAPTY_PUBLIC_SDK_KEY" \
+  --dart-define=PRIVACY_POLICY_URL="$PRIVACY_POLICY_URL" \
+  --dart-define=TERMS_OF_SERVICE_URL="$TERMS_OF_SERVICE_URL"
+```
+
+Purchasing and restore are Android-only. Web explicitly states that mobile
+purchasing is not currently available, and iOS shows an Android availability
+notice; neither platform exposes an enabled purchase or restore action. Manage
+Subscription opens the product-specific Google Play subscriptions page when
+product context is available and otherwise opens the general subscriptions
+center. See [Google Play premium validation](docs/google-play-premium-validation.md)
+for the required internal-testing checklist and external dashboard blockers.
+
 ## Architecture
 
 The repository root is an orchestration-only Dart workspace. Product code is

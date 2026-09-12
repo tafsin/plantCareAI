@@ -68,6 +68,20 @@ class PlantOnboardingPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                  if (state.plantLimitReached)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: FilledButton.icon(
+                        key: const ValueKey('photo-creation-upgrade'),
+                        onPressed: () => context.go(
+                          AppRoutes.premiumLocation(
+                            returnTo: AppRoutes.newPlant,
+                          ),
+                        ),
+                        icon: const Icon(Icons.workspace_premium_outlined),
+                        label: const Text('Upgrade to Premium'),
+                      ),
+                    ),
                   ...switch (state.step) {
                     PlantOnboardingStep.method => [
                       const Text('Step 1 of 5 · A new plant to get to know'),

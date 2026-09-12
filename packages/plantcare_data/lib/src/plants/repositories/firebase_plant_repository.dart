@@ -68,6 +68,16 @@ final class FirebasePlantRepository implements PlantRepository {
   }
 
   @override
+  Future<int> countPlants() async {
+    try {
+      final snapshot = await _plants().limit(DataLimits.maxPlantsPerUser).get();
+      return snapshot.docs.length;
+    } catch (error, stackTrace) {
+      throw _mapError('count plants', error, stackTrace);
+    }
+  }
+
+  @override
   Future<String> addPlant(PlantDraft plant) async {
     try {
       final reference = await _plants().add(

@@ -11,6 +11,7 @@ import 'package:plantcare_app/app/router/app_router.dart';
 import 'package:plantcare_app/app/theme/theme_bloc.dart';
 import 'package:plantcare_domain/reminders.dart';
 import 'package:plantcare_features/authentication.dart';
+import 'package:plantcare_features/premium_subscriptions.dart';
 import 'package:plantcare_shared/environment.dart';
 
 void main() {
@@ -26,6 +27,7 @@ void main() {
         themeBloc: getIt<ThemeBloc>(),
         authSessionBloc: getIt<AuthSessionBloc>(),
         environmentConfig: getIt<EnvironmentConfig>(),
+        premiumAccessBloc: getIt<PremiumAccessBloc>(),
       ),
     );
     getIt<NotificationScheduler>().notificationTapPayloads.listen((location) {

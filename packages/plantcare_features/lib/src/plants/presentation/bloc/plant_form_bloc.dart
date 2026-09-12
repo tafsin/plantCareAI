@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:plantcare_domain/plants.dart';
+import 'package:plantcare_domain/premium_subscriptions.dart';
 import 'package:plantcare_shared/errors.dart';
 
 sealed class PlantFormEvent extends Equatable {
@@ -17,7 +18,14 @@ final class PlantFormSubmitted extends PlantFormEvent {
   List<Object?> get props => [draft, plantId];
 }
 
-enum PlantFormStatus { initial, submitting, created, updated, failure }
+enum PlantFormStatus {
+  initial,
+  submitting,
+  created,
+  updated,
+  plantLimitReached,
+  failure,
+}
 
 final class PlantFormState extends Equatable {
   const PlantFormState({
@@ -35,11 +43,17 @@ final class PlantFormState extends Equatable {
 }
 
 final class PlantFormBloc extends Bloc<PlantFormEvent, PlantFormState> {
-  PlantFormBloc(this._repository) : super(const PlantFormState()) {
+  PlantFormBloc(
+    this._repository, {
+    PremiumAccessSnapshot Function()? premiumAccess,
+  }) : _premiumAccess =
+           premiumAccess ?? (() => const PremiumAccessSnapshot.signedOut()),
+       super(const PlantFormState()) {
     on<PlantFormSubmitted>(_onSubmitted);
   }
 
   final PlantRepository _repository;
+  final PremiumAccessSnapshot Function() _premiumAccess;
   var _submissionInProgress = false;
 
   Future<void> _onSubmitted(
@@ -72,6 +86,19 @@ final class PlantFormBloc extends Bloc<PlantFormEvent, PlantFormState> {
         await _repository.updatePlant(plantId, draft);
         emit(PlantFormState(status: PlantFormStatus.updated, plantId: plantId));
       } else {
+        final capability = PlantCapabilityPolicy.createSavedPlant(
+          savedPlantCount: await _repository.countPlants(),
+          premiumAccess: _premiumAccess(),
+        );
+        if (!capability.allowed) {
+          emit(
+            PlantFormState(
+              status: PlantFormStatus.plantLimitReached,
+              errorMessage: capability.message,
+            ),
+          );
+          return;
+        }
         final plantId = await _repository.addPlant(draft);
         emit(PlantFormState(status: PlantFormStatus.created, plantId: plantId));
       }

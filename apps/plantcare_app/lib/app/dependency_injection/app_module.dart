@@ -13,8 +13,10 @@ import 'package:plantcare_app/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_app/app/router/app_router.dart';
 import 'package:plantcare_app/firebase_options.dart';
 import 'package:plantcare_data/local_plant_images.dart';
+import 'package:plantcare_data/premium_subscriptions.dart';
 import 'package:plantcare_domain/authentication.dart';
 import 'package:plantcare_domain/local_plant_images.dart';
+import 'package:plantcare_domain/premium_subscriptions.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/care_history.dart';
 import 'package:plantcare_features/fertilizer_assessment.dart';
@@ -25,6 +27,7 @@ import 'package:plantcare_features/plant_health_check.dart';
 import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
+import 'package:plantcare_features/premium_subscriptions.dart';
 import 'package:plantcare_features/reminders.dart';
 import 'package:plantcare_features/soil_check.dart';
 import 'package:plantcare_shared/environment.dart';
@@ -46,6 +49,7 @@ abstract class AppModule {
     CareLogBlocFactory careLogBlocFactory,
     FertilizerAssessmentBlocFactory fertilizerAssessmentBlocFactory,
     ReminderBlocFactory reminderBlocFactory,
+    PremiumBlocFactory premiumBlocFactory,
   ) => createAppRouter(
     authSessionBloc: authSessionBloc,
     authenticationBlocFactory: authenticationBlocFactory,
@@ -60,6 +64,7 @@ abstract class AppModule {
     careLogBlocFactory: careLogBlocFactory,
     fertilizerAssessmentBlocFactory: fertilizerAssessmentBlocFactory,
     reminderBlocFactory: reminderBlocFactory,
+    premiumBlocFactory: premiumBlocFactory,
   );
 
   @lazySingleton
@@ -83,6 +88,25 @@ abstract class AppModule {
       const CompileTimeEnvironmentConfig();
 
   @lazySingleton
+  PremiumSubscriptionConfiguration get premiumSubscriptionConfiguration =>
+      const CompileTimeEnvironmentConfig().premiumSubscription;
+
+  @lazySingleton
+  PremiumSubscriptionRepository premiumSubscriptionRepository(
+    AuthenticationSession session,
+    PremiumSubscriptionConfiguration configuration,
+  ) => AdaptyPremiumSubscriptionRepository(session, configuration);
+
+  @lazySingleton
+  PremiumDestinationLauncher premiumDestinationLauncher(
+    PremiumSubscriptionConfiguration configuration,
+  ) => UrlPremiumDestinationLauncher(configuration);
+
+  @lazySingleton
+  PremiumAccessBloc premiumAccessBloc(PremiumBlocFactory factory) =>
+      factory.createAccessBloc();
+
+  @lazySingleton
   FirebaseAppCheckActivator firebaseAppCheckActivator(
     EnvironmentConfig environmentConfig,
   ) => FirebaseAppCheckActivator(environmentConfig);
@@ -103,6 +127,7 @@ abstract class AppModule {
     // App Check have completed their bootstrap stages.
     startApplicationServices: () async {
       await Future.wait([
+        GetIt.instance<PremiumSubscriptionRepository>().initialize(),
         GetIt.instance<ReminderLifecycleService>().start(),
         GetIt.instance<LocalPlantImageLifecycleService>().start(),
       ]);

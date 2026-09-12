@@ -18,6 +18,7 @@ import 'package:plantcare_features/plant_health_check.dart';
 import 'package:plantcare_features/plant_identification.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
+import 'package:plantcare_features/premium_subscriptions.dart';
 import 'package:plantcare_features/reminders.dart';
 import 'package:plantcare_features/soil_check.dart';
 
@@ -31,6 +32,14 @@ String? validatedProtectedDestination(String? candidate) {
   }
   if (!_isProtectedPath(uri.path) || uri.hasFragment) return null;
   if (!uri.hasQuery) return uri.path;
+  if (uri.path == AppRoutes.premium &&
+      uri.queryParameters.length == 1 &&
+      const {
+        AppRoutes.newPlant,
+        AppRoutes.manualPlant,
+      }.contains(uri.queryParameters['returnTo'])) {
+    return uri.toString();
+  }
   final segments = uri.pathSegments;
   final isCareForm =
       segments.length == 4 &&
@@ -75,7 +84,9 @@ bool _isProtectedPath(String path) {
       path == AppRoutes.manualPlant) {
     return true;
   }
-  if (path == AppRoutes.reminders || path == AppRoutes.privacySafety) {
+  if (path == AppRoutes.reminders ||
+      path == AppRoutes.privacySafety ||
+      path == AppRoutes.premium) {
     return true;
   }
   final segments = Uri(path: path).pathSegments;
@@ -145,6 +156,7 @@ GoRouter createAppRouter({
   CareLogBlocFactory? careLogBlocFactory,
   FertilizerAssessmentBlocFactory? fertilizerAssessmentBlocFactory,
   ReminderBlocFactory? reminderBlocFactory,
+  PremiumBlocFactory? premiumBlocFactory,
   String initialLocation = AppRoutes.home,
 }) {
   return GoRouter(
@@ -249,6 +261,20 @@ GoRouter createAppRouter({
                     child: const PrivacySafetyPage(enableLocalImages: true),
                   ),
           ),
+          if (premiumBlocFactory != null)
+            GoRoute(
+              path: AppRoutes.premium,
+              builder: (context, state) => BlocProvider<PaywallBloc>(
+                create: (_) => premiumBlocFactory.createPaywallBloc(),
+                child: PremiumPage(
+                  returnTo: switch (state.uri.queryParameters['returnTo']) {
+                    AppRoutes.newPlant => AppRoutes.newPlant,
+                    AppRoutes.manualPlant => AppRoutes.manualPlant,
+                    _ => null,
+                  },
+                ),
+              ),
+            ),
           if (reminderBlocFactory != null)
             GoRoute(
               path: AppRoutes.reminders,
@@ -268,22 +294,38 @@ GoRouter createAppRouter({
           ),
           GoRoute(
             path: AppRoutes.newPlant,
-            builder: (context, state) => plantIdentificationBlocFactory == null
-                ? BlocProvider(
-                    create: (_) => plantBlocFactory.createPlantFormBloc(),
-                    child: const PlantFormPage(showHeader: false),
-                  )
-                : BlocProvider(
-                    create: (_) => plantIdentificationBlocFactory.create(),
-                    child: const PlantOnboardingPage(),
-                  ),
+            builder: (context, state) {
+              final page = plantIdentificationBlocFactory == null
+                  ? BlocProvider(
+                      create: (_) => plantBlocFactory.createPlantFormBloc(),
+                      child: const PlantFormPage(showHeader: false),
+                    )
+                  : BlocProvider(
+                      create: (_) => plantIdentificationBlocFactory.create(),
+                      child: const PlantOnboardingPage(),
+                    );
+              return premiumBlocFactory == null
+                  ? page
+                  : PlantCreationGate(
+                      returnTo: AppRoutes.newPlant,
+                      child: page,
+                    );
+            },
           ),
           GoRoute(
             path: AppRoutes.manualPlant,
-            builder: (context, state) => BlocProvider(
-              create: (_) => plantBlocFactory.createPlantFormBloc(),
-              child: const PlantFormPage(showHeader: false),
-            ),
+            builder: (context, state) {
+              final page = BlocProvider(
+                create: (_) => plantBlocFactory.createPlantFormBloc(),
+                child: const PlantFormPage(showHeader: false),
+              );
+              return premiumBlocFactory == null
+                  ? page
+                  : PlantCreationGate(
+                      returnTo: AppRoutes.manualPlant,
+                      child: page,
+                    );
+            },
           ),
           GoRoute(
             path: '/plants/:plantId',
