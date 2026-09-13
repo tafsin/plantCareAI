@@ -5,12 +5,14 @@ class AuthPageFrame extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.child,
+    this.branding,
     super.key,
   });
 
   final String title;
   final String subtitle;
   final Widget child;
+  final Widget? branding;
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +43,12 @@ class AuthPageFrame extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Icon(
-                            Icons.eco_outlined,
-                            size: 56,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                          branding ??
+                              Icon(
+                                Icons.eco_outlined,
+                                size: 56,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                           const SizedBox(height: 20),
                           Text(
                             title,

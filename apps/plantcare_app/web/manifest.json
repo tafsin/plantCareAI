@@ -3,7 +3,7 @@
     "short_name": "PlantCare AI",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#F7FBF5",
+    "background_color": "#F5FAF2",
     "theme_color": "#2E7D32",
     "description": "Plant-care management and guidance across mobile and web.",
     "orientation": "portrait-primary",

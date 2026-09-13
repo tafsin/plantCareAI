@@ -33,7 +33,9 @@ dependencies:
 dev_dependencies:
   bloc_test: ^10.0.0
   build_runner: ^2.16.1
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
+  flutter_native_splash: ^2.4.8
   flutter_test:
     sdk: flutter
   image: ^4.9.2
@@ -41,3 +43,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/branding/brand-mark-transparent.png
+    - assets/branding/wordmark-horizontal.png

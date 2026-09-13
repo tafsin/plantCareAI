@@ -84,6 +84,7 @@ void main() {
   ) async {
     await show(tester, location: AppRoutes.plants, width: 1200);
 
+    expect(find.byKey(const ValueKey('shell-branding')), findsOneWidget);
     expect(
       find.descendant(
         of: find.byType(AppBar),
@@ -91,5 +92,17 @@ void main() {
       ),
       findsOneWidget,
     );
+  });
+
+  testWidgets('keeps wide shell branding responsive at large text scale', (
+    tester,
+  ) async {
+    tester.platformDispatcher.textScaleFactorTestValue = 2.5;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+    await show(tester, location: AppRoutes.plants, width: 840);
+
+    expect(find.byKey(const ValueKey('shell-branding')), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }

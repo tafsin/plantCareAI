@@ -148,6 +148,59 @@ product context is available and otherwise opens the general subscriptions
 center. See [Google Play premium validation](docs/google-play-premium-validation.md)
 for the required internal-testing checklist and external dashboard blockers.
 
+## Brand assets and regeneration
+
+The approved, design-owned source package remains under
+`design/plantcare-brand/`. App-owned source copies live in
+`apps/plantcare_app/assets/branding/`. The transparent mark and horizontal
+wordmark are the only images declared as Flutter runtime assets. Launcher and
+splash masters in that directory are build inputs, while the Android mipmaps
+and adaptive-icon XML, iOS `AppIcon.appiconset` and launch assets, and files
+under `web/` are generated or platform-ready outputs.
+
+After replacing a source with another approved asset of the same purpose,
+regenerate from the application package:
+
+```sh
+cd apps/plantcare_app
+dart run tool/generate_brand_icons.dart
+dart run tool/generate_brand_splash.dart
+```
+
+The app-owned icon command invokes `flutter_launcher_icons` and then preserves
+an unrelated Xcode asset-symbol setting that version 0.14.4 otherwise rewrites
+when selecting the `AppIcon` catalog. Keep using the wrapper until that
+upstream matching behavior is fixed and the pinned compatible version is
+updated deliberately.
+
+The splash wrapper invokes `flutter_native_splash:create` and removes
+generator-added trailing whitespace from the generated web and Android text
+resources, keeping the output compatible with the repository's diff checks.
+
+The launcher configuration uses the opaque application master for Android,
+the dedicated opaque 1024-pixel iOS master for the complete AppIcon set, and
+the transparent adaptive foreground over centralized pale mint `#F5FAF2`.
+The splash configuration uses the transparent splash mark on pale mint in
+light mode and the existing deep dark surface in dark mode across Android,
+iOS, and web. Never add rounded corners or another rounded-square mask to any
+master; Android and iOS apply their platform masks.
+
+Before accepting regenerated assets, verify:
+
+- Android legacy mipmaps show the approved full-bleed icon, and the adaptive
+  XML references the pale-mint background and inset foreground.
+- The adaptive mark remains inside the mask safe zone on representative round,
+  squircle, and square launchers.
+- Every iOS AppIcon slot is present, the 1024-pixel marketing icon is opaque,
+  and no icon has manually rounded corners.
+- The 16, 32, and 48-pixel favicons and all four PWA icon files are referenced
+  correctly, including both maskable icons.
+- Light and dark native splash screens center the unstretched approved mark.
+- Authentication uses the wordmark only on sufficiently wide light surfaces;
+  narrow and dark layouts use the mark with theme-aware native text.
+- The wide application shell shows one compact brand signature without
+  replacing navigation icons, and narrow/large-text layouts do not overflow.
+
 ## Architecture
 
 The repository root is an orchestration-only Dart workspace. Product code is

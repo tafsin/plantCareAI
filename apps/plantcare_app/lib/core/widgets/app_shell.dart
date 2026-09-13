@@ -5,6 +5,8 @@ import 'package:plantcare_app/core/constants/app_constants.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/navigation.dart';
 
+import 'app_branding.dart';
+
 class AppShell extends StatelessWidget {
   const AppShell({required this.location, required this.child, super.key});
 
@@ -99,7 +101,37 @@ class AppShell extends StatelessWidget {
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 leading: _leading(context),
-                title: title == null ? null : Text(title),
+                title: isWide
+                    ? Row(
+                        children: [
+                          const SizedBox(
+                            width: 164,
+                            child: AppBranding.compact(),
+                          ),
+                          const SizedBox(width: 16),
+                          if (title != null) ...[
+                            SizedBox(
+                              height: 28,
+                              child: VerticalDivider(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Flexible(
+                              child: Text(
+                                title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ],
+                      )
+                    : title == null
+                    ? null
+                    : Text(title),
                 actions: [
                   IconButton(
                     key: const ValueKey('upgrade-premium-button'),
