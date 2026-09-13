@@ -7,9 +7,10 @@ import 'package:plantcare_features/src/authentication/presentation/widgets/auth_
 import 'package:plantcare_features/src/navigation/app_routes.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-  const ForgotPasswordPage({this.redirect, super.key});
+  const ForgotPasswordPage({this.redirect, this.branding, super.key});
 
   final String? redirect;
+  final Widget? branding;
 
   @override
   State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
@@ -39,6 +40,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return AuthPageFrame(
       title: 'Reset your password',
       subtitle: 'We’ll email instructions if an account exists.',
+      branding: widget.branding,
       child: BlocListener<PasswordResetBloc, PasswordResetState>(
         listener: (context, state) {
           if (state is PasswordResetSuccess) {

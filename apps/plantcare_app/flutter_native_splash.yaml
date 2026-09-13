@@ -1,0 +1,18 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: true
+  color: "#F5FAF2"
+  color_dark: "#10140F"
+  image: assets/branding/splash-mark-512.png
+  image_dark: assets/branding/splash-mark-512.png
+  android_gravity: center
+  ios_content_mode: center
+  web_image_mode: center
+  android_12:
+    color: "#F5FAF2"
+    color_dark: "#10140F"
+    image: assets/branding/splash-mark-512.png
+    image_dark: assets/branding/splash-mark-512.png
+    icon_background_color: "#F5FAF2"
+    icon_background_color_dark: "#10140F"

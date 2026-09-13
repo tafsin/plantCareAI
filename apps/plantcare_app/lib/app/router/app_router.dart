@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:plantcare_app/core/widgets/app_branding.dart';
 import 'package:plantcare_app/core/widgets/app_shell.dart';
 import 'package:plantcare_domain/care_history.dart';
 import 'package:plantcare_domain/local_plant_images.dart';
@@ -197,6 +198,7 @@ GoRouter createAppRouter({
         builder: (context, state) => BlocProvider(
           create: (_) => authenticationBlocFactory.createSignInBloc(),
           child: SignInPage(
+            branding: const AppBranding.auth(),
             showEmail: state.uri.queryParameters['method'] == 'email',
             redirect: validatedProtectedDestination(
               state.uri.queryParameters['redirect'],
@@ -210,6 +212,7 @@ GoRouter createAppRouter({
         builder: (context, state) => BlocProvider(
           create: (_) => authenticationBlocFactory.createRegisterBloc(),
           child: RegisterPage(
+            branding: const AppBranding.auth(),
             redirect: validatedProtectedDestination(
               state.uri.queryParameters['redirect'],
             ),
@@ -221,6 +224,7 @@ GoRouter createAppRouter({
         builder: (context, state) => BlocProvider(
           create: (_) => authenticationBlocFactory.createPasswordResetBloc(),
           child: ForgotPasswordPage(
+            branding: const AppBranding.auth(),
             redirect: validatedProtectedDestination(
               state.uri.queryParameters['redirect'],
             ),

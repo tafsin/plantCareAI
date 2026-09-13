@@ -15,6 +15,44 @@ import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_repository.dart';
 
 void main() {
+  for (final (:route, :description) in [
+    (route: AppRoutes.signIn, description: 'sign-in'),
+    (route: AppRoutes.register, description: 'registration'),
+    (route: AppRoutes.forgotPassword, description: 'password-reset'),
+  ]) {
+    testWidgets('$description layout renders the approved wordmark', (
+      tester,
+    ) async {
+      await _signedOutHarness(tester, initialLocation: route);
+
+      expect(find.byKey(const ValueKey('brand-wordmark')), findsOneWidget);
+    });
+  }
+
+  testWidgets('sign-in announces the PlantCare AI brand once', (tester) async {
+    await _signedOutHarness(tester);
+
+    expect(find.text('Welcome'), findsOneWidget);
+    expect(find.bySemanticsLabel('PlantCare AI'), findsOneWidget);
+  });
+
+  testWidgets('narrow large-text authentication branding does not overflow', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(320, 900));
+    tester.platformDispatcher.textScaleFactorTestValue = 2.5;
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+    await _signedOutHarness(tester);
+
+    expect(
+      find.byKey(const ValueKey('brand-mark-native-text')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Google authentication preserves the protected destination', (
     tester,
   ) async {
@@ -125,6 +163,7 @@ void main() {
       find.byKey(const ValueKey('register-confirm-password')),
       'plant123',
     );
+    await tester.ensureVisible(find.byKey(const ValueKey('register-submit')));
     await tester.tap(find.byKey(const ValueKey('register-submit')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));

@@ -14,12 +14,14 @@ class SignInPage extends StatefulWidget {
     this.redirect,
     this.notice,
     this.showEmail = false,
+    this.branding,
     super.key,
   });
 
   final String? redirect;
   final String? notice;
   final bool showEmail;
+  final Widget? branding;
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -58,8 +60,9 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return AuthPageFrame(
-      title: 'PlantCare AI',
+      title: 'Welcome',
       subtitle: 'Sign in or get started.',
+      branding: widget.branding,
       child: BlocBuilder<SignInBloc, SignInState>(
         builder: (context, state) {
           final isSubmitting = state is SignInSubmitting;

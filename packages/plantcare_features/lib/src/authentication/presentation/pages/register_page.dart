@@ -7,9 +7,10 @@ import 'package:plantcare_features/src/authentication/presentation/widgets/auth_
 import 'package:plantcare_features/src/navigation/app_routes.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({this.redirect, super.key});
+  const RegisterPage({this.redirect, this.branding, super.key});
 
   final String? redirect;
+  final Widget? branding;
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -53,6 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return AuthPageFrame(
       title: 'Create your account',
       subtitle: 'Start building a healthier plant collection.',
+      branding: widget.branding,
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
           final isSubmitting = state is RegisterSubmitting;
