@@ -1,0 +1,15 @@
+{
+  "ownerPath": "users/VzfrnlugYzgbHIAb7Gkcvi7yuf62/plants/eGUh6GIJ1w3agL1P1w1m/reminders",
+  "documents": [
+    {
+      "documentId": "P4JuHz2X104ICgrps3Lf",
+      "type": "soil_check",
+      "title": "Check soil moisture",
+      "status": "active",
+      "dueAt_utc": "2026-09-16T18:08:10.123631Z",
+      "createdAt_utc": "2026-09-15T18:10:06.669Z",
+      "source": "user_created",
+      "schemaVersion": "1"
+    }
+  ]
+}

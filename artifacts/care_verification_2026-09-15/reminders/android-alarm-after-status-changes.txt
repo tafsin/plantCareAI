@@ -1,0 +1,5 @@
+      operation=PendingIntent{f9f2cc7: PendingIntentRecord{f54e2f4 com.google.android.gms/com.google.android.gms.core startService}}
+    RTC_WAKEUP #40: Alarm{2a40efa type 0 origWhen 1789582090000 whenElapsed 90718597 com.tasnimalam.plantcare_ai}
+      tag=*walarm*:com.tasnimalam.plantcare_ai/com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver
+      type=RTC_WAKEUP origWhen=2026-09-16 14:08:10.000 window=+1h0m0s0ms repeatInterval=0 count=0 flags=0x20
+      policyWhenElapsed: requester=+23h54m44s83ms app_standby=-12s428ms device_idle=-- battery_saver=-12s428ms tare=-12s428ms
