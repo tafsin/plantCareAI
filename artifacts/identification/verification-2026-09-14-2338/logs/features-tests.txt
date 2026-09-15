@@ -1,0 +1,70 @@
+Resolving dependencies in `/Users/tasnimalam/Documents/plantcare_ai`...
+Downloading packages...
+  _fe_analyzer_shared 103.0.0 (108.0.0 available)
+  analyzer 13.3.0 (14.4.0 available)
+  archive 4.2.0 (4.3.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image_picker_android 0.8.13+22 (0.8.13+23 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.1.1 (1.2.0 available)
+  melos 7.4.0 (8.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pub_updater 0.5.0 (0.6.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  source_gen 4.2.4 (4.3.0 available)
+  test 1.31.1 (1.32.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  test_core 0.6.18 (0.6.20 available)
+  vector_math 2.4.0 (2.4.2 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies in `/Users/tasnimalam/Documents/plantcare_ai`!
+22 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_identification_bloc_test.dart
+00:00 +0: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_identification_bloc_test.dart: submit requires a selected image; picker cancellation sends nothing
+00:00 +1: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +2: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +3: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +4: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +5: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +6: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +7: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +8: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +9: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +10: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +11: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +12: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +13: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +14: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +15: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +16: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +17: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +18: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +19: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +20: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:00 +21: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:01 +22: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:01 +23: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:01 +24: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 360.0
+00:01 +25: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_identification_bloc_test.dart: save failure retains draft; edit and retry never regenerate AI
+00:01 +26: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +27: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +28: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +29: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +30: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +31: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +32: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: full review and save at width 1280.0
+00:01 +33: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: no consent sends no AI request and keeps safe exits
+00:01 +34: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: confidence 0.3 presentation
+00:01 +35: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: confidence 0.7 presentation
+00:01 +36: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: unsupported identity displays warning and can enter profile
+00:01 +37: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: unusable image noPlantVisible
+00:01 +38: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: unusable image insufficientImageQuality
+00:02 +39: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: manual fallback opens unchanged plant form without AI
+00:02 +40: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_features/test/features/plant_identification/plant_onboarding_page_test.dart: fresh workflow resets at method selection
+00:02 +41: All tests passed!

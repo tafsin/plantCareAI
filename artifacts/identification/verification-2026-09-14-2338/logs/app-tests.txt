@@ -1,0 +1,36 @@
+Resolving dependencies in `/Users/tasnimalam/Documents/plantcare_ai`...
+Downloading packages...
+  _fe_analyzer_shared 103.0.0 (108.0.0 available)
+  analyzer 13.3.0 (14.4.0 available)
+  archive 4.2.0 (4.3.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image_picker_android 0.8.13+22 (0.8.13+23 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.1.1 (1.2.0 available)
+  melos 7.4.0 (8.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pub_updater 0.5.0 (0.6.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  source_gen 4.2.4 (4.3.0 available)
+  test 1.31.1 (1.32.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  test_core 0.6.18 (0.6.20 available)
+  vector_math 2.4.0 (2.4.2 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies in `/Users/tasnimalam/Documents/plantcare_ai`!
+22 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart
+00:00 +0: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/flutter_binding_initializer_test.dart: initializes Marionette in debug mode
+00:00 +1: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart: empty scenario keeps the production service
+00:00 +2: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart: empty scenario keeps the production service
+00:00 +3: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart: installs supported response only for emulator debug
+00:00 +4: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart: installs low_confidence response only for emulator debug
+00:00 +5: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart: installs unsupported response only for emulator debug
+00:01 +6: /Users/tasnimalam/Documents/plantcare_ai/apps/plantcare_app/test/app/plant_identification_verification_override_test.dart: rejects verification responses in release or against live data
+00:01 +7: All tests passed!

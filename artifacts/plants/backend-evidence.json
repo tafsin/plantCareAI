@@ -1,0 +1,47 @@
+{
+  "firebaseProjectId": "plantcare-ai-dev-tasnimalam",
+  "firebaseEmulators": {
+    "authentication": "127.0.0.1:9099",
+    "firestore": "127.0.0.1:8080"
+  },
+  "testUserUid": "vHemHvVA3Ql04lcRe09yLFStiG98",
+  "plantDocumentPath": "users/vHemHvVA3Ql04lcRe09yLFStiG98/plants/yBwikWqTD38CBsyxkASM",
+  "createVerification": {
+    "documentCount": 1,
+    "commonName": "Patio Tomato",
+    "scientificName": "Solanum lycopersicum",
+    "environment": "outdoor",
+    "growingMedium": "pot",
+    "potSizeLiters": 12.5,
+    "sunlight": "full",
+    "growthStage": "flowering",
+    "createdAtFirestoreType": "timestampValue",
+    "createdAt": "2026-09-14T21:58:56.693Z",
+    "updatedAtFirestoreType": "timestampValue",
+    "updatedAt": "2026-09-14T21:58:56.693Z",
+    "firestoreCreateTime": "2026-09-14T21:58:56.806888Z",
+    "firestoreUpdateTime": "2026-09-14T21:58:56.806888Z"
+  },
+  "editVerification": {
+    "commonName": "Patio Tomato Updated",
+    "potSizeLiters": 15.0,
+    "sunlight": "partial",
+    "growthStage": "fruiting",
+    "createdAtFirestoreType": "timestampValue",
+    "createdAt": "2026-09-14T21:58:56.693Z",
+    "updatedAtFirestoreType": "timestampValue",
+    "updatedAt": "2026-09-14T22:01:44.705Z",
+    "firestoreCreateTime": "2026-09-14T21:58:56.806888Z",
+    "firestoreUpdateTime": "2026-09-14T22:01:44.868579Z",
+    "createdAtPreserved": true,
+    "updatedAtAdvanced": true
+  },
+  "invalidSubmissionVerification": {
+    "collectionDocumentCountAfterInvalidSubmit": 0
+  },
+  "deleteVerification": {
+    "deletedDocumentReadStatus": "NOT_FOUND",
+    "collectionDocumentCount": 0,
+    "safeDestination": "My Plants empty state"
+  }
+}

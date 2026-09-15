@@ -1,0 +1,303 @@
+Launching lib/main.dart on sdk gphone64 arm64 in debug mode...
+Running Gradle task 'assembleDebug'...                          
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): adapty_flutter, firebase_ai, firebase_app_check, firebase_auth, firebase_core, flutter_timezone
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+Running Gradle task 'assembleDebug'...                             19.2s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+Installing build/app/outputs/flutter-apk/app-debug.apk...          12.6s
+I/FlutterActivityAndFragmentDelegate(10880): If you are attempting to set --enable-dart-profiling via Intent extras to launch a Flutter component outside of using the Flutter CLI, note that support for setting engine flags on Android via Intent will soon be dropped; see https://github.com/flutter/flutter/issues/180686 for more information on this breaking change. To migrate, set --enable-dart-profiling or any other flags specified via Intent extras on the command line instead or see https://github.com/flutter/flutter/blob/main/docs/engine/Flutter-Android-Engine-Flags.md for alternative methods.
+D/FlutterJNI(10880): Beginning load of flutter...
+D/FlutterJNI(10880): flutter (null) was loaded normally!
+I/flutter (10880): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+Syncing files to device sdk gphone64 arm64...                   
+W/am.plantcare_ai(10880): Verification of void io.flutter.plugins.imagepicker.ImagePickerDelegate$2.getFullImagePath(android.net.Uri, io.flutter.plugins.imagepicker.ImagePickerDelegate$OnPathReadyListener) took 103.667ms (241.16 bytecodes/s) (2208B approximate peak alloc)
+W/am.plantcare_ai(10880): Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+W/am.plantcare_ai(10880): Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+W/am.plantcare_ai(10880): Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+W/am.plantcare_ai(10880): Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+Syncing files to device sdk gphone64 arm64...                    1,969ms
+
+Flutter run key commands.
+r Hot reload. 🔥🔥🔥
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on sdk gphone64 arm64 is available at: http://127.0.0.1:61134/d0WrZVypOWw=/
+The Flutter DevTools debugger and profiler on sdk gphone64 arm64 is available at: http://127.0.0.1:61134/d0WrZVypOWw=/devtools/?uri=ws://127.0.0.1:61134/d0WrZVypOWw=/ws
+I/am.plantcare_ai(10880): Background concurrent copying GC freed 21575(1826KB) AllocSpace objects, 5(100KB) LOS objects, 49% free, 3376KB/6752KB, paused 550us,213us total 707.986ms
+D/AccessibilityBridge(10880): Setting not found: accessibility_display_inversion_enabled, using default: 0
+D/FlutterRenderer(10880): Width is zero. 0,0
+D/CompatibilityChangeReporter(10880): Compat change id reported: 237531167; UID 10190; state: DISABLED
+W/OpenGLRenderer(10880): Unknown dataspace 0
+I/Choreographer(10880): Skipped 1022 frames!  The application may be doing too much work on its main thread.
+D/FlutterRenderer(10880): Width is zero. 0,0
+D/FlutterJNI(10880): Sending viewport metrics to the engine.
+W/OpenGLRenderer(10880): Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+W/OpenGLRenderer(10880): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+I/Gralloc4(10880): mapper 4.x is not supported
+E/OpenGLRenderer(10880): Unable to match the desired swap behavior.
+I/Choreographer(10880): Skipped 160 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI(10880): Sending viewport metrics to the engine.
+I/Choreographer(10880): Skipped 65 frames!  The application may be doing too much work on its main thread.
+D/ProfileInstaller(10880): Installing profile for com.tasnimalam.plantcare_ai
+W/am.plantcare_ai(10880): Suspending all threads took: 10.199ms
+I/am.plantcare_ai(10880): Background young concurrent copying GC freed 29618(1708KB) AllocSpace objects, 12(336KB) LOS objects, 27% free, 4864KB/6752KB, paused 644us,10.571ms total 139.185ms
+W/DynamiteModule(10880): Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+I/DynamiteModule(10880): Considering local module com.google.android.gms.providerinstaller.dynamite:0 and remote module com.google.android.gms.providerinstaller.dynamite:0
+W/ProviderInstaller(10880): Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+D/nativeloader(10880): Configuring clns-7 for other apk /system/framework/org.apache.http.legacy.jar. target_sdk_version=37, uses_libraries=ALL, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/nativeloader(10880): Configuring clns-8 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=37, uses_libraries=ALL, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/nativeloader(10880): Configuring clns-9 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=37, uses_libraries=ALL, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/ApplicationLoaders(10880): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+D/ApplicationLoaders(10880): Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+D/nativeloader(10880): Configuring clns-10 for other apk /data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk. target_sdk_version=37, uses_libraries=, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+W/am.plantcare_ai(10880): Accessing hidden method Ldalvik/system/VMStack;->getStackClass2()Ljava/lang/Class; (unsupported, reflection, allowed)
+I/gwck    (10880): Unable to retrieve flag snapshot for com.google.android.gms.providerinstaller#com.tasnimalam.plantcare_ai, using defaults.
+E/GoogleApiManager(10880): Failed to get service from broker. 
+E/GoogleApiManager(10880): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager(10880): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager(10880): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager(10880): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager(10880): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager(10880): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager(10880): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager(10880): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager(10880): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager(10880): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager(10880): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager(10880): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager(10880): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/GoogleApiManager(10880): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar(10880): Failed to register com.google.android.gms.providerinstaller#com.tasnimalam.plantcare_ai
+W/FlagRegistrar(10880): gwcv: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar(10880): 	at gwcx.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):13)
+W/FlagRegistrar(10880): 	at hxco.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):3)
+W/FlagRegistrar(10880): 	at hxcq.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):139)
+W/FlagRegistrar(10880): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar(10880): 	at hxcy.f(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar(10880): 	at hxcy.m(:com.google.android.gms@263436029@26.34.36 (190400-981326859):101)
+W/FlagRegistrar(10880): 	at hxcy.q(:com.google.android.gms@263436029@26.34.36 (190400-981326859):16)
+W/FlagRegistrar(10880): 	at gpll.jY(:com.google.android.gms@263436029@26.34.36 (190400-981326859):35)
+W/FlagRegistrar(10880): 	at gbii.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):12)
+W/FlagRegistrar(10880): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar(10880): 	at gbij.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):18)
+W/FlagRegistrar(10880): 	at gbiy.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):34)
+W/FlagRegistrar(10880): 	at gbja.c(:com.google.android.gms@263436029@26.34.36 (190400-981326859):23)
+W/FlagRegistrar(10880): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):9)
+W/FlagRegistrar(10880): 	at bmoi.r(:com.google.android.gms@263436029@26.34.36 (190400-981326859):48)
+W/FlagRegistrar(10880): 	at bmoi.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):10)
+W/FlagRegistrar(10880): 	at bmoi.g(:com.google.android.gms@263436029@26.34.36 (190400-981326859):191)
+W/FlagRegistrar(10880): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):74)
+W/FlagRegistrar(10880): 	at android.os.Handler.handleCallback(Handler.java:958)
+W/FlagRegistrar(10880): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+W/FlagRegistrar(10880): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar(10880): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagRegistrar(10880): 	at android.os.Looper.loopOnce(Looper.java:205)
+W/FlagRegistrar(10880): 	at android.os.Looper.loop(Looper.java:294)
+W/FlagRegistrar(10880): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/FlagRegistrar(10880): Caused by: bmjw: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar(10880): 	at bnia.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):15)
+W/FlagRegistrar(10880): 	at bmlv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar(10880): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagRegistrar(10880): 	... 11 more
+E/GoogleApiManager(10880): Failed to get service from broker. 
+E/GoogleApiManager(10880): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager(10880): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager(10880): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager(10880): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager(10880): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager(10880): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager(10880): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager(10880): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager(10880): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager(10880): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager(10880): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager(10880): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager(10880): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+E/GoogleApiManager(10880): Failed to get service from broker. 
+E/GoogleApiManager(10880): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager(10880): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager(10880): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager(10880): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager(10880): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager(10880): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager(10880): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager(10880): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager(10880): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager(10880): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager(10880): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager(10880): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager(10880): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/GoogleApiManager(10880): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore(10880): Unable to update local snapshot for com.google.android.gms.providerinstaller#com.tasnimalam.plantcare_ai, may result in stale flags.
+W/FlagStore(10880): java.util.concurrent.ExecutionException: gwcv: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore(10880): 	at hxcy.j(:com.google.android.gms@263436029@26.34.36 (190400-981326859):21)
+W/FlagStore(10880): 	at hxdg.t(:com.google.android.gms@263436029@26.34.36 (190400-981326859):24)
+W/FlagStore(10880): 	at hxcy.get(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at hxhm.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):2)
+W/FlagStore(10880): 	at hxgc.s(:com.google.android.gms@263436029@26.34.36 (190400-981326859):10)
+W/FlagStore(10880): 	at gwid.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at gwhh.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagStore(10880): 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+W/FlagStore(10880): 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+W/FlagStore(10880): 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+W/FlagStore(10880): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+W/FlagStore(10880): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+W/FlagStore(10880): 	at java.lang.Thread.run(Thread.java:1012)
+W/FlagStore(10880): Caused by: gwcv: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore(10880): 	at gwcx.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):13)
+W/FlagStore(10880): 	at hxco.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):3)
+W/FlagStore(10880): 	at hxcq.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):139)
+W/FlagStore(10880): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at hxcy.f(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at hxcy.m(:com.google.android.gms@263436029@26.34.36 (190400-981326859):101)
+W/FlagStore(10880): 	at hxcy.q(:com.google.android.gms@263436029@26.34.36 (190400-981326859):16)
+W/FlagStore(10880): 	at gpll.jY(:com.google.android.gms@263436029@26.34.36 (190400-981326859):35)
+W/FlagStore(10880): 	at gbii.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):12)
+W/FlagStore(10880): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at gbij.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):18)
+W/FlagStore(10880): 	at gbiy.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):34)
+W/FlagStore(10880): 	at gbjf.B(:com.google.android.gms@263436029@26.34.36 (190400-981326859):17)
+W/FlagStore(10880): 	at gbia.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):60)
+W/FlagStore(10880): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at gbib.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):8)
+W/FlagStore(10880): 	at gbiy.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):34)
+W/FlagStore(10880): 	at gbja.c(:com.google.android.gms@263436029@26.34.36 (190400-981326859):23)
+W/FlagStore(10880): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):9)
+W/FlagStore(10880): 	at bmoi.r(:com.google.android.gms@263436029@26.34.36 (190400-981326859):48)
+W/FlagStore(10880): 	at bmoi.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):10)
+W/FlagStore(10880): 	at bmoi.g(:com.google.android.gms@263436029@26.34.36 (190400-981326859):191)
+W/FlagStore(10880): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):74)
+W/FlagStore(10880): 	at android.os.Handler.handleCallback(Handler.java:958)
+W/FlagStore(10880): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+W/FlagStore(10880): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagStore(10880): 	at android.os.Looper.loopOnce(Looper.java:205)
+W/FlagStore(10880): 	at android.os.Looper.loop(Looper.java:294)
+W/FlagStore(10880): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/FlagStore(10880): Caused by: bmjw: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore(10880): 	at bnia.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):15)
+W/FlagStore(10880): 	at bmlv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore(10880): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagStore(10880): 	... 11 more
+V/NativeCrypto(10880): Registering com/google/android/gms/org/conscrypt/NativeCrypto's 336 native methods...
+W/am.plantcare_ai(10880): Accessing hidden method Ljava/security/spec/ECParameterSpec;->getCurveName()Ljava/lang/String; (unsupported, reflection, allowed)
+I/ProviderInstaller(10880): Installed default security provider GmsCore_OpenSSL
+I/Choreographer(10880): Skipped 130 frames!  The application may be doing too much work on its main thread.
+D/TrafficStats(10880): tagSocket(134) with statsTag=0xffffffff, statsUid=-1
+I/Choreographer(10880): Skipped 330 frames!  The application may be doing too much work on its main thread.
+I/Choreographer(10880): Skipped 30 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI(10880): Sending viewport metrics to the engine.
+D/FlutterJNI(10880): Sending viewport metrics to the engine.
+D/EGL_emulation(10880): app_time_stats: avg=326.15ms min=238.84ms max=395.07ms count=4
+E/GoogleApiManager(10880): Failed to get service from broker. 
+E/GoogleApiManager(10880): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager(10880): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager(10880): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager(10880): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager(10880): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager(10880): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager(10880): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager(10880): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager(10880): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager(10880): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager(10880): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager(10880): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager(10880): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager(10880): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/GoogleApiManager(10880): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+D/EGL_emulation(10880): app_time_stats: avg=13504.17ms min=13504.17ms max=13504.17ms count=1
+D/EGL_emulation(10880): app_time_stats: avg=349.88ms min=41.39ms max=789.39ms count=4
+D/EGL_emulation(10880): app_time_stats: avg=2493.25ms min=8.37ms max=4978.13ms count=2
+D/EGL_emulation(10880): app_time_stats: avg=343.02ms min=37.35ms max=756.49ms count=3
+I/am.plantcare_ai(10880): Background young concurrent copying GC freed 8945(649KB) AllocSpace objects, 4(144KB) LOS objects, 12% free, 5935KB/6752KB, paused 156us,28us total 294.057ms
+D/EGL_emulation(10880): app_time_stats: avg=76.69ms min=8.72ms max=253.49ms count=13
+D/EGL_emulation(10880): app_time_stats: avg=54.64ms min=9.93ms max=205.47ms count=19
+D/EGL_emulation(10880): app_time_stats: avg=71.84ms min=17.47ms max=187.70ms count=14
+D/EGL_emulation(10880): app_time_stats: avg=68.60ms min=9.77ms max=303.53ms count=18
+D/EGL_emulation(10880): app_time_stats: avg=44.07ms min=10.23ms max=106.50ms count=22
+D/EGL_emulation(10880): app_time_stats: avg=50.31ms min=28.12ms max=104.27ms count=21
+D/EGL_emulation(10880): app_time_stats: avg=47.80ms min=18.99ms max=143.15ms count=21
+D/EGL_emulation(10880): app_time_stats: avg=39.70ms min=20.53ms max=67.19ms count=25
+D/EGL_emulation(10880): app_time_stats: avg=77.38ms min=17.56ms max=587.98ms count=13
+I/Choreographer(10880): Skipped 43 frames!  The application may be doing too much work on its main thread.
+I/OpenGLRenderer(10880): Davey! duration=801ms; Flags=0, FrameTimelineVsyncId=77053, IntendedVsync=3161790049869, Vsync=3162506716507, InputEventId=0, HandleInputStart=3162514939257, AnimationStart=3162514947507, PerformTraversalsStart=3162514951298, DrawStart=3162521316507, FrameDeadline=3161806716535, FrameInterval=3162510817090, FrameStartTime=16666666, SyncQueued=3162529264757, SyncStart=3162529609257, IssueDrawCommandsStart=3162530773298, SwapBuffers=3162545731840, FrameCompleted=3162591697882, DequeueBufferDuration=9024875, QueueBufferDuration=1940375, GpuCompleted=3162591697882, SwapBuffersCompleted=3162589858882, DisplayPresentTime=0, CommandSubmissionCompleted=3162545731840, 
+D/EGL_emulation(10880): app_time_stats: avg=517.78ms min=259.63ms max=775.93ms count=2
+D/EGL_emulation(10880): app_time_stats: avg=92.54ms min=16.46ms max=345.55ms count=12
+D/EGL_emulation(10880): app_time_stats: avg=52.33ms min=4.53ms max=127.85ms count=19
+D/EGL_emulation(10880): app_time_stats: avg=39.85ms min=8.55ms max=100.14ms count=24
+D/EGL_emulation(10880): app_time_stats: avg=12193.46ms min=390.92ms max=32172.97ms count=3
+D/EGL_emulation(10880): app_time_stats: avg=82.72ms min=25.27ms max=317.57ms count=14
+D/EGL_emulation(10880): app_time_stats: avg=1484.19ms min=1484.19ms max=1484.19ms count=1
+D/EGL_emulation(10880): app_time_stats: avg=127.27ms min=28.53ms max=771.13ms count=12
+D/EGL_emulation(10880): app_time_stats: avg=119.85ms min=17.80ms max=431.73ms count=9
+D/EGL_emulation(10880): app_time_stats: avg=61.61ms min=7.74ms max=219.85ms count=17
+D/EGL_emulation(10880): app_time_stats: avg=73.15ms min=22.97ms max=166.01ms count=14
+D/EGL_emulation(10880): app_time_stats: avg=4378.10ms min=4378.10ms max=4378.10ms count=1
+D/EGL_emulation(10880): app_time_stats: avg=88.06ms min=41.29ms max=247.59ms count=12
+D/EGL_emulation(10880): app_time_stats: avg=83.88ms min=38.37ms max=233.88ms count=13
+D/EGL_emulation(10880): app_time_stats: avg=67.53ms min=4.12ms max=218.99ms count=11
+I/Choreographer(10880): Skipped 75 frames!  The application may be doing too much work on its main thread.
+D/CompatibilityChangeReporter(10880): Compat change id reported: 78294732; UID 10190; state: ENABLED
+E/OpenGLRenderer(10880): Unable to match the desired swap behavior.
+I/Choreographer(10880): Skipped 60 frames!  The application may be doing too much work on its main thread.
+E/SurfaceSyncGroup(10880): Failed to receive transaction ready in 1000ms. Marking SurfaceSyncGroup(wmsSync-VRI[MainActivity]#4) as ready
+E/SurfaceSyncGroup(10880): Failed to receive transaction ready in 1000ms. Marking SurfaceSyncGroup(VRI[MainActivity]#5) as ready
+D/FlutterJNI(10880): Sending viewport metrics to the engine.
+W/am.plantcare_ai(10880): Verification of boolean io.flutter.plugins.imagepicker.MessagesPigeonUtils.deepEquals(java.lang.Object, java.lang.Object) took 190.645ms (2323.69 bytecodes/s) (11136B approximate peak alloc)
+I/am.plantcare_ai(10880): Background concurrent copying GC freed 8717(546KB) AllocSpace objects, 6(184KB) LOS objects, 49% free, 5983KB/11MB, paused 2.508ms,30us total 866.797ms
+D/FlutterJNI(10880): Sending viewport metrics to the engine.
+D/EGL_emulation(10880): app_time_stats: avg=150.56ms min=15.07ms max=293.94ms count=7
+D/EGL_emulation(10880): app_time_stats: avg=169.82ms min=25.39ms max=716.91ms count=6
+D/EGL_emulation(10880): app_time_stats: avg=109.13ms min=21.01ms max=673.68ms count=9
+D/EGL_emulation(10880): app_time_stats: avg=1000.65ms min=36.66ms max=2788.19ms count=3
+D/EGL_emulation(10880): app_time_stats: avg=72.20ms min=7.61ms max=470.75ms count=14
+I/flutter (10880): ScreenshotService: Successfully captured screenshot (304069 bytes).
+D/EGL_emulation(10880): app_time_stats: avg=3752.05ms min=6.56ms max=29532.47ms count=8
+D/EGL_emulation(10880): app_time_stats: avg=201.06ms min=46.78ms max=608.92ms count=5
+W/OkHttpClientTransport(10880): io.grpc.okhttp.OkHttpClientTransport$ClientFrameHandler@d541831: Received GOAWAY with ENHANCE_YOUR_CALM. Debug data: too_many_pings
+W/AtomicBackoff(10880): Increased {0} to {1}
+W/Firestore(10880): (26.6.0) [WatchStream]: (2dd5bb3) Stream closed with status: Status{code=RESOURCE_EXHAUSTED, description=HTTP/2 error code: ENHANCE_YOUR_CALM (Bandwidth exhausted)
+W/Firestore(10880): Received Goaway
+W/Firestore(10880): too_many_pings, cause=null}.
+D/TrafficStats(10880): tagSocket(134) with statsTag=0xffffffff, statsUid=-1
+I/flutter (10880): ScreenshotService: Successfully captured screenshot (247998 bytes).
+D/EGL_emulation(10880): app_time_stats: avg=1357.02ms min=21.49ms max=10003.31ms count=8
+W/Firestore(10880): (26.6.0) [Firestore]: Listen for QueryWrapper(query=Query(target=Query(users/tXwYOri17uDhuIc8uLfZYYzyUqIi/plants/6lTNIo3ddVJEc6F7Ez1f/reminders order by dueAt, __name__);limitType=LIMIT_TO_FIRST)) failed: Status{code=PERMISSION_DENIED, description=
+W/Firestore(10880): evaluation error at L583:24 for 'list' @ L583, false for 'list' @ L621, false for 'list' @ L583, false for 'list' @ L621, cause=null}
+D/EGL_emulation(10880): app_time_stats: avg=440.19ms min=180.92ms max=746.84ms count=3
+D/EGL_emulation(10880): app_time_stats: avg=4147.62ms min=182.64ms max=8112.60ms count=2
+D/EGL_emulation(10880): app_time_stats: avg=228.13ms min=44.81ms max=833.30ms count=5
+D/EGL_emulation(10880): app_time_stats: avg=251.61ms min=76.14ms max=663.49ms count=5
+I/flutter (10880): ScreenshotService: Successfully captured screenshot (836054 bytes).
+D/EGL_emulation(10880): app_time_stats: avg=2895.73ms min=32.36ms max=16910.73ms count=6
+D/EGL_emulation(10880): app_time_stats: avg=962.74ms min=16.50ms max=8360.49ms count=9
+D/EGL_emulation(10880): app_time_stats: avg=1442.78ms min=24.03ms max=11220.68ms count=8
+D/EGL_emulation(10880): app_time_stats: avg=197.68ms min=27.74ms max=1530.25ms count=10
+D/EGL_emulation(10880): app_time_stats: avg=1268.78ms min=16.59ms max=8526.47ms count=7
+D/EGL_emulation(10880): app_time_stats: avg=348.28ms min=8.69ms max=6268.91ms count=20
+I/flutter (10880): ScreenshotService: Successfully captured screenshot (164059 bytes).
+W/OkHttpClientTransport(10880): io.grpc.okhttp.OkHttpClientTransport$ClientFrameHandler@dca979b: Received GOAWAY with ENHANCE_YOUR_CALM. Debug data: too_many_pings
+W/AtomicBackoff(10880): Increased {0} to {1}
+D/TrafficStats(10880): tagSocket(115) with statsTag=0xffffffff, statsUid=-1
+W/Firestore(10880): (26.6.0) [WatchStream]: (2dd5bb3) Stream closed with status: Status{code=RESOURCE_EXHAUSTED, description=HTTP/2 error code: ENHANCE_YOUR_CALM (Bandwidth exhausted)
+W/Firestore(10880): Received Goaway
+W/Firestore(10880): too_many_pings, cause=null}.
+
+Application finished.

@@ -1,0 +1,2 @@
+{"jsonrpc":"2.0","result":{"type":"Success"},"id":"1"}
+{"time":"2026-09-15T03:52:23.259Z","logger":"plantcare_ai.identification_verification","message":"scenario=lowConfidence requestCount=1 mimeType=image/jpeg byteCount=121636"}

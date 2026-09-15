@@ -48,6 +48,8 @@ void main() {
   Future<void> identify(WidgetTester tester) async {
     bloc.add(const IdentificationPhotoRequested(PlantImageSource.gallery));
     await tester.pumpAndSettle();
+    bloc.add(const IdentificationConsentChanged(true));
+    await tester.pumpAndSettle();
     bloc.add(const IdentificationSubmitted());
     await tester.pumpAndSettle();
   }
@@ -66,11 +68,21 @@ void main() {
         reason: bloc.state.message,
       );
       expect(find.text('Identify plant'), findsOneWidget);
-      expect(find.byType(Checkbox), findsNothing);
+      expect(find.byType(Checkbox), findsOneWidget);
+      expect(
+        tester.widget<FilledButton>(find.byType(FilledButton)).onPressed,
+        isNull,
+      );
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('ai-processing-consent')),
+      );
+      await tester.tap(find.byKey(const ValueKey('ai-processing-consent')));
+      await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Identify plant'));
       await tester.tap(find.text('Identify plant'));
       await tester.pumpAndSettle();
       expect(find.text('Leading match · confirmation needed'), findsOneWidget);
+      expect(find.text('Confidence: 90% · not guaranteed'), findsOneWidget);
       await tester.tap(find.text('Confirm Pothos'));
       await tester.pumpAndSettle();
       expect(find.widgetWithText(TextFormField, 'Pothos'), findsOneWidget);
@@ -114,6 +126,25 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+  testWidgets('no consent sends no AI request and keeps safe exits', (
+    tester,
+  ) async {
+    await show(tester);
+    await tester.tap(find.text('Identify from photo'));
+    await tester.pumpAndSettle();
+
+    expect(service.calls, 0);
+    expect(find.text('Cancel — don’t send photo'), findsOneWidget);
+    expect(find.text('Add manually'), findsOneWidget);
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.byKey(const ValueKey('identify-plant-submit')),
+          )
+          .onPressed,
+      isNull,
+    );
+  });
   for (final confidence in [.3, .7]) {
     testWidgets('confidence $confidence presentation', (tester) async {
       service.value = result(confidence);

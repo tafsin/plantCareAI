@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-09-15T02:44:00Z",
+  "projectId": "plantcare-ai-dev-tasnimalam",
+  "emulator": "127.0.0.1:8080",
+  "userId": "JYe4hpPmKQQRJek1SPwrgmmeTfWG",
+  "assertions": {
+    "plantCount": 2,
+    "serverTimestampFieldsAreTimestampValues": true,
+    "originalImagePersistedInFirestore": false,
+    "aiIdentificationMetadataPersistedInFirestore": false
+  },
+  "documents": [
+    {
+      "documentId": "5pqnyNrCHgqxnwiFlfpX",
+      "fields": {
+        "commonName": {"stringValue": "Pothos"},
+        "scientificName": {"stringValue": "Epipremnum aureum"},
+        "environment": {"stringValue": "indoor"},
+        "growingMedium": {"stringValue": "pot"},
+        "potSizeLiters": {"doubleValue": 5.0},
+        "sunlight": {"stringValue": "partial"},
+        "growthStage": {"stringValue": "vegetative"},
+        "notes": {"nullValue": null},
+        "createdAt": {"timestampValue": "2026-09-15T02:30:51.863Z"},
+        "updatedAt": {"timestampValue": "2026-09-15T02:30:51.863Z"}
+      }
+    },
+    {
+      "documentId": "NAbeZ5WbEgIr54BADtAq",
+      "fields": {
+        "commonName": {"stringValue": "Monstera"},
+        "scientificName": {"stringValue": "Monstera deliciosa"},
+        "environment": {"stringValue": "indoor"},
+        "growingMedium": {"stringValue": "pot"},
+        "potSizeLiters": {"doubleValue": 6.0},
+        "sunlight": {"stringValue": "partial"},
+        "growthStage": {"stringValue": "vegetative"},
+        "notes": {"nullValue": null},
+        "createdAt": {"timestampValue": "2026-09-15T02:43:27.407Z"},
+        "updatedAt": {"timestampValue": "2026-09-15T02:43:27.407Z"}
+      }
+    }
+  ],
+  "persistedFieldNames": [
+    "commonName",
+    "createdAt",
+    "environment",
+    "growingMedium",
+    "growthStage",
+    "notes",
+    "potSizeLiters",
+    "scientificName",
+    "sunlight",
+    "updatedAt"
+  ]
+}

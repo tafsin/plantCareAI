@@ -159,9 +159,23 @@ class PlantOnboardingPage extends StatelessWidget {
                           ),
                         ],
                       ),
+                      CheckboxListTile(
+                        key: const ValueKey('ai-processing-consent'),
+                        contentPadding: EdgeInsets.zero,
+                        value: state.aiProcessingConsented,
+                        onChanged: (value) => bloc.add(
+                          IdentificationConsentChanged(value ?? false),
+                        ),
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: const Text(
+                          'I consent to sending this photo to Firebase AI for plant identification.',
+                        ),
+                      ),
                       FilledButton(
-                        onPressed: () =>
-                            bloc.add(const IdentificationSubmitted()),
+                        key: const ValueKey('identify-plant-submit'),
+                        onPressed: state.aiProcessingConsented
+                            ? () => bloc.add(const IdentificationSubmitted())
+                            : null,
                         child: const Text('Identify plant'),
                       ),
                       TextButton(
@@ -351,6 +365,11 @@ class PlantOnboardingPage extends StatelessWidget {
             Text(
               candidate.scientificName,
               style: const TextStyle(fontStyle: FontStyle.italic),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Confidence: ${(candidate.confidence * 100).round()}% · not guaranteed',
+              key: ValueKey('candidate-confidence-$index'),
             ),
             const SizedBox(height: 12),
             for (final evidence in candidate.visibleEvidence)

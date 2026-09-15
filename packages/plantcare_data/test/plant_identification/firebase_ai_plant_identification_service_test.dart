@@ -33,6 +33,35 @@ void main() {
     );
     expect(calls, 0);
   });
+  test('never sends emulator authentication to the live AI endpoint', () async {
+    var calls = 0;
+    final service = FirebaseAiPlantIdentificationService.forTest(
+      isAuthenticated: () => true,
+      useFirebaseAuthEmulator: true,
+      generateResponse: (_) async {
+        calls++;
+        return null;
+      },
+    );
+
+    await expectLater(
+      service.identify(image: image),
+      throwsA(
+        isA<PlantIdentificationFailure>()
+            .having(
+              (failure) => failure.type,
+              'type',
+              PlantIdentificationFailureType.unavailable,
+            )
+            .having(
+              (failure) => failure.message,
+              'message',
+              contains('cannot use an emulator sign-in'),
+            ),
+      ),
+    );
+    expect(calls, 0);
+  });
   test('decodes response and rejects malformed response', () async {
     String? response =
         '{"schemaVersion":1,"imageStatus":"no_plant_visible","identification_candidates":[]}';
@@ -78,6 +107,8 @@ void main() {
     'App Check rejected': PlantIdentificationFailureType.appCheck,
     'blocked by safety': PlantIdentificationFailureType.safety,
     '401 unauthenticated': PlantIdentificationFailureType.unauthenticated,
+    'Request is missing required authentication credential':
+        PlantIdentificationFailureType.unauthenticated,
     '403 denied': PlantIdentificationFailureType.unavailable,
   };
   for (final entry in errors.entries) {

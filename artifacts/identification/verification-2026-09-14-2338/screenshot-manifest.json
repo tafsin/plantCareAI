@@ -1,0 +1,202 @@
+[
+  {
+    "file": "screenshots/01-candidates-bottom.png",
+    "sha256": "1a63397a431053840c38b23c698412376aecb9bc95059f86436be1b79a0efb9b",
+    "bytes": 177089,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:42:29.903138+00:00"
+  },
+  {
+    "file": "screenshots/01-candidates.png",
+    "sha256": "0a20ee48d0f33c232223a46846fac76102b5da7b0df7fdd1a1816aaec0e279f1",
+    "bytes": 188558,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:42:20.235040+00:00"
+  },
+  {
+    "file": "screenshots/01-consent-checked.png",
+    "sha256": "e7df94ec8199383576ea071769b4c97a221d9507fb85cd208ed9e17d6a01d72b",
+    "bytes": 380782,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:42:05.942636+00:00"
+  },
+  {
+    "file": "screenshots/01-photo-preview.png",
+    "sha256": "1bf52c1e687c79e9456b1e23c75437f31be52956e6ebb3d04da502d0ba002bd7",
+    "bytes": 1046247,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:41:37.775825+00:00"
+  },
+  {
+    "file": "screenshots/01-profile-questions.png",
+    "sha256": "cdee04f829cdc63a618daf32b9520015b727a8f6e37dac337922c445a4abceb1",
+    "bytes": 132986,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:45:51.142905+00:00"
+  },
+  {
+    "file": "screenshots/01-profile-review.png",
+    "sha256": "06505977958218bb781760ff73c2812233672c3d5afe4109fe78136875c9f55b",
+    "bytes": 153208,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:46:00.954553+00:00"
+  },
+  {
+    "file": "screenshots/01-saved-details.png",
+    "sha256": "6b76da79c32c2cc49bf0ca6976024a1481ecbdab41a94789cc8901852a96ff71",
+    "bytes": 933238,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:46:38.440990+00:00"
+  },
+  {
+    "file": "screenshots/01-saved.png",
+    "sha256": "b471d1e3d99712984a031d6f495d6d2f27633297d424792cf4d1bb21cc635543",
+    "bytes": 166886,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:46:09.995099+00:00"
+  },
+  {
+    "file": "screenshots/02-low-confidence.png",
+    "sha256": "cba96ba84aa9e871bc4552ec26efa316078c7d717cf554231b01b7a0f388e85c",
+    "bytes": 153345,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:52:34.374256+00:00"
+  },
+  {
+    "file": "screenshots/03-manual-fallback.png",
+    "sha256": "a071debc86a3656aa8fd3f03ff5fedac5f04efa5e06be755a8ced6742f983771",
+    "bytes": 131218,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:48:32.972752+00:00"
+  },
+  {
+    "file": "screenshots/03-no-consent-with-recorder.png",
+    "sha256": "60981ba409f8f5ef5a20c7d6a7caed5727f29719f4f190d8dc8025ec27ba70f1",
+    "bytes": 228373,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:51:34.800477+00:00"
+  },
+  {
+    "file": "screenshots/03-no-consent.png",
+    "sha256": "10e27a3262275ff322f33a8b021cfcc427cf2142386f8007704c99d2e59b2c72",
+    "bytes": 379511,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:41:48.875864+00:00"
+  },
+  {
+    "file": "screenshots/04-invalid-format.png",
+    "sha256": "555ec3b59bbaeecc359ff811b77de5e8fcad861e357a5e62c389af965ab4d33b",
+    "bytes": 170546,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:47:28.508871+00:00"
+  },
+  {
+    "file": "screenshots/04-invalid-with-recorder.png",
+    "sha256": "510491e3411052fb2c93867e89ab6f749aa01893703f77f7717ed285590de6c8",
+    "bytes": 171190,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:53:56.913675+00:00"
+  },
+  {
+    "file": "screenshots/04-oversize-with-recorder.png",
+    "sha256": "440c7027b5caea20df584e609d86bf07fa7cd301f5462de7c6acef3919c458a0",
+    "bytes": 170580,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:54:37.062795+00:00"
+  },
+  {
+    "file": "screenshots/04-oversize.png",
+    "sha256": "9953ff75b05acb8d52c7dffb196d4b3f0852360afb8f0093fe0ed2dd37c044d1",
+    "bytes": 170111,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:47:53.327266+00:00"
+  },
+  {
+    "file": "screenshots/05-collection-no-warning.png",
+    "sha256": "167a40fe41655dd7d79b7525413eeabc4646185496c3cfb650c80df0dd3bb79a",
+    "bytes": 132739,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:59:13.452612+00:00"
+  },
+  {
+    "file": "screenshots/05-profile-review-warning.png",
+    "sha256": "14011a25bb8464a5c41b54231f83ef29dd4f90390c3a7a58bc008b84a2430fa1",
+    "bytes": 182885,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:57:55.849860+00:00"
+  },
+  {
+    "file": "screenshots/05-saved-details-care.png",
+    "sha256": "624e70be117858f7bf5a480e873adda9c1cb26790f9a101e9cde33bf6e1a5cda",
+    "bytes": 155561,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:58:27.461827+00:00"
+  },
+  {
+    "file": "screenshots/05-saved-details-guidance.png",
+    "sha256": "b4cfdf3b6686a6b248638292ba8b1130f6c8f606179118de018793278b82a564",
+    "bytes": 162597,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:58:36.058044+00:00"
+  },
+  {
+    "file": "screenshots/05-saved-details-profile.png",
+    "sha256": "b6c522a504c29cd854363df7725f3d90c4a21a243e204a5ff46731a5f815157a",
+    "bytes": 127131,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:58:56.674049+00:00"
+  },
+  {
+    "file": "screenshots/05-saved-details-reminders.png",
+    "sha256": "e68ef2f9107a607166d8c48930f87be4c5b03d35575f755a608481a36b4c8337",
+    "bytes": 155381,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:58:47.773394+00:00"
+  },
+  {
+    "file": "screenshots/05-saved-details-top.png",
+    "sha256": "8a1868b8562fd386d3d4fedf9ba22bf48ab76b9dc824ec144f78b74b63b41f4a",
+    "bytes": 937115,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:58:16.079506+00:00"
+  },
+  {
+    "file": "screenshots/05-saved-no-warning.png",
+    "sha256": "5b06ab47a5949d9f71d6efbcf0225d467f0d554f3a6cd1182e532e6788d5f98f",
+    "bytes": 167705,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:58:04.373908+00:00"
+  },
+  {
+    "file": "screenshots/05-unsupported-candidate.png",
+    "sha256": "424aa59df845f62a2c1b951cba7bd1d52f25f59684ab78456e1fdd5b5f8344cd",
+    "bytes": 218759,
+    "width": 1080,
+    "height": 2280,
+    "capturedAt": "2026-09-15T03:57:32.154196+00:00"
+  }
+]

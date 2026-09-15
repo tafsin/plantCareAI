@@ -45,6 +45,8 @@ void main() {
 
   Future<void> identify() async {
     await pick();
+    bloc.add(const IdentificationConsentChanged(true));
+    await settle();
     bloc.add(const IdentificationSubmitted());
     await settle();
   }
@@ -151,6 +153,8 @@ void main() {
     picker.pending!.complete(picker.image);
     await settle();
     service.pending = Completer();
+    bloc.add(const IdentificationConsentChanged(true));
+    await settle();
     bloc.add(const IdentificationSubmitted());
     bloc.add(const IdentificationSubmitted());
     await settle();
@@ -216,6 +220,8 @@ void main() {
   test('cancellation during AI ignores late success', () async {
     service.pending = Completer();
     await pick();
+    bloc.add(const IdentificationConsentChanged(true));
+    await settle();
     bloc.add(const IdentificationSubmitted());
     await settle();
     bloc.add(const IdentificationReset());
@@ -225,6 +231,21 @@ void main() {
     expect(bloc.state.step, PlantOnboardingStep.method);
     expect(bloc.state.result, isNull);
     expect(processor.last!.bytes, everyElement(0));
+  });
+  test('AI submission requires explicit consent and reset clears it', () async {
+    await pick();
+
+    bloc.add(const IdentificationSubmitted());
+    await settle();
+    expect(service.calls, 0);
+    expect(bloc.state.step, PlantOnboardingStep.preview);
+
+    bloc.add(const IdentificationConsentChanged(true));
+    await settle();
+    expect(bloc.state.aiProcessingConsented, isTrue);
+    bloc.add(const IdentificationReset());
+    await settle();
+    expect(bloc.state.aiProcessingConsented, isFalse);
   });
   test('cancellation during picker wipes late image', () async {
     picker.pending = Completer();

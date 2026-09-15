@@ -1,0 +1,45 @@
+{
+  "backend": "live Firestore",
+  "capturedAt": "2026-09-15T16:15:42.855Z",
+  "totalPlantCount": 3,
+  "newDocuments": [
+    {
+      "name": "projects/plantcare-ai-dev-tasnimalam/databases/(default)/documents/users/VzfrnlugYzgbHIAb7Gkcvi7yuf62/plants/eGUh6GIJ1w3agL1P1w1m",
+      "fields": {
+        "notes": {
+          "stringValue": "Live photo-identification verification 2026-09-15."
+        },
+        "scientificName": {
+          "stringValue": "Epipremnum aureum"
+        },
+        "environment": {
+          "stringValue": "indoor"
+        },
+        "createdAt": {
+          "timestampValue": "2026-09-15T16:14:48.420Z"
+        },
+        "sunlight": {
+          "stringValue": "partial"
+        },
+        "growingMedium": {
+          "stringValue": "pot"
+        },
+        "updatedAt": {
+          "timestampValue": "2026-09-15T16:14:48.420Z"
+        },
+        "potSizeLiters": {
+          "doubleValue": 5
+        },
+        "growthStage": {
+          "stringValue": "vegetative"
+        },
+        "commonName": {
+          "stringValue": "Golden Pothos"
+        }
+      },
+      "createTime": "2026-09-15T16:14:48.601223Z",
+      "updateTime": "2026-09-15T16:14:48.601223Z"
+    }
+  ],
+  "exactExistingPlantFields": true
+}

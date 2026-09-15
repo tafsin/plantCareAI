@@ -1,0 +1,84 @@
+Resolving dependencies in `/Users/tasnimalam/Documents/plantcare_ai`...
+Downloading packages...
+  _fe_analyzer_shared 103.0.0 (108.0.0 available)
+  analyzer 13.3.0 (14.4.0 available)
+  archive 4.2.0 (4.3.0 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image_picker_android 0.8.13+22 (0.8.13+23 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.1.1 (1.2.0 available)
+  melos 7.4.0 (8.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  platform 3.1.6 (3.2.0 available)
+  pub_updater 0.5.0 (0.6.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  source_gen 4.2.4 (4.3.0 available)
+  test 1.31.1 (1.32.0 available)
+  test_api 0.7.12 (0.7.14 available)
+  test_core 0.6.18 (0.6.20 available)
+  vector_math 2.4.0 (2.4.2 available)
+  xml 6.6.1 (7.0.1 available)
+Got dependencies in `/Users/tasnimalam/Documents/plantcare_ai`!
+22 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/firebase_ai_plant_identification_service_test.dart
+00:00 +0: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +1: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +2: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +3: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +4: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +5: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +6: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +7: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +8: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +9: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +10: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +11: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +12: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +13: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +14: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +15: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +16: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +17: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +18: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +19: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +20: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: accepts and normalizes a valid JPEG selection
+00:00 +21: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects bad confidence
+00:00 +22: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: rejects unsupported files
+00:00 +23: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: rejects unsupported files
+00:00 +24: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: rejects unsupported files
+00:00 +25: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects bad visibleEvidence
+00:00 +26: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_observation/local_plant_image_processor_test.dart: rejects inputs larger than 10 MB before decoding
+00:00 +27: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects bad ambiguityNote
+00:00 +28: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects bad unknown
+00:00 +29: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects confidence 1.1
+00:00 +30: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects confidence 0.9
+00:00 +31: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects confidence null
+00:00 +32: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects confidence true
+00:00 +33: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence <b>Leaf</b>
+00:00 +34: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence **leaf**
+00:00 +35: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence www.example.org
+00:00 +36: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence example.xyz/path
+00:00 +37: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence 90 percent certain
+00:00 +38: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence mailto:plant@example.xyz
+00:00 +39: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence Leaves 90%
+00:00 +40: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence Apply fertilizer
+00:00 +41: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence Water weekly
+00:00 +42: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+00:00 +43: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects evidence leaf
+shape
+00:00 +44: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects missing candidate commonName
+00:00 +45: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects missing candidate scientificName
+00:00 +46: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects missing candidate confidence
+00:00 +47: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects missing candidate visibleEvidence
+00:00 +48: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects oversized names, evidence counts and ambiguity
+00:00 +49: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: plant names containing water remain identifiable
+00:00 +50: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: rejects oversized raw output and non-object JSON
+00:00 +51: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: accepts empty candidates for usableImage
+00:00 +52: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: accepts empty candidates for noPlantVisible
+00:00 +53: /Users/tasnimalam/Documents/plantcare_ai/packages/plantcare_data/test/plant_identification/plant_identification_codec_test.dart: accepts empty candidates for insufficientImageQuality
+00:00 +54: All tests passed!

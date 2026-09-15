@@ -1,0 +1,34 @@
+[
+  {
+    "file": "screenshots/01-consent.png",
+    "sha256": "3b957986f79211cc09b76182546872bb9061992c7916c46c4f8eb971673b52f7"
+  },
+  {
+    "file": "screenshots/01-live-identification-failed.png",
+    "sha256": "c680443d4984cec2434482eccf84a246bc8dd107859e2e8af0ac9048b83c54a6"
+  },
+  {
+    "file": "screenshots/01-photo.png",
+    "sha256": "ad349640241c2d364bce6cfec818bf4a6f2cccd736577144a133e17a1c0d4008"
+  },
+  {
+    "file": "screenshots/03-manual-entry.png",
+    "sha256": "af69edcba3c89e9129ed7a984c626f144fb72ed6c05fff03fe9062264c35ae8f"
+  },
+  {
+    "file": "screenshots/03-no-consent.png",
+    "sha256": "d7ffcfab8922700402ed8dc561c0b3463ccf21f5d45147a43711d662eeddfb49"
+  },
+  {
+    "file": "screenshots/04-invalid-gif.png",
+    "sha256": "c6b326f448f16cf2dfa948799a76725c943f085b84c4e40e17ff91d230710153"
+  },
+  {
+    "file": "screenshots/04-oversize-png.png",
+    "sha256": "789d065a8ecd3408f2b807488825652ca03bfa5949b45884a4c8ddbbf6e3a170"
+  },
+  {
+    "file": "screenshots/05-existing-unsupported-details.png",
+    "sha256": "905794c7396d4369387dcdc58dd561c5b39df9353f3b238e8b683f39139f6f83"
+  }
+]

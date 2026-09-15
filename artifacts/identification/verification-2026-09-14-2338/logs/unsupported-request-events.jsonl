@@ -1,0 +1,3 @@
+{"jsonrpc":"2.0","result":{"type":"Success"},"id":"1"}
+{"time":"2026-09-15T03:57:14.359Z","logger":"plantcare_ai.identification_verification","message":"scenario=unsupported requestCount=1 mimeType=image/jpeg byteCount=127770"}
+{"time":"2026-09-15T03:57:57.511Z","logger":"plantcare_ai.reminders","message":"Reminder lifecycle failed to watch reminders"}

@@ -71,9 +71,6 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
     gh.lazySingleton<_i430.NativeGoogleIdentity>(
       () => _i430.SdkNativeGoogleIdentity(),
     );
-    gh.lazySingleton<_i132.PlantIdentificationService>(
-      () => _i388.FirebaseAiPlantIdentificationService(gh<_i59.FirebaseAuth>()),
-    );
     gh.lazySingleton<_i823.PlantDiagnosisRepository>(
       () => _i331.FirebasePlantDiagnosisRepository(
         gh<_i974.FirebaseFirestore>(),
@@ -129,6 +126,12 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
       () => _i367.FirebaseKnowledgeRepository(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
+      ),
+    );
+    gh.lazySingleton<_i132.PlantIdentificationService>(
+      () => _i388.FirebaseAiPlantIdentificationService(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i515.EnvironmentConfig>(),
       ),
     );
     gh.lazySingleton<_i412.ReminderRepository>(

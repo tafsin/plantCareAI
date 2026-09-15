@@ -1,0 +1,41 @@
+{
+  "documents": [
+    {
+      "name": "projects/plantcare-ai-dev-tasnimalam/databases/(default)/documents/users/tXwYOri17uDhuIc8uLfZYYzyUqIi/plants/WwQk1ut0QpMCv0FkT5fC",
+      "fields": {
+        "commonName": {
+          "stringValue": "Pothos"
+        },
+        "environment": {
+          "stringValue": "indoor"
+        },
+        "sunlight": {
+          "stringValue": "partial"
+        },
+        "notes": {
+          "nullValue": null
+        },
+        "scientificName": {
+          "stringValue": "Epipremnum aureum"
+        },
+        "growthStage": {
+          "stringValue": "vegetative"
+        },
+        "potSizeLiters": {
+          "doubleValue": 5.0
+        },
+        "growingMedium": {
+          "stringValue": "pot"
+        },
+        "createdAt": {
+          "timestampValue": "2026-09-15T03:46:01.577Z"
+        },
+        "updatedAt": {
+          "timestampValue": "2026-09-15T03:46:01.577Z"
+        }
+      },
+      "createTime": "2026-09-15T03:46:01.773278Z",
+      "updateTime": "2026-09-15T03:46:01.773278Z"
+    }
+  ]
+}

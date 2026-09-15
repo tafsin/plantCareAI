@@ -1,0 +1,26 @@
+[
+  {
+    "file": "screenshots/01-after-save-limit-screen.png",
+    "sha256": "338d7dbfe7383486e1a9dae7c8cdfe0db31f62d5d55d9af443ab9b6a03e06cc5"
+  },
+  {
+    "file": "screenshots/01-live-candidate.png",
+    "sha256": "fdb00c77f494a30efeb4b612415d0b1f2173300b2c8714ca0c790c0b308d1143"
+  },
+  {
+    "file": "screenshots/01-profile-questions.png",
+    "sha256": "15fcf735ec62bee29c09cb11dd4f78049f4f2acf503e8ab55d5fd143c7830970"
+  },
+  {
+    "file": "screenshots/01-review.png",
+    "sha256": "7553e5e998ed9cd73c85d0e64d267f964102d5fb5e7c2b1766cbff3110856629"
+  },
+  {
+    "file": "screenshots/01-saved-collection.png",
+    "sha256": "c8a45b358f8dbd0e6c0810a7cfcf1bd506dedcf6478527672abc4e31a0572391"
+  },
+  {
+    "file": "screenshots/01-saved-details.png",
+    "sha256": "0aba995025f2f1aa67dcd6cd706f0096bfd41031ee633248ce9ee0a6d72a3678"
+  }
+]

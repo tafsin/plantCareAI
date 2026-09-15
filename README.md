@@ -275,6 +275,24 @@ dart pub workspace list
 melos list
 ```
 
+## Marionette MCP
+
+Debug builds initialize `MarionetteBinding`, allowing an MCP-compatible local
+agent to inspect and interact with the running Flutter application. Release
+builds continue to use the standard Flutter binding.
+
+Install and register the local MCP server once if it is not already available:
+
+```sh
+dart pub global activate marionette_mcp
+codex mcp add marionette -- marionette_mcp
+```
+
+Run the application in debug mode, copy the VM service WebSocket URI printed by
+`flutter run`, and use Marionette's `connect` tool with that URI. The binding is
+initialized before dependency injection and Firebase startup; do not initialize
+another Flutter binding first.
+
 Melos 7.4.0 provides these root commands:
 
 ```sh
@@ -588,6 +606,23 @@ Run a debug build with emulator use enabled:
 cd apps/plantcare_app
 flutter run --dart-define=USE_FIREBASE_EMULATOR=true
 ```
+
+Firebase AI Logic remains a live service and must never receive an
+Authentication Emulator token. The app now stops that incompatible request
+locally. Use live Firebase Authentication for a live-AI smoke test.
+
+For deterministic local UI verification only, select one explicit fake
+identification response while Auth and Firestore emulators are enabled:
+
+```sh
+flutter run -d emulator-5554 \
+  --dart-define=USE_FIREBASE_EMULATOR=true \
+  --dart-define=PLANT_IDENTIFICATION_VERIFICATION_SCENARIO=supported
+```
+
+The accepted scenarios are `supported`, `low_confidence`, and `unsupported`.
+The override is rejected without Firebase emulators and in release builds. It
+must not be used as evidence that the live Firebase AI backend is available.
 
 Web and the iOS simulator connect to `localhost` on ports `9099` and `8080`.
 An Android emulator connects to the host machine through `10.0.2.2` on the

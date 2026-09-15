@@ -1,0 +1,6 @@
+melos run analyze
+  └> dart analyze .
+     └> RUNNING
+
+Analyzing ....
+No issues found!

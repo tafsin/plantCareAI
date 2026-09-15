@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-09-14T19:31:00-04:00",
+  "firebaseMode": {
+    "authentication": "Firebase Authentication Emulator",
+    "firestore": "Cloud Firestore Emulator",
+    "ai": "live Firebase AI Logic backend (not emulated)"
+  },
+  "authenticatedTestUser": "qa.identification.20260914.001@example.com",
+  "firestoreInspection": {
+    "path": "users/{redacted-uid}/plants",
+    "documentCountAfterFailedIdentification": 0,
+    "documents": []
+  },
+  "interpretation": "The unavailable AI request did not create a plant document. This does not prove the post-success field allowlist because the save step was never reached."
+}

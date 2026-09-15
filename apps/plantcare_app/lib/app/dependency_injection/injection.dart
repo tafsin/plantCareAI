@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:plantcare_app/app/config/compile_time_environment_config.dart';
 import 'package:plantcare_app/app/dependency_injection/injection.config.dart';
+import 'package:plantcare_app/app/verification/plant_identification_verification_override.dart';
 import 'package:plantcare_data/data_module.dart';
 import 'package:plantcare_features/features_module.dart';
 
@@ -17,4 +19,9 @@ final getIt = GetIt.instance;
 )
 Future<void> configureDependencies() async {
   await getIt.init();
+  await installPlantIdentificationVerificationOverride(
+    getIt,
+    useFirebaseAuthEmulator:
+        const CompileTimeEnvironmentConfig().useFirebaseAuthEmulator,
+  );
 }

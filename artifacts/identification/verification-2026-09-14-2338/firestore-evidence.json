@@ -1,0 +1,90 @@
+{
+  "capturedAt": "2026-09-15T03:58:04.987937+00:00",
+  "backend": "Local Firestore emulator; read with emulator admin credential",
+  "projectId": "plantcare-ai-dev-tasnimalam",
+  "userId": "tXwYOri17uDhuIc8uLfZYYzyUqIi",
+  "assertions": {
+    "plantCount": 2,
+    "exactExistingPlantFields": true,
+    "timestampFieldsHaveTimestampValues": true,
+    "photoAbsentFromSavedPlantDocuments": true,
+    "identificationMetadataAbsentFromSavedPlantDocuments": true
+  },
+  "scope": "The saved plant documents. This is not a production backend audit.",
+  "documents": [
+    {
+      "name": "projects/plantcare-ai-dev-tasnimalam/databases/(default)/documents/users/tXwYOri17uDhuIc8uLfZYYzyUqIi/plants/6lTNIo3ddVJEc6F7Ez1f",
+      "fields": {
+        "commonName": {
+          "stringValue": "Monstera"
+        },
+        "environment": {
+          "stringValue": "indoor"
+        },
+        "sunlight": {
+          "stringValue": "partial"
+        },
+        "notes": {
+          "nullValue": null
+        },
+        "scientificName": {
+          "stringValue": "Monstera deliciosa"
+        },
+        "growthStage": {
+          "stringValue": "vegetative"
+        },
+        "potSizeLiters": {
+          "doubleValue": 6.0
+        },
+        "growingMedium": {
+          "stringValue": "pot"
+        },
+        "createdAt": {
+          "timestampValue": "2026-09-15T03:57:57.107Z"
+        },
+        "updatedAt": {
+          "timestampValue": "2026-09-15T03:57:57.107Z"
+        }
+      },
+      "createTime": "2026-09-15T03:57:57.318810Z",
+      "updateTime": "2026-09-15T03:57:57.318810Z"
+    },
+    {
+      "name": "projects/plantcare-ai-dev-tasnimalam/databases/(default)/documents/users/tXwYOri17uDhuIc8uLfZYYzyUqIi/plants/WwQk1ut0QpMCv0FkT5fC",
+      "fields": {
+        "commonName": {
+          "stringValue": "Pothos"
+        },
+        "environment": {
+          "stringValue": "indoor"
+        },
+        "sunlight": {
+          "stringValue": "partial"
+        },
+        "notes": {
+          "nullValue": null
+        },
+        "scientificName": {
+          "stringValue": "Epipremnum aureum"
+        },
+        "growthStage": {
+          "stringValue": "vegetative"
+        },
+        "potSizeLiters": {
+          "doubleValue": 5.0
+        },
+        "growingMedium": {
+          "stringValue": "pot"
+        },
+        "createdAt": {
+          "timestampValue": "2026-09-15T03:46:01.577Z"
+        },
+        "updatedAt": {
+          "timestampValue": "2026-09-15T03:46:01.577Z"
+        }
+      },
+      "createTime": "2026-09-15T03:46:01.773278Z",
+      "updateTime": "2026-09-15T03:46:01.773278Z"
+    }
+  ]
+}

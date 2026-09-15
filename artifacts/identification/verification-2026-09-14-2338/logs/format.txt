@@ -1,0 +1,5 @@
+melos run format
+  └> dart format --output=none --set-exit-if-changed apps/plantcare_app/lib apps/plantcare_app/test apps/plantcare_app/tool packages/plantcare_shared/lib packages/plantcare_shared/test packages/plantcare_domain/lib packages/plantcare_domain/test packages/plantcare_data/lib packages/plantcare_data/test packages/plantcare_features/lib packages/plantcare_features/test tool
+     └> RUNNING
+
+Formatted 371 files (0 changed) in 1.46 seconds.

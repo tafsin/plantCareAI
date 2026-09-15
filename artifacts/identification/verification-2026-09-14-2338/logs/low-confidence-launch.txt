@@ -1,0 +1,402 @@
+Launching lib/main.dart on sdk gphone64 arm64 in debug mode...
+Running Gradle task 'assembleDebug'...                          
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): adapty_flutter, firebase_ai, firebase_app_check, firebase_auth, firebase_core, flutter_timezone
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+Running Gradle task 'assembleDebug'...                             15.9s
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+Installing build/app/outputs/flutter-apk/app-debug.apk...          13.4s
+I/FlutterActivityAndFragmentDelegate( 9920): If you are attempting to set --enable-dart-profiling via Intent extras to launch a Flutter component outside of using the Flutter CLI, note that support for setting engine flags on Android via Intent will soon be dropped; see https://github.com/flutter/flutter/issues/180686 for more information on this breaking change. To migrate, set --enable-dart-profiling or any other flags specified via Intent extras on the command line instead or see https://github.com/flutter/flutter/blob/main/docs/engine/Flutter-Android-Engine-Flags.md for alternative methods.
+D/FlutterJNI( 9920): Beginning load of flutter...
+D/FlutterJNI( 9920): flutter (null) was loaded normally!
+I/flutter ( 9920): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+Syncing files to device sdk gphone64 arm64...                   
+W/am.plantcare_ai( 9920): Verification of void io.flutter.plugins.imagepicker.ImagePickerDelegate$2.getFullImagePath(android.net.Uri, io.flutter.plugins.imagepicker.ImagePickerDelegate$OnPathReadyListener) took 156.245ms (160.01 bytecodes/s) (2208B approximate peak alloc)
+Syncing files to device sdk gphone64 arm64...                      990ms
+W/am.plantcare_ai( 9920): JNI critical lock held for 47.258ms on Thread[1,tid=9920,Runnable,Thread*=0xb4000071e8bd2f50,peer=0x733661c8,"main"]
+
+Flutter run key commands.
+r Hot reload. 🔥🔥🔥
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on sdk gphone64 arm64 is available at: http://127.0.0.1:60238/vcybgiH6KeU=/
+The Flutter DevTools debugger and profiler on sdk gphone64 arm64 is available at: http://127.0.0.1:60238/vcybgiH6KeU=/devtools/?uri=ws://127.0.0.1:60238/vcybgiH6KeU=/ws
+W/am.plantcare_ai( 9920): Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (unsupported,test-api, reflection, allowed)
+W/am.plantcare_ai( 9920): Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (unsupported, reflection, allowed)
+W/am.plantcare_ai( 9920): Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (unsupported, reflection, allowed)
+W/am.plantcare_ai( 9920): Accessing hidden method Landroid/util/LongArray;->get(I)J (unsupported, reflection, allowed)
+D/AccessibilityBridge( 9920): Setting not found: accessibility_display_inversion_enabled, using default: 0
+D/FlutterRenderer( 9920): Width is zero. 0,0
+D/CompatibilityChangeReporter( 9920): Compat change id reported: 237531167; UID 10190; state: DISABLED
+W/OpenGLRenderer( 9920): Unknown dataspace 0
+I/Choreographer( 9920): Skipped 618 frames!  The application may be doing too much work on its main thread.
+D/FlutterRenderer( 9920): Width is zero. 0,0
+D/FlutterJNI( 9920): Sending viewport metrics to the engine.
+W/OpenGLRenderer( 9920): Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...
+W/OpenGLRenderer( 9920): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+I/Gralloc4( 9920): mapper 4.x is not supported
+E/OpenGLRenderer( 9920): Unable to match the desired swap behavior.
+I/Choreographer( 9920): Skipped 164 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 9920): Sending viewport metrics to the engine.
+I/am.plantcare_ai( 9920): Background concurrent copying GC freed 46157(3126KB) AllocSpace objects, 15(396KB) LOS objects, 49% free, 4283KB/8566KB, paused 793us,35us total 144.823ms
+I/Choreographer( 9920): Skipped 72 frames!  The application may be doing too much work on its main thread.
+D/ProfileInstaller( 9920): Installing profile for com.tasnimalam.plantcare_ai
+I/Choreographer( 9920): Skipped 103 frames!  The application may be doing too much work on its main thread.
+W/DynamiteModule( 9920): Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+I/DynamiteModule( 9920): Considering local module com.google.android.gms.providerinstaller.dynamite:0 and remote module com.google.android.gms.providerinstaller.dynamite:0
+W/ProviderInstaller( 9920): Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+D/nativeloader( 9920): Configuring clns-7 for other apk /system/framework/org.apache.http.legacy.jar. target_sdk_version=37, uses_libraries=ALL, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/nativeloader( 9920): Configuring clns-8 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=37, uses_libraries=ALL, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/nativeloader( 9920): Configuring clns-9 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=37, uses_libraries=ALL, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/ApplicationLoaders( 9920): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+D/ApplicationLoaders( 9920): Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+D/nativeloader( 9920): Configuring clns-10 for other apk /data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk. target_sdk_version=37, uses_libraries=, library_path=/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/lib/arm64:/data/app/~~fe5o2NbAevuMDV-TGKy2DA==/com.google.android.gms-pno9Cqwn5qC0-EvwkgvNJA==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+I/am.plantcare_ai( 9920): Waiting for a blocking GC ClassLinker
+W/am.plantcare_ai( 9920): Accessing hidden method Ldalvik/system/VMStack;->getStackClass2()Ljava/lang/Class; (unsupported, reflection, allowed)
+I/gwck    ( 9920): Unable to retrieve flag snapshot for com.google.android.gms.providerinstaller#com.tasnimalam.plantcare_ai, using defaults.
+E/GoogleApiManager( 9920): Failed to get service from broker. 
+E/GoogleApiManager( 9920): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager( 9920): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager( 9920): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager( 9920): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager( 9920): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager( 9920): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager( 9920): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager( 9920): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager( 9920): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager( 9920): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager( 9920): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager( 9920): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/GoogleApiManager( 9920): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar( 9920): Failed to register com.google.android.gms.providerinstaller#com.tasnimalam.plantcare_ai
+W/FlagRegistrar( 9920): gwcv: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar( 9920): 	at gwcx.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):13)
+W/FlagRegistrar( 9920): 	at hxco.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):3)
+W/FlagRegistrar( 9920): 	at hxcq.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):139)
+W/FlagRegistrar( 9920): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar( 9920): 	at hxcy.f(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar( 9920): 	at hxcy.m(:com.google.android.gms@263436029@26.34.36 (190400-981326859):101)
+W/FlagRegistrar( 9920): 	at hxcy.q(:com.google.android.gms@263436029@26.34.36 (190400-981326859):16)
+W/FlagRegistrar( 9920): 	at gpll.jY(:com.google.android.gms@263436029@26.34.36 (190400-981326859):35)
+W/FlagRegistrar( 9920): 	at gbii.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):12)
+W/FlagRegistrar( 9920): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar( 9920): 	at gbij.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):18)
+W/FlagRegistrar( 9920): 	at gbiy.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):34)
+W/FlagRegistrar( 9920): 	at gbja.c(:com.google.android.gms@263436029@26.34.36 (190400-981326859):23)
+W/FlagRegistrar( 9920): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):9)
+W/FlagRegistrar( 9920): 	at bmoi.r(:com.google.android.gms@263436029@26.34.36 (190400-981326859):48)
+W/FlagRegistrar( 9920): 	at bmoi.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):10)
+W/FlagRegistrar( 9920): 	at bmoi.g(:com.google.android.gms@263436029@26.34.36 (190400-981326859):191)
+W/FlagRegistrar( 9920): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):74)
+W/FlagRegistrar( 9920): 	at android.os.Handler.handleCallback(Handler.java:958)
+W/FlagRegistrar( 9920): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+W/FlagRegistrar( 9920): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar( 9920): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagRegistrar( 9920): 	at android.os.Looper.loopOnce(Looper.java:205)
+W/FlagRegistrar( 9920): 	at android.os.Looper.loop(Looper.java:294)
+W/FlagRegistrar( 9920): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/FlagRegistrar( 9920): Caused by: bmjw: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar( 9920): 	at bnia.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):15)
+W/FlagRegistrar( 9920): 	at bmlv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagRegistrar( 9920): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagRegistrar( 9920): 	... 11 more
+E/GoogleApiManager( 9920): Failed to get service from broker. 
+E/GoogleApiManager( 9920): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager( 9920): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager( 9920): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager( 9920): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager( 9920): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager( 9920): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager( 9920): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager( 9920): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager( 9920): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager( 9920): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager( 9920): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager( 9920): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/GoogleApiManager( 9920): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore( 9920): Unable to update local snapshot for com.google.android.gms.providerinstaller#com.tasnimalam.plantcare_ai, may result in stale flags.
+W/FlagStore( 9920): java.util.concurrent.ExecutionException: gwcv: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore( 9920): 	at hxcy.j(:com.google.android.gms@263436029@26.34.36 (190400-981326859):21)
+W/FlagStore( 9920): 	at hxdg.t(:com.google.android.gms@263436029@26.34.36 (190400-981326859):24)
+W/FlagStore( 9920): 	at hxcy.get(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at hxhm.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):2)
+W/FlagStore( 9920): 	at hxgc.s(:com.google.android.gms@263436029@26.34.36 (190400-981326859):10)
+W/FlagStore( 9920): 	at gwid.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at gwhh.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagStore( 9920): 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+W/FlagStore( 9920): 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+W/FlagStore( 9920): 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+W/FlagStore( 9920): 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+W/FlagStore( 9920): 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+W/FlagStore( 9920): 	at java.lang.Thread.run(Thread.java:1012)
+W/FlagStore( 9920): Caused by: gwcv: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore( 9920): 	at gwcx.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):13)
+W/FlagStore( 9920): 	at hxco.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):3)
+W/FlagStore( 9920): 	at hxcq.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):139)
+W/FlagStore( 9920): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at hxcy.f(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at hxcy.m(:com.google.android.gms@263436029@26.34.36 (190400-981326859):101)
+W/FlagStore( 9920): 	at hxcy.q(:com.google.android.gms@263436029@26.34.36 (190400-981326859):16)
+W/FlagStore( 9920): 	at gpll.jY(:com.google.android.gms@263436029@26.34.36 (190400-981326859):35)
+W/FlagStore( 9920): 	at gbii.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):12)
+W/FlagStore( 9920): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at gbij.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):18)
+W/FlagStore( 9920): 	at gbiy.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):34)
+W/FlagStore( 9920): 	at gbjf.B(:com.google.android.gms@263436029@26.34.36 (190400-981326859):17)
+W/FlagStore( 9920): 	at gbia.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):60)
+W/FlagStore( 9920): 	at hxex.execute(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at gbib.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):8)
+W/FlagStore( 9920): 	at gbiy.b(:com.google.android.gms@263436029@26.34.36 (190400-981326859):34)
+W/FlagStore( 9920): 	at gbja.c(:com.google.android.gms@263436029@26.34.36 (190400-981326859):23)
+W/FlagStore( 9920): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):9)
+W/FlagStore( 9920): 	at bmoi.r(:com.google.android.gms@263436029@26.34.36 (190400-981326859):48)
+W/FlagStore( 9920): 	at bmoi.d(:com.google.android.gms@263436029@26.34.36 (190400-981326859):10)
+W/FlagStore( 9920): 	at bmoi.g(:com.google.android.gms@263436029@26.34.36 (190400-981326859):191)
+W/FlagStore( 9920): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):74)
+W/FlagStore( 9920): 	at android.os.Handler.handleCallback(Handler.java:958)
+W/FlagStore( 9920): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+W/FlagStore( 9920): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagStore( 9920): 	at android.os.Looper.loopOnce(Looper.java:205)
+W/FlagStore( 9920): 	at android.os.Looper.loop(Looper.java:294)
+W/FlagStore( 9920): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/FlagStore( 9920): Caused by: bmjw: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagStore( 9920): 	at bnia.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):15)
+W/FlagStore( 9920): 	at bmlv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+W/FlagStore( 9920): 	at bmls.e(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+W/FlagStore( 9920): 	... 11 more
+V/NativeCrypto( 9920): Registering com/google/android/gms/org/conscrypt/NativeCrypto's 336 native methods...
+W/am.plantcare_ai( 9920): Accessing hidden method Ljava/security/spec/ECParameterSpec;->getCurveName()Ljava/lang/String; (unsupported, reflection, allowed)
+I/ProviderInstaller( 9920): Installed default security provider GmsCore_OpenSSL
+D/TrafficStats( 9920): tagSocket(134) with statsTag=0xffffffff, statsUid=-1
+I/Choreographer( 9920): Skipped 371 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 9920): Sending viewport metrics to the engine.
+I/am.plantcare_ai( 9920): Background young concurrent copying GC freed 35939(2587KB) AllocSpace objects, 2(40KB) LOS objects, 31% free, 5886KB/8566KB, paused 4.566ms,97us total 310.096ms
+I/OpenGLRenderer( 9920): Davey! duration=768ms; Flags=1, FrameTimelineVsyncId=50624, IntendedVsync=2756240066091, Vsync=2756673399407, InputEventId=0, HandleInputStart=2756677414438, AnimationStart=2756677423563, PerformTraversalsStart=2756677432230, DrawStart=2756850995188, FrameDeadline=2756256732757, FrameInterval=2756675116063, FrameStartTime=16666666, SyncQueued=2756874959188, SyncStart=2756882685313, IssueDrawCommandsStart=2756910693730, SwapBuffers=2756995929897, FrameCompleted=2757016670605, DequeueBufferDuration=2870958, QueueBufferDuration=625500, GpuCompleted=2757013730980, SwapBuffersCompleted=2757016670605, DisplayPresentTime=0, CommandSubmissionCompleted=2756995929897, 
+D/FlutterJNI( 9920): Sending viewport metrics to the engine.
+D/EGL_emulation( 9920): app_time_stats: avg=345.48ms min=74.06ms max=657.27ms count=4
+E/GoogleApiManager( 9920): Failed to get service from broker. 
+E/GoogleApiManager( 9920): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager( 9920): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3057)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.createException(Parcel.java:3041)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.readException(Parcel.java:3024)
+E/GoogleApiManager( 9920): 	at android.os.Parcel.readException(Parcel.java:2966)
+E/GoogleApiManager( 9920): 	at bnkv.a(:com.google.android.gms@263436029@26.34.36 (190400-981326859):36)
+E/GoogleApiManager( 9920): 	at bnio.y(:com.google.android.gms@263436029@26.34.36 (190400-981326859):143)
+E/GoogleApiManager( 9920): 	at bmok.run(:com.google.android.gms@263436029@26.34.36 (190400-981326859):42)
+E/GoogleApiManager( 9920): 	at android.os.Handler.handleCallback(Handler.java:958)
+E/GoogleApiManager( 9920): 	at android.os.Handler.dispatchMessage(Handler.java:99)
+E/GoogleApiManager( 9920): 	at dhpa.mq(:com.google.android.gms@263436029@26.34.36 (190400-981326859):1)
+E/GoogleApiManager( 9920): 	at dhpa.dispatchMessage(:com.google.android.gms@263436029@26.34.36 (190400-981326859):5)
+E/GoogleApiManager( 9920): 	at android.os.Looper.loopOnce(Looper.java:205)
+E/GoogleApiManager( 9920): 	at android.os.Looper.loop(Looper.java:294)
+E/GoogleApiManager( 9920): 	at android.os.HandlerThread.run(HandlerThread.java:67)
+W/GoogleApiManager( 9920): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+D/EGL_emulation( 9920): app_time_stats: avg=10733.08ms min=10733.08ms max=10733.08ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=479.89ms min=154.25ms max=818.79ms count=3
+D/EGL_emulation( 9920): app_time_stats: avg=4358.72ms min=8.39ms max=8709.04ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=116.87ms min=41.91ms max=330.90ms count=9
+D/EGL_emulation( 9920): app_time_stats: avg=58.05ms min=17.80ms max=93.69ms count=18
+D/EGL_emulation( 9920): app_time_stats: avg=67.88ms min=22.63ms max=150.55ms count=15
+D/EGL_emulation( 9920): app_time_stats: avg=85.30ms min=48.85ms max=144.02ms count=12
+D/EGL_emulation( 9920): app_time_stats: avg=45.95ms min=9.47ms max=91.94ms count=22
+D/EGL_emulation( 9920): app_time_stats: avg=41.27ms min=23.84ms max=69.05ms count=25
+I/Choreographer( 9920): Skipped 51 frames!  The application may be doing too much work on its main thread.
+D/EGL_emulation( 9920): app_time_stats: avg=119.67ms min=6.46ms max=1063.21ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=62.76ms min=15.90ms max=196.80ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=53.11ms min=29.54ms max=83.36ms count=19
+D/EGL_emulation( 9920): app_time_stats: avg=66.94ms min=25.38ms max=167.50ms count=15
+D/EGL_emulation( 9920): app_time_stats: avg=41.52ms min=17.27ms max=68.79ms count=23
+D/EGL_emulation( 9920): app_time_stats: avg=38.20ms min=17.13ms max=104.14ms count=27
+D/EGL_emulation( 9920): app_time_stats: avg=11877.02ms min=796.89ms max=29582.72ms count=3
+D/EGL_emulation( 9920): app_time_stats: avg=67.85ms min=24.35ms max=251.36ms count=15
+D/EGL_emulation( 9920): app_time_stats: avg=1101.81ms min=1101.81ms max=1101.81ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=63.22ms min=27.73ms max=121.07ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=44.60ms min=19.95ms max=120.69ms count=22
+D/EGL_emulation( 9920): app_time_stats: avg=82.24ms min=9.63ms max=405.71ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=108.22ms min=42.98ms max=178.63ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=4488.15ms min=4488.15ms max=4488.15ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=240.72ms min=13.51ms max=456.23ms count=4
+D/CompatibilityChangeReporter( 9920): Compat change id reported: 78294732; UID 10190; state: ENABLED
+E/OpenGLRenderer( 9920): Unable to match the desired swap behavior.
+D/EGL_emulation( 9920): app_time_stats: avg=150.38ms min=7.74ms max=710.45ms count=7
+D/EGL_emulation( 9920): app_time_stats: avg=595.57ms min=211.01ms max=1531.92ms count=4
+D/EGL_emulation( 9920): app_time_stats: avg=2179.57ms min=424.69ms max=3934.46ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=92.22ms min=14.31ms max=322.97ms count=11
+D/EGL_emulation( 9920): app_time_stats: avg=115.60ms min=15.02ms max=373.48ms count=9
+D/EGL_emulation( 9920): app_time_stats: avg=62.78ms min=12.47ms max=138.55ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=2033.69ms min=415.14ms max=3652.23ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=111.06ms min=22.67ms max=292.42ms count=11
+D/EGL_emulation( 9920): app_time_stats: avg=91.47ms min=29.87ms max=530.34ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=1231.39ms min=1231.39ms max=1231.39ms count=1
+I/Choreographer( 9920): Skipped 71 frames!  The application may be doing too much work on its main thread.
+D/EGL_emulation( 9920): app_time_stats: avg=2851.33ms min=2851.33ms max=2851.33ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=16676.49ms min=16676.49ms max=16676.49ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=5622.72ms min=74.66ms max=16120.79ms count=3
+D/EGL_emulation( 9920): app_time_stats: avg=1495.21ms min=1495.21ms max=1495.21ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=1627.39ms min=1627.39ms max=1627.39ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=7962.15ms min=87.28ms max=15837.02ms count=2
+W/OkHttpClientTransport( 9920): io.grpc.okhttp.OkHttpClientTransport$ClientFrameHandler@7351dd6: Received GOAWAY with ENHANCE_YOUR_CALM. Debug data: too_many_pings
+W/AtomicBackoff( 9920): Increased {0} to {1}
+W/Firestore( 9920): (26.6.0) [WatchStream]: (9ef8517) Stream closed with status: Status{code=RESOURCE_EXHAUSTED, description=HTTP/2 error code: ENHANCE_YOUR_CALM (Bandwidth exhausted)
+W/Firestore( 9920): Received Goaway
+W/Firestore( 9920): too_many_pings, cause=null}.
+D/TrafficStats( 9920): tagSocket(152) with statsTag=0xffffffff, statsUid=-1
+D/EGL_emulation( 9920): app_time_stats: avg=202.82ms min=19.80ms max=1898.33ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=49.95ms min=17.01ms max=116.22ms count=19
+D/EGL_emulation( 9920): app_time_stats: avg=78.93ms min=4.96ms max=427.22ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=22110.88ms min=22110.88ms max=22110.88ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=123.85ms min=11.14ms max=491.72ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=51.44ms min=7.80ms max=111.80ms count=20
+D/EGL_emulation( 9920): app_time_stats: avg=85.97ms min=33.70ms max=377.02ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=2268.21ms min=2268.21ms max=2268.21ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=39.87ms min=9.11ms max=183.85ms count=27
+D/EGL_emulation( 9920): app_time_stats: avg=67.22ms min=28.24ms max=128.03ms count=15
+D/EGL_emulation( 9920): app_time_stats: avg=54.87ms min=24.50ms max=128.77ms count=18
+D/EGL_emulation( 9920): app_time_stats: avg=3905.36ms min=3905.36ms max=3905.36ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=73.00ms min=22.21ms max=201.71ms count=14
+D/EGL_emulation( 9920): app_time_stats: avg=1171.58ms min=1171.58ms max=1171.58ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=56.32ms min=27.53ms max=174.23ms count=18
+D/EGL_emulation( 9920): app_time_stats: avg=33.98ms min=11.16ms max=136.30ms count=27
+D/EGL_emulation( 9920): app_time_stats: avg=83.14ms min=7.09ms max=201.96ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=83.53ms min=27.31ms max=288.95ms count=12
+D/EGL_emulation( 9920): app_time_stats: avg=4082.33ms min=4082.33ms max=4082.33ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=92.30ms min=36.79ms max=218.76ms count=11
+D/EGL_emulation( 9920): app_time_stats: avg=86.15ms min=18.17ms max=247.21ms count=12
+E/OpenGLRenderer( 9920): Unable to match the desired swap behavior.
+D/EGL_emulation( 9920): app_time_stats: avg=234.18ms min=50.13ms max=573.18ms count=6
+D/EGL_emulation( 9920): app_time_stats: avg=1215.21ms min=364.17ms max=2066.26ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=127.64ms min=7.34ms max=310.30ms count=8
+D/EGL_emulation( 9920): app_time_stats: avg=179.32ms min=52.10ms max=749.11ms count=8
+D/EGL_emulation( 9920): app_time_stats: avg=1808.88ms min=1808.88ms max=1808.88ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=51.24ms min=11.33ms max=267.94ms count=19
+D/EGL_emulation( 9920): app_time_stats: avg=31.29ms min=5.39ms max=72.64ms count=28
+
+══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════
+The following _Exception was thrown during a service extension callback for
+"ext.flutter.marionette.tap":
+Exception: Element matching {text: Identify from photo} not found
+
+When the exception was thrown, this was the stack:
+#0      GestureDispatcher.tap (package:marionette_flutter/src/services/gesture_dispatcher.dart:36:7)
+#1      registerGestureExtensions.<anonymous closure> (package:marionette_flutter/src/binding/extensions/gesture_extensions.dart:23:31)
+#2      registerInternalMarionetteExtension.<anonymous closure> (package:marionette_flutter/src/binding/register_extension_internal.dart:40:32)
+<asynchronous suspension>
+#3      _runExtension.<anonymous closure> (dart:developer-patch/developer.dart:140:13)
+<asynchronous suspension>
+════════════════════════════════════════════════════════════════════════════════════════════════════
+
+D/EGL_emulation( 9920): app_time_stats: avg=14001.90ms min=14001.90ms max=14001.90ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=1222.97ms min=12.15ms max=11519.27ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=1592.09ms min=1592.09ms max=1592.09ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=1955.16ms min=1955.16ms max=1955.16ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=4708.43ms min=431.78ms max=8985.08ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=80.52ms min=16.28ms max=528.73ms count=13
+I/flutter ( 9920): ScreenshotService: Successfully captured screenshot (208269 bytes).
+D/EGL_emulation( 9920): app_time_stats: avg=1687.46ms min=5.28ms max=16213.44ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=53.30ms min=19.22ms max=169.95ms count=19
+D/EGL_emulation( 9920): app_time_stats: avg=65.20ms min=23.54ms max=141.22ms count=15
+D/EGL_emulation( 9920): app_time_stats: avg=29471.14ms min=29471.14ms max=29471.14ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=114.57ms min=36.48ms max=229.98ms count=9
+D/EGL_emulation( 9920): app_time_stats: avg=41.16ms min=19.52ms max=73.72ms count=25
+D/EGL_emulation( 9920): app_time_stats: avg=2266.67ms min=2266.67ms max=2266.67ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=53.25ms min=15.87ms max=155.59ms count=19
+D/EGL_emulation( 9920): app_time_stats: avg=73.60ms min=20.36ms max=312.41ms count=14
+D/EGL_emulation( 9920): app_time_stats: avg=50.89ms min=14.51ms max=219.12ms count=18
+D/EGL_emulation( 9920): app_time_stats: avg=60.86ms min=17.89ms max=235.84ms count=17
+D/EGL_emulation( 9920): app_time_stats: avg=3908.55ms min=3908.55ms max=3908.55ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=58.56ms min=11.40ms max=190.36ms count=17
+D/EGL_emulation( 9920): app_time_stats: avg=29.22ms min=11.17ms max=54.58ms count=32
+D/EGL_emulation( 9920): app_time_stats: avg=71.69ms min=12.20ms max=309.06ms count=14
+D/EGL_emulation( 9920): app_time_stats: avg=70.76ms min=10.84ms max=149.40ms count=14
+D/EGL_emulation( 9920): app_time_stats: avg=2303.84ms min=736.84ms max=3870.83ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=92.10ms min=28.41ms max=243.01ms count=11
+D/EGL_emulation( 9920): app_time_stats: avg=132.63ms min=38.32ms max=384.08ms count=8
+D/EGL_emulation( 9920): app_time_stats: avg=1321.01ms min=1321.01ms max=1321.01ms count=1
+E/OpenGLRenderer( 9920): Unable to match the desired swap behavior.
+I/am.plantcare_ai( 9920): Background concurrent copying GC freed 33096(1650KB) AllocSpace objects, 20(784KB) LOS objects, 49% free, 6044KB/11MB, paused 146us,20.345ms total 877.016ms
+D/EGL_emulation( 9920): app_time_stats: avg=213.96ms min=33.51ms max=546.02ms count=7
+D/EGL_emulation( 9920): app_time_stats: avg=990.03ms min=821.14ms max=1158.91ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=77.91ms min=25.07ms max=231.87ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=1474.23ms min=1474.23ms max=1474.23ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=56.73ms min=27.81ms max=220.54ms count=18
+D/EGL_emulation( 9920): app_time_stats: avg=3045.81ms min=10.28ms max=17625.16ms count=6
+D/EGL_emulation( 9920): app_time_stats: avg=654.92ms min=14.11ms max=6902.08ms count=12
+D/EGL_emulation( 9920): app_time_stats: avg=63.70ms min=24.02ms max=239.43ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=84.38ms min=13.80ms max=377.98ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=29529.51ms min=29529.51ms max=29529.51ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=98.38ms min=51.15ms max=238.21ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=47.56ms min=17.82ms max=89.81ms count=21
+D/EGL_emulation( 9920): app_time_stats: avg=2064.94ms min=2064.94ms max=2064.94ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=63.34ms min=23.76ms max=170.29ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=37.07ms min=7.14ms max=85.60ms count=27
+D/EGL_emulation( 9920): app_time_stats: avg=83.13ms min=13.74ms max=410.50ms count=16
+D/EGL_emulation( 9920): app_time_stats: avg=110.47ms min=9.57ms max=251.77ms count=9
+D/EGL_emulation( 9920): app_time_stats: avg=4339.03ms min=4339.03ms max=4339.03ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=59.81ms min=16.93ms max=229.37ms count=17
+D/EGL_emulation( 9920): app_time_stats: avg=1075.98ms min=1075.98ms max=1075.98ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=50.80ms min=15.14ms max=130.21ms count=20
+D/EGL_emulation( 9920): app_time_stats: avg=49.11ms min=27.30ms max=119.39ms count=20
+D/EGL_emulation( 9920): app_time_stats: avg=81.93ms min=37.63ms max=198.99ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=92.47ms min=32.12ms max=233.77ms count=11
+D/EGL_emulation( 9920): app_time_stats: avg=127.81ms min=39.15ms max=301.95ms count=8
+I/Choreographer( 9920): Skipped 38 frames!  The application may be doing too much work on its main thread.
+D/EGL_emulation( 9920): app_time_stats: avg=5113.40ms min=5113.40ms max=5113.40ms count=1
+I/OpenGLRenderer( 9920): Davey! duration=742ms; Flags=0, FrameTimelineVsyncId=68508, IntendedVsync=2974973390675, Vsync=2975606723983, InputEventId=0, HandleInputStart=2975631402293, AnimationStart=2975631407834, PerformTraversalsStart=2975631422168, DrawStart=2975664888751, FrameDeadline=2974990057341, FrameInterval=2975615246876, FrameStartTime=16666666, SyncQueued=2975671892209, SyncStart=2975672783126, IssueDrawCommandsStart=2975673029543, SwapBuffers=2975683886751, FrameCompleted=2975716870501, DequeueBufferDuration=778542, QueueBufferDuration=3852000, GpuCompleted=2975715316001, SwapBuffersCompleted=2975716870501, DisplayPresentTime=1012762415437975051, CommandSubmissionCompleted=2975683886751, 
+E/OpenGLRenderer( 9920): Unable to match the desired swap behavior.
+D/EGL_emulation( 9920): app_time_stats: avg=352.24ms min=46.60ms max=899.24ms count=3
+D/EGL_emulation( 9920): app_time_stats: avg=10571.87ms min=10571.87ms max=10571.87ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=46.05ms min=11.23ms max=183.27ms count=21
+D/EGL_emulation( 9920): app_time_stats: avg=78.69ms min=16.84ms max=264.78ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=7420.60ms min=650.34ms max=14190.86ms count=2
+D/EGL_emulation( 9920): app_time_stats: avg=101.39ms min=30.42ms max=311.02ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=50.72ms min=14.16ms max=126.47ms count=20
+D/EGL_emulation( 9920): app_time_stats: avg=2471.65ms min=2471.65ms max=2471.65ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=99.62ms min=23.73ms max=232.39ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=37.74ms min=11.21ms max=76.39ms count=26
+D/EGL_emulation( 9920): app_time_stats: avg=66.04ms min=9.18ms max=179.37ms count=15
+D/EGL_emulation( 9920): app_time_stats: avg=49.48ms min=15.08ms max=187.43ms count=20
+D/EGL_emulation( 9920): app_time_stats: avg=3961.76ms min=3961.76ms max=3961.76ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=75.11ms min=33.95ms max=232.62ms count=14
+D/EGL_emulation( 9920): app_time_stats: avg=76.43ms min=25.80ms max=238.42ms count=13
+D/EGL_emulation( 9920): app_time_stats: avg=1599.93ms min=1599.93ms max=1599.93ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=84.91ms min=33.60ms max=214.04ms count=12
+D/EGL_emulation( 9920): app_time_stats: avg=45.05ms min=10.44ms max=112.30ms count=22
+D/EGL_emulation( 9920): app_time_stats: avg=98.25ms min=23.14ms max=271.32ms count=12
+D/EGL_emulation( 9920): app_time_stats: avg=86.70ms min=15.54ms max=287.97ms count=10
+D/EGL_emulation( 9920): app_time_stats: avg=5008.78ms min=5008.78ms max=5008.78ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=345.51ms min=94.29ms max=590.59ms count=4
+D/EGL_emulation( 9920): app_time_stats: avg=1326.74ms min=1326.74ms max=1326.74ms count=1
+D/EGL_emulation( 9920): app_time_stats: avg=358.55ms min=91.26ms max=681.39ms count=3
+I/Choreographer( 9920): Skipped 52 frames!  The application may be doing too much work on its main thread.
+E/OpenGLRenderer( 9920): Unable to match the desired swap behavior.
+I/OpenGLRenderer( 9920): Davey! duration=1907ms; Flags=1, FrameTimelineVsyncId=73100, IntendedVsync=3014073400213, Vsync=3014940066793, InputEventId=0, HandleInputStart=3014949132395, AnimationStart=3014949146228, PerformTraversalsStart=3014949149145, DrawStart=3015466648062, FrameDeadline=3014090066879, FrameInterval=3014948204770, FrameStartTime=16666665, SyncQueued=3015484284812, SyncStart=3015501968353, IssueDrawCommandsStart=3015502400228, SwapBuffers=3015949031270, FrameCompleted=3015998344270, DequeueBufferDuration=6232000, QueueBufferDuration=26209542, GpuCompleted=3015991954479, SwapBuffersCompleted=3015998344270, DisplayPresentTime=1252582754963362142, CommandSubmissionCompleted=3015949031270, 
+I/Choreographer( 9920): Skipped 71 frames!  The application may be doing too much work on its main thread.
+E/SurfaceSyncGroup( 9920): Failed to receive transaction ready in 1000ms. Marking SurfaceSyncGroup(wmsSync-VRI[MainActivity]#18) as ready
+E/SurfaceSyncGroup( 9920): Failed to receive transaction ready in 1000ms. Marking SurfaceSyncGroup(VRI[MainActivity]#19) as ready
+E/SurfaceSyncGroup( 9920): Failed to receive transaction ready in 1000ms. Marking SurfaceSyncGroup(SurfaceView[com.tasnimalam.plantcare_ai/com.tasnimalam.plantcare_ai.MainActivity]#17) as ready
+D/EGL_emulation( 9920): app_time_stats: avg=83.97ms min=6.99ms max=439.73ms count=17
+D/EGL_emulation( 9920): app_time_stats: avg=103.65ms min=4.35ms max=960.38ms count=17
+W/OkHttpClientTransport( 9920): io.grpc.okhttp.OkHttpClientTransport$ClientFrameHandler@ac74071: Received GOAWAY with ENHANCE_YOUR_CALM. Debug data: too_many_pings
+W/AtomicBackoff( 9920): Increased {0} to {1}
+W/Firestore( 9920): (26.6.0) [WatchStream]: (9ef8517) Stream closed with status: Status{code=RESOURCE_EXHAUSTED, description=HTTP/2 error code: ENHANCE_YOUR_CALM (Bandwidth exhausted)
+W/Firestore( 9920): Received Goaway
+W/Firestore( 9920): too_many_pings, cause=null}.
+D/TrafficStats( 9920): tagSocket(139) with statsTag=0xffffffff, statsUid=-1
+
+Application finished.

@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +8,7 @@ import 'package:plantcare_data/src/core/firebase_ai_config.dart';
 import 'package:plantcare_data/src/plant_identification/plant_identification_codec.dart';
 import 'package:plantcare_domain/plant_identification.dart';
 import 'package:plantcare_domain/plant_observation.dart';
+import 'package:plantcare_shared/environment.dart';
 
 typedef GenerateIdentificationResponse = Future<String?> Function(
   SelectedPlantImage image,
@@ -14,20 +17,40 @@ typedef GenerateIdentificationResponse = Future<String?> Function(
 @LazySingleton(as: PlantIdentificationService)
 final class FirebaseAiPlantIdentificationService
     implements PlantIdentificationService {
-  FirebaseAiPlantIdentificationService(FirebaseAuth auth)
-    : _isAuthenticated = (() => auth.currentUser != null),
-      _generate = _generator();
+  FirebaseAiPlantIdentificationService(
+    FirebaseAuth auth,
+    EnvironmentConfig environmentConfig,
+  ) : this._(
+        () => auth.currentUser != null,
+        _generator(),
+        environmentConfig.useFirebaseAuthEmulator,
+        environmentConfig.useAppCheckDebug,
+      );
 
   @visibleForTesting
   FirebaseAiPlantIdentificationService.forTest({
     required bool Function() isAuthenticated,
     required GenerateIdentificationResponse generateResponse,
-  }) : this._(isAuthenticated, generateResponse);
+    bool useFirebaseAuthEmulator = false,
+    bool useAppCheckDebug = false,
+  }) : this._(
+         isAuthenticated,
+         generateResponse,
+         useFirebaseAuthEmulator,
+         useAppCheckDebug,
+       );
 
-  FirebaseAiPlantIdentificationService._(this._isAuthenticated, this._generate);
+  FirebaseAiPlantIdentificationService._(
+    this._isAuthenticated,
+    this._generate,
+    this._useFirebaseAuthEmulator,
+    this._useAppCheckDebug,
+  );
 
   final bool Function() _isAuthenticated;
   final GenerateIdentificationResponse _generate;
+  final bool _useFirebaseAuthEmulator;
+  final bool _useAppCheckDebug;
 
   static GenerateIdentificationResponse _generator() {
     final model = FirebaseAI.googleAI().generativeModel(
@@ -101,9 +124,18 @@ treatment, watering, fertilizer advice, or instructions. schemaVersion is 1.''',
     required SelectedPlantImage image,
   }) async {
     if (!_isAuthenticated()) {
+      _safeLog('unauthenticated');
       throw const PlantIdentificationFailure(
         PlantIdentificationFailureType.unauthenticated,
         'Sign in to identify a plant.',
+      );
+    }
+    if (_useFirebaseAuthEmulator) {
+      _safeLog('auth_emulator_incompatible');
+      throw const PlantIdentificationFailure(
+        PlantIdentificationFailureType.unavailable,
+        'Live plant identification cannot use an emulator sign-in. '
+        'Restart with live Firebase or use the verification mode.',
       );
     }
     try {
@@ -120,18 +152,23 @@ treatment, watering, fertilizer advice, or instructions. schemaVersion is 1.''',
     } on PlantIdentificationFailure {
       rethrow;
     } on FormatException {
+      _safeLog('malformed_response');
       throw const PlantIdentificationFailure(
         PlantIdentificationFailureType.malformed,
         'The identification was not usable. Please try another photo.',
       );
     } on QuotaExceeded {
+      _safeLog('quota');
       throw const PlantIdentificationFailure(
         PlantIdentificationFailureType.quota,
         'Plant identification has reached its limit. Try again later or add manually.',
       );
     } on FirebaseAIException catch (error) {
-      throw mapError(error.message);
+      final failure = mapError(error.message);
+      _safeLog(failure.type.name);
+      throw failure;
     } catch (_) {
+      _safeLog('unknown');
       throw const PlantIdentificationFailure(
         PlantIdentificationFailureType.unknown,
         'Could not identify this plant. Try again or add it manually.',
@@ -141,7 +178,9 @@ treatment, watering, fertilizer advice, or instructions. schemaVersion is 1.''',
 
   static PlantIdentificationFailure mapError(String message) {
     final text = message.toLowerCase();
-    if (RegExp('401|unauthenticated|authentication required').hasMatch(text)) {
+    if (RegExp(
+      '401|unauthenticated|authentication required|missing required authentication|authentication credential',
+    ).hasMatch(text)) {
       return const PlantIdentificationFailure(
         PlantIdentificationFailureType.unauthenticated,
         'Sign in to identify a plant.',
@@ -175,5 +214,17 @@ treatment, watering, fertilizer advice, or instructions. schemaVersion is 1.''',
       PlantIdentificationFailureType.unavailable,
       'Plant identification is temporarily unavailable. Try later or add manually.',
     );
+  }
+
+  void _safeLog(String category) {
+    if (kDebugMode) {
+      developer.log(
+        'category=$category model=${FirebaseAiConfig.model} '
+        'platform=${kIsWeb ? 'web' : defaultTargetPlatform.name} '
+        'emulator=$_useFirebaseAuthEmulator '
+        'appCheckDebug=$_useAppCheckDebug',
+        name: 'plantcare_ai.identification',
+      );
+    }
   }
 }

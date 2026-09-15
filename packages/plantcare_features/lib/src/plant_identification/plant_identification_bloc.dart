@@ -26,6 +26,15 @@ final class IdentificationSubmitted extends PlantIdentificationEvent {
   const IdentificationSubmitted();
 }
 
+final class IdentificationConsentChanged extends PlantIdentificationEvent {
+  const IdentificationConsentChanged(this.consented);
+
+  final bool consented;
+
+  @override
+  List<Object?> get props => [consented];
+}
+
 final class IdentificationReset extends PlantIdentificationEvent {
   const IdentificationReset();
 }
@@ -72,6 +81,7 @@ final class PlantIdentificationState extends Equatable {
     this.message,
     this.plantId,
     this.plantLimitReached = false,
+    this.aiProcessingConsented = false,
   });
   final PlantOnboardingStep step;
   final PlantIdentificationResult? result;
@@ -79,6 +89,7 @@ final class PlantIdentificationState extends Equatable {
   final String? message;
   final String? plantId;
   final bool plantLimitReached;
+  final bool aiProcessingConsented;
   @override
   List<Object?> get props => [
     step,
@@ -87,6 +98,7 @@ final class PlantIdentificationState extends Equatable {
     message,
     plantId,
     plantLimitReached,
+    aiProcessingConsented,
   ];
 }
 
@@ -105,6 +117,16 @@ final class PlantIdentificationBloc
            premiumAccess ?? (() => const PremiumAccessSnapshot.signedOut()),
        super(const PlantIdentificationState()) {
     on<IdentificationPhotoRequested>(_pick);
+    on<IdentificationConsentChanged>((event, emit) {
+      if (state.step != PlantOnboardingStep.preview) return;
+      emit(
+        PlantIdentificationState(
+          step: state.step,
+          message: state.message,
+          aiProcessingConsented: event.consented,
+        ),
+      );
+    });
     on<IdentificationSubmitted>(_identify);
     on<IdentificationReset>((event, emit) {
       if (state.step == PlantOnboardingStep.saving) return;
@@ -271,7 +293,11 @@ final class PlantIdentificationBloc
     IdentificationSubmitted event,
     Emitter<PlantIdentificationState> emit,
   ) async {
-    if (state.step != PlantOnboardingStep.preview || _image == null) return;
+    if (state.step != PlantOnboardingStep.preview ||
+        _image == null ||
+        !state.aiProcessingConsented) {
+      return;
+    }
     final epoch = _epoch;
     final image = _image!;
     emit(const PlantIdentificationState(step: PlantOnboardingStep.identifying));

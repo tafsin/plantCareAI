@@ -1,0 +1,5 @@
+melos run boundaries
+  └> dart run tool/check_package_boundaries.dart
+     └> RUNNING
+
+Package boundaries are valid.

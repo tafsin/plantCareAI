@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_app/app/app.dart';
 import 'package:plantcare_app/app/bootstrap/app_bootstrap.dart';
 import 'package:plantcare_app/app/bootstrap/app_initializer.dart';
+import 'package:plantcare_app/app/bootstrap/flutter_binding_initializer.dart';
 import 'package:plantcare_app/app/dependency_injection/injection.dart';
 import 'package:plantcare_app/app/router/app_router.dart';
 import 'package:plantcare_app/app/theme/theme_bloc.dart';
@@ -16,7 +16,7 @@ import 'package:plantcare_shared/environment.dart';
 
 void main() {
   runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+    initializePlantCareFlutterBinding();
     FlutterError.onError = FlutterError.presentError;
     await configureDependencies();
 
