@@ -1,0 +1,39 @@
+Fresh-context runtime evidence (2026-09-17, America/Toronto)
+
+Surfaces
+- Android emulator: emulator-5554
+- Android interaction: Marionette MCP only
+- Firebase Emulator Hub: 127.0.0.1:4400
+- Auth: 127.0.0.1:9099
+- Firestore: 127.0.0.1:8080
+- Hosting: 127.0.0.1:5002
+- App Check debug mode: disabled
+
+Android observations
+- Account was the fourth narrow navigation destination after a disposable email account signed in.
+- Account -> Privacy and data -> Delete account and data was operable.
+- Generic subscription copy remained usable despite no successful Premium lookup.
+- With acknowledgement checked, lowercase "delete" left the destructive button disabled.
+- Exact "DELETE" enabled the destructive button and showed a current-password reauthentication field.
+- A deliberately wrong password produced: "Account verification could not be completed. Please try again." Retry, support, Privacy Policy, and Terms remained available.
+- A separate fresh emulator-only account completed password reauthentication and deletion. The completion screen said the account/application data were deleted and the user was signed out.
+- Admin read against the local emulators after completion found the disposable Auth user absent.
+- Admin read against the local Firestore emulator found one retained cleanup handoff with exactly four fields: schemaVersion=1, providerCleanup=["adapty"], source="self_service_mobile", requestedAt=Timestamp.
+
+Web observations
+- After the final Hosting rebuild, http://127.0.0.1:5002/account-deletion loaded signed out and remained at the exact clean URL after refresh.
+- The public page prominently identified PlantCare AI and displayed the 30-day verified-deletion window, deleted-data list, 90-day minimal-record limit, 30-day unverified-correspondence limit, provider retention distinction, and inaccessible-device warning.
+- It displayed both "Sign in to delete my account" and the configured "Start a support request" action with neutral ownership language and a credentials/payment warning.
+- Initial post-routing-fix verification exposed no Privacy Policy or Terms controls in the signed-out accessibility tree. After the legal-control fix and Hosting rebuild, both Privacy Policy and Terms of Service were visibly rendered and exposed as buttons in the complete accessibility tree; direct refresh preserved them at the clean URL.
+- Port 5002 retained stale service-worker bundles during repeated authenticated checks: emulator sign-in failed and registrations initiated from `/account-deletion` landed on Home. Those results are retained as pre-fix regression evidence, and all affected fixtures were deleted.
+- The definitive fresh-origin build at `http://127.0.0.1:5003/account-deletion` passed end to end. Registration carried `redirect=/account-deletion`, returned to and remained on the clean deletion route, and rendered the authenticated generic subscription warning.
+- With subscription acknowledgement selected, lowercase `delete` left the destructive action disabled. Replacing it with exact case-sensitive `DELETE` enabled the action and exposed password reauthentication.
+- The disposable web account completed deletion and displayed the fixed signed-out completion state while remaining on `/account-deletion`.
+- Local emulator inspection found the disposable Auth user absent and found an exact four-field cleanup handoff with schemaVersion=1, providerCleanup=["adapty"], source="self_service_web", and requestedAt as a Firestore Timestamp.
+- Loaded scripts observed through Chrome were local main.dart.js/flutter_bootstrap.js and Google's GIS client. No Adapty script or Adapty console activity was observed. This is observational evidence, not a complete packet-level network trace.
+- The final port 5003 build displayed `Running in emulator mode. Do not use with production credentials.` at runtime.
+
+Safety/runtime notes
+- Android logcat reported "No AppCheckProvider installed" and use of a placeholder token. No App Check debug provider/token was requested or used.
+- Firestore emulator logs warned that the app's configured project namespace was plantcare-ai-dev-tasnimalam while the emulator process was started for demo-plantcare-ai. All verification reads/writes were still directed through FIRESTORE_EMULATOR_HOST/FIREBASE_AUTH_EMULATOR_HOST on loopback.
+- No deployment, production write, real user, live Adapty API/SDK operation, or Google Play purchase endpoint was invoked.

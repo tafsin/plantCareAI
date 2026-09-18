@@ -1,0 +1,13 @@
+{
+  "name": "plantcare-account-deletion-admin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "process": "node src/cli.mjs process-pending",
+    "purge": "node src/cli.mjs purge"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.3.0"
+  }
+}

@@ -1,0 +1,13 @@
+Commands/checks used (credentials and identifiers omitted)
+
+- openspec status --change add-account-management-and-deletion --json
+- openspec instructions apply --change add-account-management-and-deletion --json
+- Marionette connect/get_interactive_elements/tap/enter_text/scroll_to against the supplied Android debug VM service
+- adb -s emulator-5554 exec-out screencap -p (screenshots only; semantic interaction remained Marionette-only)
+- Chrome Computer Use against http://127.0.0.1:5002/account-deletion
+- Chrome reload at the exact clean route
+- Chrome Computer Use registration from the public route using disposable emulator-only accounts
+- Chrome Computer Use final end-to-end registration/deletion at http://127.0.0.1:5003/account-deletion
+- Firebase Admin SDK reads with FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 and FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+- curl http://127.0.0.1:4400/emulators
+- file artifacts/account-deletion/verification-2026-09-17-fresh/*.{png,jpg}
