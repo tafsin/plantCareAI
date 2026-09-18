@@ -15,6 +15,8 @@ class AppShell extends StatelessWidget {
 
   int get _selectedIndex => location.startsWith(AppRoutes.reminders)
       ? 2
+      : location.startsWith(AppRoutes.account)
+      ? 3
       : location.startsWith(AppRoutes.plants)
       ? 1
       : 0;
@@ -23,7 +25,8 @@ class AppShell extends StatelessWidget {
     context.go(switch (index) {
       0 => AppRoutes.home,
       1 => AppRoutes.plants,
-      _ => AppRoutes.reminders,
+      2 => AppRoutes.reminders,
+      _ => AppRoutes.account,
     });
   }
 
@@ -36,12 +39,14 @@ class AppShell extends StatelessWidget {
     if (_isAddPlant) return 'Add plant';
     if (_isHealthCheck) return 'Plant Health Check';
     if (location == AppRoutes.premium) return 'Premium';
+    if (location == AppRoutes.privacyData) return 'Privacy and data';
     return switch (_selectedIndex) {
       0 when location == AppRoutes.privacySafety => 'Privacy & Safety',
       0 => 'Home',
       1 when !isWide && location == AppRoutes.plants => null,
       1 => 'My Plants',
-      _ => 'Reminders',
+      2 => 'Reminders',
+      _ => 'Account',
     };
   }
 
@@ -186,6 +191,11 @@ class AppShell extends StatelessWidget {
                           selectedIcon: Icon(Icons.notifications),
                           label: Text('Reminders'),
                         ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.person_outline),
+                          selectedIcon: Icon(Icons.person),
+                          label: Text('Account'),
+                        ),
                       ],
                     ),
                     const VerticalDivider(width: 1),
@@ -218,6 +228,12 @@ class AppShell extends StatelessWidget {
                           icon: Icon(Icons.notifications_outlined),
                           selectedIcon: Icon(Icons.notifications),
                           label: 'Reminders',
+                        ),
+                        NavigationDestination(
+                          key: ValueKey('account-destination'),
+                          icon: Icon(Icons.person_outline),
+                          selectedIcon: Icon(Icons.person),
+                          label: 'Account',
                         ),
                       ],
                     ),

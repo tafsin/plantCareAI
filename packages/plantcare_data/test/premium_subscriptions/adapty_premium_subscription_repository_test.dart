@@ -99,23 +99,32 @@ void main() {
     },
   );
 
-  test('non-Android boundary never activates or retrieves', () async {
-    final unsupportedSdk = _FakeAdapty();
-    final unsupported = AdaptyPremiumSubscriptionRepository(
-      session,
-      configuration,
-      sdk: unsupportedSdk,
-      platform: PurchasePlatform.web,
-    );
-    addTearDown(unsupported.dispose);
+  for (final platform in [PurchasePlatform.web, PurchasePlatform.ios]) {
+    test(
+      '$platform never activates, retrieves, or makes profile calls',
+      () async {
+        final unsupportedSdk = _FakeAdapty();
+        final unsupported = AdaptyPremiumSubscriptionRepository(
+          session,
+          configuration,
+          sdk: unsupportedSdk,
+          platform: platform,
+        );
+        addTearDown(unsupported.dispose);
 
-    await unsupported.initialize();
-    expect(
-      (await unsupported.preparePaywall()).availability,
-      PaywallAvailability.unsupported,
+        await unsupported.initialize();
+        expect(
+          (await unsupported.preparePaywall()).availability,
+          PaywallAvailability.unsupported,
+        );
+        await expectLater(
+          unsupported.refreshProfile(),
+          throwsA(isA<PremiumSubscriptionFailure>()),
+        );
+        expect(unsupportedSdk.calls, isEmpty);
+      },
     );
-    expect(unsupportedSdk.calls, isEmpty);
-  });
+  }
 
   test(
     'missing public key is non-fatal and reported as configuration',

@@ -309,6 +309,26 @@ If a check is not applicable or cannot run, state that clearly in the completion
 - Document required environment variables and setup steps without including secret values.
 - Keep examples aligned with the implemented behavior.
 
+## Account-deletion retention policy
+
+- Self-service deletion must record the exact authenticated create-only
+  `accountDeletionCleanupRequests/{uid}` Adapty handoff before deleting any
+  Firestore application data or Firebase Authentication identity. Clients may
+  never read, update, or delete that request, and Firebase deletion does not
+  wait for provider API completion after the write is acknowledged.
+- Delete user-owned Firestore descendants child-first, verify every known path
+  empty, clear UID-scoped data accessible on the current device, and delete
+  Firebase Authentication last. Keep the deletion manifest current whenever a
+  new user-owned store is introduced.
+- Retain only the approved minimal completed support record for at most 90 days
+  and permanently purge it. Delete unverifiable correspondence no later than
+  30 days after the last verification attempt. Pending provider cleanup must be
+  processed within 30 days through a trusted server-authorized tool.
+- Adapty SDK logout is identity reset, not profile deletion. Provider billing,
+  transaction, fraud, tax, or legally required records are provider-controlled
+  and distinct from PlantCare application data. Subscription cancellation is
+  recommended when relevant but is not a deletion prerequisite.
+
 ## Completion Report
 
 When completing a task:

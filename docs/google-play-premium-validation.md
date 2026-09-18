@@ -16,6 +16,9 @@ Adapty and Google Play dashboards that:
 - Flow copy contains no trial or introductory-offer claim;
 - restore behavior is present and the Privacy Policy and Terms destinations are
   the approved production HTTPS pages;
+- the Play Console account-deletion URL is
+  `https://plantcare-ai-dev-tasnimalam.web.app/account-deletion`; verify a local
+  release build and Hosting deep-link refresh before entering or publishing it;
 - the Google Play base plan is active in the same application/package and is
   available to the internal-testing track and tester region.
 
@@ -81,6 +84,10 @@ item. Do not infer their state from unit tests or a successful build.
 16. Make subscription status temporarily unavailable and confirm the account
     retains the complete Free feature set, with only fourth-and-later plant
     creation unavailable.
+17. Open account deletion and confirm it recommends cancellation when relevant
+    while clearly stating cancellation is not required. Adapty unavailability
+    must not block deletion after the authenticated cleanup handoff is recorded;
+    SDK logout must never be described as Adapty profile deletion.
 
 Record the build version, track, tester region, device/Android version, each
 result above, dashboard evidence, and whether a real Google Play transaction

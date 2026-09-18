@@ -9,6 +9,10 @@ import 'dart:async' as _i687;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:plantcare_data/src/account_management/firebase_account_deletion_repository.dart'
+    as _i89;
+import 'package:plantcare_data/src/account_management/url_account_destination_launcher.dart'
+    as _i401;
 import 'package:plantcare_data/src/authentication/repositories/firebase_authentication_repository.dart'
     as _i903;
 import 'package:plantcare_data/src/authentication/services/native_google_identity.dart'
@@ -43,6 +47,7 @@ import 'package:plantcare_data/src/reminders/services/shared_preferences_notific
     as _i381;
 import 'package:plantcare_data/src/soil_check/repositories/firebase_soil_check_repository.dart'
     as _i327;
+import 'package:plantcare_domain/account_management.dart' as _i768;
 import 'package:plantcare_domain/authentication.dart' as _i521;
 import 'package:plantcare_domain/care_history.dart' as _i82;
 import 'package:plantcare_domain/fertilizer_assessment.dart' as _i726;
@@ -113,6 +118,13 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
         gh<_i59.FirebaseAuth>(),
       ),
     );
+    gh.lazySingleton<_i768.AccountDeletionRepository>(
+      () => _i89.FirebaseAccountDeletionRepository(
+        gh<_i59.FirebaseAuth>(),
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i430.NativeGoogleIdentity>(),
+      ),
+    );
     gh.lazySingleton<_i82.CareLogRepository>(
       () => _i146.FirebaseCareLogRepository(
         gh<_i974.FirebaseFirestore>(),
@@ -126,6 +138,11 @@ class PlantcareDataPackageModule extends _i526.MicroPackageModule {
       () => _i367.FirebaseKnowledgeRepository(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
+      ),
+    );
+    gh.lazySingleton<_i768.AccountDestinationLauncher>(
+      () => _i401.UrlAccountDestinationLauncher(
+        gh<_i768.AccountDeletionConfiguration>(),
       ),
     );
     gh.lazySingleton<_i132.PlantIdentificationService>(

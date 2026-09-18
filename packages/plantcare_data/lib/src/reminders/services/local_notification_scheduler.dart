@@ -181,9 +181,10 @@ final class LocalNotificationScheduler implements NotificationScheduler {
 
   @override
   Future<void> clearUser(String userId) async {
-    if (!isSupported) return;
-    for (final id in (await _ids.entries(userId)).values) {
-      await _plugin.cancel(id: id);
+    if (isSupported) {
+      for (final id in (await _ids.entries(userId)).values) {
+        await _plugin.cancel(id: id);
+      }
     }
     await _ids.clear(userId);
   }

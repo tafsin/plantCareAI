@@ -593,8 +593,30 @@ service cloud.firestore {
           && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId))
           && validReminder(request.resource.data, uid, plantId)
           && validReminderUpdate(resource.data, request.resource.data);
-        allow delete: if false;
+        allow delete: if signedInAs(uid)
+          && exists(/databases/$(database)/documents/users/$(uid)/plants/$(plantId));
       }
+    }
+
+    match /accountDeletionCleanupRequests/{uid} {
+      allow create: if signedInAs(uid)
+        && request.resource.data.keys().hasAll([
+          'schemaVersion', 'requestedAt', 'providerCleanup', 'source'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'schemaVersion', 'requestedAt', 'providerCleanup', 'source'
+        ])
+        && request.resource.data.schemaVersion == 1
+        && request.resource.data.requestedAt == request.time
+        && request.resource.data.providerCleanup == ['adapty']
+        && request.resource.data.source in [
+          'self_service_mobile', 'self_service_web'
+        ];
+      allow get, list, update, delete: if false;
+    }
+
+    match /accountDeletionSupportRecords/{recordId} {
+      allow read, write: if false;
     }
 
     match /knowledgeChunks/{chunkId} {

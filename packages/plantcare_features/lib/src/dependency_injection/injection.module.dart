@@ -7,6 +7,7 @@
 import 'dart:async' as _i687;
 
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:plantcare_domain/account_management.dart' as _i768;
 import 'package:plantcare_domain/authentication.dart' as _i521;
 import 'package:plantcare_domain/care_history.dart' as _i82;
 import 'package:plantcare_domain/fertilizer_assessment.dart' as _i726;
@@ -19,6 +20,8 @@ import 'package:plantcare_domain/plants.dart' as _i867;
 import 'package:plantcare_domain/premium_subscriptions.dart' as _i902;
 import 'package:plantcare_domain/reminders.dart' as _i412;
 import 'package:plantcare_domain/soil_check.dart' as _i658;
+import 'package:plantcare_features/src/account_management/presentation/bloc/account_deletion_bloc_factory.dart'
+    as _i758;
 import 'package:plantcare_features/src/authentication/presentation/bloc/auth_session_bloc.dart'
     as _i584;
 import 'package:plantcare_features/src/authentication/presentation/bloc/authentication_bloc_factory.dart'
@@ -89,6 +92,15 @@ class PlantcareFeaturesPackageModule extends _i526.MicroPackageModule {
         gh<_i867.PlantRepository>(),
         gh<_i544.LocalPlantImageRepository>(),
         gh<_i902.PremiumSubscriptionRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i758.AccountDeletionBlocFactory>(
+      () => _i758.AccountDeletionBlocFactory(
+        gh<_i768.AccountDeletionRepository>(),
+        gh<_i544.LocalPlantImageRepository>(),
+        gh<_i412.NotificationScheduler>(),
+        gh<_i902.PremiumSubscriptionRepository>(),
+        gh<_i768.AccountDestinationLauncher>(),
       ),
     );
     gh.lazySingleton<_i958.LocalPlantImagesBlocFactory>(

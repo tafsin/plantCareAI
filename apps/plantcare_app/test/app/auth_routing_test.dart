@@ -7,12 +7,14 @@ import 'package:plantcare_app/app/router/app_router.dart';
 import 'package:plantcare_app/app/theme/theme_bloc.dart';
 import 'package:plantcare_domain/authentication.dart';
 import 'package:plantcare_domain/plants.dart';
+import 'package:plantcare_features/account_management.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/navigation.dart';
 import 'package:plantcare_features/plant_observation.dart';
 import 'package:plantcare_features/plants.dart';
 import 'package:plantcare_features/premium_subscriptions.dart';
 
+import '../helpers/fake_account_deletion_dependencies.dart';
 import '../helpers/fake_authentication_repository.dart';
 import '../helpers/fake_local_plant_image_repository.dart';
 import '../helpers/fake_plant_observation_dependencies.dart';
@@ -53,6 +55,97 @@ void main() {
 
     expect(harness.router.state.uri.path, AppRoutes.signIn);
     expect(harness.router.state.uri.queryParameters['redirect'], location);
+  });
+
+  testWidgets('public deletion route stays open across authentication', (
+    tester,
+  ) async {
+    final harness = await _pumpHarness(
+      tester,
+      initialLocation: AppRoutes.accountDeletion,
+    );
+
+    harness.repository.emitAuthState(null);
+    await tester.pumpAndSettle();
+    expect(harness.router.state.uri.path, AppRoutes.accountDeletion);
+    expect(find.text('Permanent deletion'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('public-deletion-sign-in')),
+      400,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(
+      find.byKey(const ValueKey('public-deletion-sign-in')),
+      findsOneWidget,
+    );
+    expect(find.text('Privacy Policy'), findsOneWidget);
+    expect(find.text('Terms of Service'), findsOneWidget);
+
+    harness.repository.emitAuthState(
+      const AppUser(uid: 'user-1', email: 'user@test.com'),
+    );
+    await tester.pumpAndSettle();
+    expect(harness.router.state.uri.path, AppRoutes.accountDeletion);
+    expect(find.byKey(const ValueKey('account-deletion-page')), findsOneWidget);
+  });
+
+  testWidgets('explicit deletion registration returns to the public route', (
+    tester,
+  ) async {
+    final harness = await _pumpHarness(
+      tester,
+      initialLocation: AppRoutes.registerLocation(AppRoutes.accountDeletion),
+    );
+
+    harness.repository.emitAuthState(null);
+    await tester.pumpAndSettle();
+    expect(harness.router.state.uri.path, AppRoutes.register);
+
+    harness.repository.emitAuthState(
+      const AppUser(uid: 'user-1', email: 'user@test.com'),
+    );
+    await tester.pumpAndSettle();
+    expect(harness.router.state.uri.path, AppRoutes.accountDeletion);
+    expect(find.byKey(const ValueKey('account-deletion-page')), findsOneWidget);
+  });
+
+  testWidgets('registration opened inside deletion preserves its return path', (
+    tester,
+  ) async {
+    final harness = await _pumpHarness(
+      tester,
+      initialLocation: AppRoutes.accountDeletion,
+    );
+
+    harness.repository.emitAuthState(null);
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('public-deletion-sign-in')),
+      400,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.byKey(const ValueKey('public-deletion-sign-in')));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('continue-with-email')),
+    );
+    await tester.tap(find.byKey(const ValueKey('continue-with-email')));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Create an email account'));
+    await tester.tap(find.text('Create an email account'));
+    await tester.pumpAndSettle();
+
+    expect(harness.router.state.uri.path, AppRoutes.register);
+    expect(
+      harness.router.state.uri.queryParameters['redirect'],
+      AppRoutes.accountDeletion,
+    );
+
+    harness.repository.emitAuthState(
+      const AppUser(uid: 'user-1', email: 'user@test.com'),
+    );
+    await tester.pumpAndSettle();
+    expect(harness.router.state.uri.path, AppRoutes.accountDeletion);
   });
 
   testWidgets('premium route preserves redirect and renders after sign-in', (
@@ -146,6 +239,15 @@ void main() {
   ) async {
     expect(validatedProtectedDestination('https://example.com'), isNull);
     expect(validatedProtectedDestination(AppRoutes.register), isNull);
+    expect(validatedProtectedDestination(AppRoutes.accountDeletion), isNull);
+    expect(
+      validatedAuthenticationReturnDestination(AppRoutes.accountDeletion),
+      AppRoutes.accountDeletion,
+    );
+    expect(
+      validatedAuthenticationReturnDestination(AppRoutes.register),
+      isNull,
+    );
     expect(validatedProtectedDestination(AppRoutes.plants), AppRoutes.plants);
     expect(validatedProtectedDestination(AppRoutes.premium), AppRoutes.premium);
     expect(validatedProtectedDestination('//example.com/premium'), isNull);
@@ -269,6 +371,13 @@ _pumpHarness(
     premiumRepository,
     FakePremiumDestinationLauncher(),
   );
+  final accountFactory = AccountDeletionBlocFactory(
+    FakeAccountDeletionRepository(),
+    FakeLocalPlantImageRepository(),
+    FakeNotificationScheduler(),
+    premiumRepository,
+    FakeAccountDestinationLauncher(),
+  );
   final premiumAccessBloc = premiumFactory.createAccessBloc();
   final sessionBloc = AuthSessionBloc(repository);
   final themeBloc = ThemeBloc();
@@ -282,6 +391,7 @@ _pumpHarness(
     ),
     plantObservationBlocFactory: observationFactory,
     premiumBlocFactory: premiumFactory,
+    accountDeletionBlocFactory: accountFactory,
     initialLocation: initialLocation,
   );
   addTearDown(() async {

@@ -56,8 +56,13 @@ class PrivacySafetyPage extends StatelessWidget {
                 ),
                 const _InformationSection(
                   icon: Icons.manage_accounts_outlined,
-                  title: 'V1 account limits',
-                  body: 'Account deletion and full data export are not included in V1. Contact the Firebase project operator before release if an account-data request process is required.',
+                  title: 'Account and data deletion',
+                  body: 'PlantCare AI acknowledges deletion requests promptly and completes verified requests within 30 calendar days after successful ownership verification. Completed deletion permanently removes the Firebase Authentication identity, plants, observations, diagnoses, soil checks, care logs, fertilizer assessments, reminders, account-scoped notification metadata, and local images accessible on the requesting device. PlantCare retains none of that content afterward. A minimal support record may remain for up to 90 days, then is permanently purged. If ownership cannot be verified, correspondence is deleted no later than 30 days after the last verification attempt.',
+                ),
+                const _InformationSection(
+                  icon: Icons.devices_outlined,
+                  title: 'Devices and provider records',
+                  body: 'Remote deletion cannot erase files remaining only on a device PlantCare can no longer access; clear app data or uninstall PlantCare AI on that device. Google Play and Adapty may separately retain billing, transaction, fraud-prevention, tax, or legally required records under their policies. These are provider-controlled records, not PlantCare application data. Subscription cancellation is recommended when relevant but is never required for account deletion.',
                 ),
               ],
             ),

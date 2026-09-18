@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:plantcare_domain/account_management.dart';
 import 'package:plantcare_domain/premium_subscriptions.dart';
 import 'package:plantcare_shared/environment.dart';
 
@@ -23,6 +23,9 @@ final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
   static const _termsOfServiceUrl = String.fromEnvironment(
     'TERMS_OF_SERVICE_URL',
   );
+  static const _accountDeletionSupportEmail = String.fromEnvironment(
+    'ACCOUNT_DELETION_SUPPORT_EMAIL',
+  );
 
   @override
   AppEnvironment get environment => switch (_environmentName) {
@@ -35,8 +38,10 @@ final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
   bool get isProduction => environment == AppEnvironment.production;
 
   @override
-  bool get useFirebaseAuthEmulator =>
-      _useFirebaseAuthEmulator && !isProduction && !kReleaseMode;
+  bool get useFirebaseAuthEmulator => firebaseEmulatorIsAllowed(
+    requested: _useFirebaseAuthEmulator,
+    environment: environment,
+  );
 
   @override
   bool get useAppCheckDebug => _useAppCheckDebug;
@@ -54,11 +59,23 @@ final class CompileTimeEnvironmentConfig implements EnvironmentConfig {
         termsOfServiceUrl: parseHttpsUrl(_termsOfServiceUrl),
       );
 
+  AccountDeletionConfiguration get accountDeletion =>
+      AccountDeletionConfiguration(
+        privacyPolicyUrl: parseHttpsUrl(_privacyPolicyUrl),
+        termsOfServiceUrl: parseHttpsUrl(_termsOfServiceUrl),
+        supportEmail: validateSupportEmail(_accountDeletionSupportEmail),
+      );
+
   static String? _nonEmpty(String value) {
     final trimmed = value.trim();
     return trimmed.isEmpty ? null : trimmed;
   }
 }
+
+bool firebaseEmulatorIsAllowed({
+  required bool requested,
+  required AppEnvironment environment,
+}) => requested && environment != AppEnvironment.production;
 
 Uri? parseHttpsUrl(String value) {
   final uri = Uri.tryParse(value.trim());

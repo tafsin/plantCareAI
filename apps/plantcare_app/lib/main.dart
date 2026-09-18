@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_app/app/app.dart';
 import 'package:plantcare_app/app/bootstrap/app_bootstrap.dart';
@@ -17,6 +18,7 @@ import 'package:plantcare_shared/environment.dart';
 void main() {
   runZonedGuarded(() async {
     initializePlantCareFlutterBinding();
+    if (kIsWeb) usePathUrlStrategy();
     FlutterError.onError = FlutterError.presentError;
     await configureDependencies();
 

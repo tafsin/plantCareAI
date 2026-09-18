@@ -14,9 +14,11 @@ import 'package:plantcare_app/app/router/app_router.dart';
 import 'package:plantcare_app/firebase_options.dart';
 import 'package:plantcare_data/local_plant_images.dart';
 import 'package:plantcare_data/premium_subscriptions.dart';
+import 'package:plantcare_domain/account_management.dart';
 import 'package:plantcare_domain/authentication.dart';
 import 'package:plantcare_domain/local_plant_images.dart';
 import 'package:plantcare_domain/premium_subscriptions.dart';
+import 'package:plantcare_features/account_management.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/care_history.dart';
 import 'package:plantcare_features/fertilizer_assessment.dart';
@@ -50,6 +52,7 @@ abstract class AppModule {
     FertilizerAssessmentBlocFactory fertilizerAssessmentBlocFactory,
     ReminderBlocFactory reminderBlocFactory,
     PremiumBlocFactory premiumBlocFactory,
+    AccountDeletionBlocFactory accountDeletionBlocFactory,
   ) => createAppRouter(
     authSessionBloc: authSessionBloc,
     authenticationBlocFactory: authenticationBlocFactory,
@@ -65,6 +68,7 @@ abstract class AppModule {
     fertilizerAssessmentBlocFactory: fertilizerAssessmentBlocFactory,
     reminderBlocFactory: reminderBlocFactory,
     premiumBlocFactory: premiumBlocFactory,
+    accountDeletionBlocFactory: accountDeletionBlocFactory,
   );
 
   @lazySingleton
@@ -90,6 +94,10 @@ abstract class AppModule {
   @lazySingleton
   PremiumSubscriptionConfiguration get premiumSubscriptionConfiguration =>
       const CompileTimeEnvironmentConfig().premiumSubscription;
+
+  @lazySingleton
+  AccountDeletionConfiguration get accountDeletionConfiguration =>
+      const CompileTimeEnvironmentConfig().accountDeletion;
 
   @lazySingleton
   PremiumSubscriptionRepository premiumSubscriptionRepository(

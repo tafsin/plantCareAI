@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:plantcare_features/src/information/presentation/pages/privacy_safety_page.dart';
 
 void main() {
-  testWidgets('discloses Spark V1 privacy, AI, reminder, and account limits', (
+  testWidgets('discloses Spark V1 privacy, AI, reminders, and deletion', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(360, 640);
@@ -18,18 +18,28 @@ void main() {
     expect(find.text('Privacy & Safety'), findsOneWidget);
     expect(find.textContaining('sent to Firebase AI'), findsOneWidget);
     expect(find.textContaining('automatically keeps'), findsOneWidget);
-    expect(find.textContaining('metadata'), findsOneWidget);
+    expect(
+      find.textContaining('processing pipeline removes image metadata'),
+      findsOneWidget,
+    );
     expect(find.textContaining('browser session'), findsOneWidget);
     expect(find.textContaining('can be wrong'), findsOneWidget);
     expect(find.textContaining('not guaranteed by a server'), findsOneWidget);
 
     await tester.scrollUntilVisible(
-      find.text('V1 account limits'),
+      find.text('Account and data deletion'),
+      300,
+      scrollable: find.byType(Scrollable),
+    );
+    expect(find.textContaining('within 30 calendar days'), findsOneWidget);
+    expect(find.textContaining('up to 90 days'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Devices and provider records'),
       300,
       scrollable: find.byType(Scrollable),
     );
     expect(
-      find.textContaining('full data export are not included'),
+      find.textContaining('never required for account deletion'),
       findsOneWidget,
     );
     expect(tester.takeException(), isNull);

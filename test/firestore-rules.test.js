@@ -832,7 +832,7 @@ describe('reminder ownership, validation, and controlled transitions', () => {
     await assertFails(setDoc(reminderRef(guest), validReminder()));
     await assertFails(setDoc(reminderRef(bob, 'alice'), validReminder()));
     await assertFails(getDoc(reminderRef(bob, 'alice')));
-    await assertFails(deleteDoc(reminderRef(alice)));
+    await assertSucceeds(deleteDoc(reminderRef(alice)));
   });
 
   test('rejects invalid enums, timestamps, unknown fields, and oversized text', async () => {
@@ -967,5 +967,56 @@ describe('curated knowledge is authenticated-read-only', () => {
     await assertFails(setDoc(v3ReleaseRef(alice), { status: 'complete' }));
     await assertFails(setDoc(v3ChunkRef(alice), { schemaVersion: 1 }));
     await assertFails(deleteDoc(v3ChunkRef(alice)));
+  });
+});
+
+describe('account deletion cleanup handoff', () => {
+  const cleanupRef = (context, uid = 'alice') => doc(
+    context.firestore(),
+    `accountDeletionCleanupRequests/${uid}`,
+  );
+  const validCleanup = (overrides = {}) => ({
+    schemaVersion: 1,
+    requestedAt: serverTimestamp(),
+    providerCleanup: ['adapty'],
+    source: 'self_service_web',
+    ...overrides,
+  });
+
+  test('owner can create exact request but cannot read, update, or delete it', async () => {
+    const alice = testEnv.authenticatedContext('alice');
+    await assertSucceeds(setDoc(cleanupRef(alice), validCleanup()));
+    await assertFails(getDoc(cleanupRef(alice)));
+    await assertFails(getDocs(collection(alice.firestore(), 'accountDeletionCleanupRequests')));
+    await assertFails(updateDoc(cleanupRef(alice), {source: 'self_service_mobile'}));
+    await assertFails(deleteDoc(cleanupRef(alice)));
+  });
+
+  test('rejects unauthenticated, cross-user, wrong id, and invalid shapes', async () => {
+    const alice = testEnv.authenticatedContext('alice');
+    const bob = testEnv.authenticatedContext('bob');
+    const guest = testEnv.unauthenticatedContext();
+    await assertFails(setDoc(cleanupRef(guest), validCleanup()));
+    await assertFails(setDoc(cleanupRef(bob, 'alice'), validCleanup()));
+    await assertFails(setDoc(cleanupRef(alice, 'other'), validCleanup()));
+    for (const [id, value] of [
+      ['extra', validCleanup({email: 'forbidden@example.com'})],
+      ['schema', validCleanup({schemaVersion: 2})],
+      ['timestamp', validCleanup({requestedAt: new Date(0)})],
+      ['provider', validCleanup({providerCleanup: ['adapty', 'other']})],
+      ['source', validCleanup({source: 'admin'})],
+    ]) {
+      const owner = testEnv.authenticatedContext(`shape-${id}`);
+      await assertFails(setDoc(cleanupRef(owner, `shape-${id}`), value));
+    }
+  });
+
+  test('clients cannot access admin support records', async () => {
+    const alice = testEnv.authenticatedContext('alice');
+    const ref = doc(alice.firestore(), 'accountDeletionSupportRecords/request-1');
+    await assertFails(setDoc(ref, {status: 'completed'}));
+    await assertFails(getDoc(ref));
+    await assertFails(updateDoc(ref, {status: 'failed'}));
+    await assertFails(deleteDoc(ref));
   });
 });

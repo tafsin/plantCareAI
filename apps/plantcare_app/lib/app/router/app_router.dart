@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:plantcare_app/core/widgets/app_branding.dart';
 import 'package:plantcare_app/core/widgets/app_shell.dart';
+import 'package:plantcare_domain/account_management.dart';
 import 'package:plantcare_domain/care_history.dart';
 import 'package:plantcare_domain/local_plant_images.dart';
 import 'package:plantcare_domain/reminders.dart';
+import 'package:plantcare_features/account_management.dart';
 import 'package:plantcare_features/authentication.dart';
 import 'package:plantcare_features/care_history.dart';
 import 'package:plantcare_features/fertilizer_assessment.dart';
@@ -78,6 +81,13 @@ String? validatedProtectedDestination(String? candidate) {
   return uri.queryParameters.isEmpty || validSuggestion ? uri.toString() : null;
 }
 
+String? validatedAuthenticationReturnDestination(String? candidate) {
+  if (candidate == AppRoutes.accountDeletion) {
+    return AppRoutes.accountDeletion;
+  }
+  return validatedProtectedDestination(candidate);
+}
+
 bool _isProtectedPath(String path) {
   if (path == AppRoutes.home ||
       path == AppRoutes.plants ||
@@ -86,6 +96,8 @@ bool _isProtectedPath(String path) {
     return true;
   }
   if (path == AppRoutes.reminders ||
+      path == AppRoutes.account ||
+      path == AppRoutes.privacyData ||
       path == AppRoutes.privacySafety ||
       path == AppRoutes.premium) {
     return true;
@@ -158,6 +170,7 @@ GoRouter createAppRouter({
   FertilizerAssessmentBlocFactory? fertilizerAssessmentBlocFactory,
   ReminderBlocFactory? reminderBlocFactory,
   PremiumBlocFactory? premiumBlocFactory,
+  AccountDeletionBlocFactory? accountDeletionBlocFactory,
   String initialLocation = AppRoutes.home,
 }) {
   return GoRouter(
@@ -173,12 +186,12 @@ GoRouter createAppRouter({
       final isAuthenticationRoute = AppRoutes.authenticationLocations.contains(
         path,
       );
-      final redirect = validatedProtectedDestination(
+      final redirect = validatedAuthenticationReturnDestination(
         state.uri.queryParameters['redirect'],
       );
 
       if (sessionState is AuthSessionUnauthenticated) {
-        if (isAuthenticationRoute) {
+        if (isAuthenticationRoute || path == AppRoutes.accountDeletion) {
           return null;
         }
         final requestedDestination = validatedProtectedDestination(
@@ -193,6 +206,35 @@ GoRouter createAppRouter({
       return null;
     },
     routes: [
+      if (accountDeletionBlocFactory != null)
+        GoRoute(
+          path: AppRoutes.accountDeletion,
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => accountDeletionBlocFactory.create(
+                  kIsWeb
+                      ? ProviderCleanupRequestSource.selfServiceWeb
+                      : ProviderCleanupRequestSource.selfServiceMobile,
+                ),
+              ),
+              BlocProvider(
+                create: (_) => authenticationBlocFactory.createSignInBloc(),
+              ),
+            ],
+            child: BlocBuilder<AuthSessionBloc, AuthSessionState>(
+              builder: (context, session) => PublicAccountDeletionPage(
+                isAuthenticated: session is AuthSessionAuthenticated,
+                signIn: const SignInPage(
+                  branding: AppBranding.auth(),
+                  redirect: AppRoutes.accountDeletion,
+                  notice: 'Sign in only to access self-service deletion. This page will remain open.',
+                ),
+                deletion: const AccountDeletionPage(showPublicHeading: true),
+              ),
+            ),
+          ),
+        ),
       GoRoute(
         path: AppRoutes.signIn,
         builder: (context, state) => BlocProvider(
@@ -200,7 +242,7 @@ GoRouter createAppRouter({
           child: SignInPage(
             branding: const AppBranding.auth(),
             showEmail: state.uri.queryParameters['method'] == 'email',
-            redirect: validatedProtectedDestination(
+            redirect: validatedAuthenticationReturnDestination(
               state.uri.queryParameters['redirect'],
             ),
             notice: state.extra is String ? state.extra! as String : null,
@@ -213,7 +255,7 @@ GoRouter createAppRouter({
           create: (_) => authenticationBlocFactory.createRegisterBloc(),
           child: RegisterPage(
             branding: const AppBranding.auth(),
-            redirect: validatedProtectedDestination(
+            redirect: validatedAuthenticationReturnDestination(
               state.uri.queryParameters['redirect'],
             ),
           ),
@@ -225,7 +267,7 @@ GoRouter createAppRouter({
           create: (_) => authenticationBlocFactory.createPasswordResetBloc(),
           child: ForgotPasswordPage(
             branding: const AppBranding.auth(),
-            redirect: validatedProtectedDestination(
+            redirect: validatedAuthenticationReturnDestination(
               state.uri.queryParameters['redirect'],
             ),
           ),
@@ -241,6 +283,24 @@ GoRouter createAppRouter({
           );
         },
         routes: [
+          if (accountDeletionBlocFactory != null)
+            GoRoute(
+              path: AppRoutes.account,
+              pageBuilder: (context, state) =>
+                  const NoTransitionPage(child: AccountPage()),
+            ),
+          if (accountDeletionBlocFactory != null)
+            GoRoute(
+              path: AppRoutes.privacyData,
+              builder: (context, state) => BlocProvider(
+                create: (_) => accountDeletionBlocFactory.create(
+                  kIsWeb
+                      ? ProviderCleanupRequestSource.selfServiceWeb
+                      : ProviderCleanupRequestSource.selfServiceMobile,
+                ),
+                child: const PrivacyDataPage(),
+              ),
+            ),
           GoRoute(
             path: AppRoutes.home,
             pageBuilder: (context, state) => NoTransitionPage(

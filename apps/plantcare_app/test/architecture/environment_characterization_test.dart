@@ -22,4 +22,35 @@ void main() {
     expect(parseHttpsUrl('/privacy'), isNull);
     expect(parseHttpsUrl(''), isNull);
   });
+
+  test('Firebase emulator mode is allowed only outside production', () {
+    expect(
+      firebaseEmulatorIsAllowed(
+        requested: true,
+        environment: AppEnvironment.development,
+      ),
+      isTrue,
+    );
+    expect(
+      firebaseEmulatorIsAllowed(
+        requested: true,
+        environment: AppEnvironment.staging,
+      ),
+      isTrue,
+    );
+    expect(
+      firebaseEmulatorIsAllowed(
+        requested: true,
+        environment: AppEnvironment.production,
+      ),
+      isFalse,
+    );
+    expect(
+      firebaseEmulatorIsAllowed(
+        requested: false,
+        environment: AppEnvironment.development,
+      ),
+      isFalse,
+    );
+  });
 }

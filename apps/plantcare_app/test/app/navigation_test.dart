@@ -100,13 +100,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byTooltip('Upgrade to Premium'), findsOneWidget);
-    expect(find.byType(NavigationDestination), findsNWidgets(3));
+    expect(find.byType(NavigationDestination), findsNWidgets(4));
+    expect(find.byKey(const ValueKey('account-destination')), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('upgrade-premium-button')));
     await tester.pumpAndSettle();
 
     expect(router.state.uri.path, AppRoutes.premium);
     expect(find.text('Premium'), findsWidgets);
-    expect(find.byType(NavigationDestination), findsNWidgets(3));
+    expect(find.byType(NavigationDestination), findsNWidgets(4));
   });
 }
 

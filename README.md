@@ -20,7 +20,8 @@ The in-app **Privacy & Safety** page records the release disclosure: selected
 images are sent to Firebase AI only after explicit submit and processed copies are then retained automatically in private native app storage or temporary web-session memory;
 structured user records are stored in Firestore; AI output is uncertain and
 informational; local reminders are best-effort; web reminders work only while
-the app is open; and account deletion and full data export are not V1 features.
+the app is open; and account deletion is available in-app and at the public
+`/account-deletion` route. Full data export is not a V1 feature.
 
 ## Source-grounded diagnosis (temporary Spark implementation)
 
@@ -125,6 +126,7 @@ environment. Values are intentionally not checked into this repository:
 ADAPTY_PUBLIC_SDK_KEY
 PRIVACY_POLICY_URL
 TERMS_OF_SERVICE_URL
+ACCOUNT_DELETION_SUPPORT_EMAIL
 ```
 
 Both legal destinations must be absolute HTTPS URLs. A missing SDK key leaves
@@ -137,8 +139,18 @@ history:
 flutter build apk \
   --dart-define=ADAPTY_PUBLIC_SDK_KEY="$ADAPTY_PUBLIC_SDK_KEY" \
   --dart-define=PRIVACY_POLICY_URL="$PRIVACY_POLICY_URL" \
-  --dart-define=TERMS_OF_SERVICE_URL="$TERMS_OF_SERVICE_URL"
+  --dart-define=TERMS_OF_SERVICE_URL="$TERMS_OF_SERVICE_URL" \
+  --dart-define=ACCOUNT_DELETION_SUPPORT_EMAIL="$ACCOUNT_DELETION_SUPPORT_EMAIL"
 ```
+
+The support value must be one mailbox address; it is not a provider secret.
+Missing or invalid configuration remains visible and disables the mail action.
+The public `/account-deletion` page works signed out, allows sign-in without an
+auth-guard redirect, and offers the configured neutral support-request draft.
+Self-service deletion records a create-only UID-keyed Adapty cleanup handoff,
+then deletes Firestore data, current-device account data, and Firebase Auth in
+that order. This Spark-compatible design uses no Cloud Functions; a separately
+authorized operator must process the pending Adapty request within 30 days.
 
 Purchasing and restore are Android-only. Web explicitly states that mobile
 purchasing is not currently available, and iOS shows an Android availability
@@ -980,7 +992,8 @@ repository root without deploying:
 firebase emulators:start --project demo-plantcare-ai --only hosting
 ```
 
-The Hosting emulator serves `/` and deep links such as `/privacy-safety` from
+The Hosting emulator serves `/` and deep links such as `/privacy-safety` and
+`/account-deletion` from
 the same SPA entry point. Firebase client paths are configured in
 `firebase.json` under `apps/plantcare_app`; `firestore.rules` remains at the
 repository root.

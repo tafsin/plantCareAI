@@ -26,11 +26,13 @@ import 'package:plantcare_app/app/dependency_injection/app_module.dart'
     as _i203;
 import 'package:plantcare_app/app/theme/theme_bloc.dart' as _i393;
 import 'package:plantcare_data/data_module.dart' as _i74;
+import 'package:plantcare_domain/account_management.dart' as _i768;
 import 'package:plantcare_domain/authentication.dart' as _i521;
 import 'package:plantcare_domain/local_plant_images.dart' as _i544;
 import 'package:plantcare_domain/plants.dart' as _i867;
 import 'package:plantcare_domain/premium_subscriptions.dart' as _i902;
 import 'package:plantcare_domain/reminders.dart' as _i412;
+import 'package:plantcare_features/account_management.dart' as _i533;
 import 'package:plantcare_features/authentication.dart' as _i712;
 import 'package:plantcare_features/care_history.dart' as _i323;
 import 'package:plantcare_features/features_module.dart' as _i30;
@@ -68,6 +70,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i902.PremiumSubscriptionConfiguration>(
       () => appModule.premiumSubscriptionConfiguration,
     );
+    gh.lazySingleton<_i768.AccountDeletionConfiguration>(
+      () => appModule.accountDeletionConfiguration,
+    );
+    gh.lazySingleton<_i902.PremiumDestinationLauncher>(
+      () => appModule.premiumDestinationLauncher(
+        gh<_i902.PremiumSubscriptionConfiguration>(),
+      ),
+    );
+    gh.lazySingleton<_i767.FirebaseAppCheckActivator>(
+      () => appModule.firebaseAppCheckActivator(gh<_i515.EnvironmentConfig>()),
+    );
+    gh.lazySingleton<_i138.PremiumAccessBloc>(
+      () => appModule.premiumAccessBloc(gh<_i138.PremiumBlocFactory>()),
+    );
     gh.lazySingleton<_i583.GoRouter>(
       () => appModule.router(
         gh<_i712.AuthSessionBloc>(),
@@ -84,18 +100,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i60.FertilizerAssessmentBlocFactory>(),
         gh<_i847.ReminderBlocFactory>(),
         gh<_i138.PremiumBlocFactory>(),
+        gh<_i533.AccountDeletionBlocFactory>(),
       ),
-    );
-    gh.lazySingleton<_i902.PremiumDestinationLauncher>(
-      () => appModule.premiumDestinationLauncher(
-        gh<_i902.PremiumSubscriptionConfiguration>(),
-      ),
-    );
-    gh.lazySingleton<_i767.FirebaseAppCheckActivator>(
-      () => appModule.firebaseAppCheckActivator(gh<_i515.EnvironmentConfig>()),
-    );
-    gh.lazySingleton<_i138.PremiumAccessBloc>(
-      () => appModule.premiumAccessBloc(gh<_i138.PremiumBlocFactory>()),
     );
     gh.lazySingleton<_i521.AuthenticationSession>(
       () =>

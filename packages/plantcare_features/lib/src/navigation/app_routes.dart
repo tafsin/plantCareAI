@@ -7,6 +7,9 @@ abstract final class AppRoutes {
   static const plants = '/plants';
   static const newPlant = '/plants/new';
   static const reminders = '/reminders';
+  static const account = '/account';
+  static const privacyData = '/account/privacy-data';
+  static const accountDeletion = '/account-deletion';
   static const privacySafety = '/privacy-safety';
   static const premium = '/premium';
   static const signIn = '/sign-in';
