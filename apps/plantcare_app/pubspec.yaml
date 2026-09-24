@@ -1,6 +1,6 @@
 name: plantcare_app
 description: Cross-platform PlantCare AI application composition and bootstrap.
-version: 1.0.0+1
+version: 1.0.0+3
 publish_to: none
 
 environment:
