@@ -51,6 +51,25 @@ void main() {
     expect(find.text('My Plants'), findsOneWidget);
   });
 
+  testWidgets('shows logout as the only app-bar action', (tester) async {
+    await show(tester, location: AppRoutes.home);
+
+    final appBar = find.byType(AppBar);
+    expect(
+      find.descendant(of: appBar, matching: find.byType(IconButton)),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: appBar,
+        matching: find.byKey(const ValueKey('logout-button')),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byTooltip('Upgrade to Premium'), findsNothing);
+    expect(find.byTooltip('Privacy and safety'), findsNothing);
+  });
+
   testWidgets('uses the fixed app bar for plant health check', (tester) async {
     await show(tester, location: AppRoutes.healthCheck('plant-1'));
 
