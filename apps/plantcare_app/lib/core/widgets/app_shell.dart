@@ -139,18 +139,6 @@ class AppShell extends StatelessWidget {
                     : Text(title),
                 actions: [
                   IconButton(
-                    key: const ValueKey('upgrade-premium-button'),
-                    tooltip: 'Upgrade to Premium',
-                    onPressed: () => context.go(AppRoutes.premium),
-                    icon: const Icon(Icons.workspace_premium_outlined),
-                  ),
-                  IconButton(
-                    key: const ValueKey('privacy-safety-button'),
-                    tooltip: 'Privacy and safety',
-                    onPressed: () => context.go(AppRoutes.privacySafety),
-                    icon: const Icon(Icons.info_outline),
-                  ),
-                  IconButton(
                     key: const ValueKey('logout-button'),
                     tooltip: 'Sign out',
                     onPressed: isLoggingOut
