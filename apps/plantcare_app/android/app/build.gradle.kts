@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -5,6 +8,13 @@ plugins {
     // END: FlutterFire Configuration
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val signingProperties = Properties()
+val signingPropertiesFile = rootProject.file("key.properties")
+
+if (signingPropertiesFile.exists()) {
+    signingProperties.load(FileInputStream(signingPropertiesFile))
 }
 
 android {
@@ -33,11 +43,25 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("plantcare-upload") {
+            if (System.getenv("CI").toBoolean()) {
+                keyAlias = System.getenv("CM_KEY_ALIAS")
+                keyPassword = System.getenv("CM_KEY_PASSWORD")
+                storeFile = System.getenv("CM_KEYSTORE_PATH")?.let(::file)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+            } else {
+                keyAlias = signingProperties.getProperty("keyAlias")
+                keyPassword = signingProperties.getProperty("keyPassword")
+                storeFile = signingProperties.getProperty("storeFile")?.let(::file)
+                storePassword = signingProperties.getProperty("storePassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("plantcare-upload")
         }
     }
 }
