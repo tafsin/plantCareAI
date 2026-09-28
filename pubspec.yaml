@@ -27,33 +27,27 @@ melos:
     generate:data:
       description: Generate the data micro-package module.
       run: >-
+        cd packages/plantcare_data &&
         dart run build_runner build &&
         dart format lib/src/dependency_injection/injection.module.dart
-      exec: {}
-      packageFilters:
-        scope: plantcare_data
     generate:features:
       description: Generate the features micro-package module.
       run: >-
+        cd packages/plantcare_features &&
         dart run build_runner build &&
         dart format lib/src/dependency_injection/injection.module.dart
-      exec: {}
-      packageFilters:
-        scope: plantcare_features
     generate:app:
       description: Generate the final application composition graph.
       run: >-
+        cd apps/plantcare_app &&
         dart run build_runner build &&
         dart format lib/app/dependency_injection/injection.config.dart
-      exec: {}
-      packageFilters:
-        scope: plantcare_app
     generate:
       description: Generate data, features, then application DI code.
       steps:
-        - melos run generate:data
-        - melos run generate:features
-        - melos run generate:app
+        - dart run melos run generate:data
+        - dart run melos run generate:features
+        - dart run melos run generate:app
     format:
       description: Check formatting for repository-owned Dart sources.
       run: >-
@@ -68,53 +62,35 @@ melos:
       run: dart analyze .
     test:shared:
       description: Run plantcare_shared tests.
-      run: dart test
-      exec: {}
-      packageFilters:
-        scope: plantcare_shared
+      run: cd packages/plantcare_shared && dart test
     test:domain:
       description: Run plantcare_domain tests.
-      run: dart test
-      exec: {}
-      packageFilters:
-        scope: plantcare_domain
+      run: cd packages/plantcare_domain && dart test
     test:dart:
       description: Run both pure-Dart package test suites.
       steps:
-        - melos run test:shared
-        - melos run test:domain
+        - dart run melos run test:shared
+        - dart run melos run test:domain
     test:data:
       description: Run plantcare_data tests.
-      run: flutter test
-      exec: {}
-      packageFilters:
-        scope: plantcare_data
+      run: cd packages/plantcare_data && flutter test
     test:features:
       description: Run plantcare_features tests.
-      run: flutter test
-      exec: {}
-      packageFilters:
-        scope: plantcare_features
+      run: cd packages/plantcare_features && flutter test
     test:app:
       description: Run plantcare_app tests.
-      run: flutter test
-      exec: {}
-      packageFilters:
-        scope: plantcare_app
+      run: cd apps/plantcare_app && flutter test
     test:flutter:
       description: Run all Flutter package tests.
       steps:
-        - melos run test:data
-        - melos run test:features
-        - melos run test:app
+        - dart run melos run test:data
+        - dart run melos run test:features
+        - dart run melos run test:app
     test:
       description: Run all Dart and Flutter tests.
       steps:
-        - melos run test:dart
-        - melos run test:flutter
+        - dart run melos run test:dart
+        - dart run melos run test:flutter
     build:web:
       description: Build the application for Firebase Hosting.
-      run: flutter build web --release
-      exec: {}
-      packageFilters:
-        scope: plantcare_app
+      run: cd apps/plantcare_app && flutter build web --release
