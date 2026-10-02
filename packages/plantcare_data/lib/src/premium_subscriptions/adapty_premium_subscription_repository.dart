@@ -14,19 +14,21 @@ final class AdaptyPremiumSubscriptionRepository
     this._configuration, {
     AdaptySdkFacade? sdk,
     PurchasePlatform? platform,
+    DateTime Function()? now,
   }) : _sdk = sdk ?? FlutterAdaptySdkFacade(),
-       platform = platform ?? currentPurchasePlatform();
+       platform = platform ?? currentPurchasePlatform(),
+       _now = now ?? DateTime.now;
 
   final AuthenticationSession _session;
   final PremiumSubscriptionConfiguration _configuration;
   final AdaptySdkFacade _sdk;
+  final DateTime Function() _now;
   @override
   final PurchasePlatform platform;
   final _access = StreamController<PremiumAccessSnapshot>.broadcast();
   final _paywallEvents = StreamController<PaywallEvent>.broadcast();
   StreamSubscription<AppUser?>? _authSubscription;
   StreamSubscription<AdaptySdkProfile>? _profileSubscription;
-  StreamSubscription<AdaptySdkEvent>? _eventSubscription;
   PremiumAccessSnapshot _currentAccess =
       const PremiumAccessSnapshot.signedOut();
   Future<void> _tail = Future.value();
@@ -34,8 +36,10 @@ final class AdaptyPremiumSubscriptionRepository
   Object? _initializationError;
   String? _identifiedUserId;
   int _identityGeneration = 0;
-  AdaptySdkFlow? _flow;
+  AdaptySdkProduct? _product;
   PremiumOffer? _offer;
+  String? _productUserId;
+  int? _productGeneration;
 
   @override
   Stream<PremiumAccessSnapshot> get accessChanges => _access.stream;
@@ -79,7 +83,6 @@ final class AdaptyPremiumSubscriptionRepository
       await _sdk.activate(apiKey: key, customerUserId: currentUser?.uid);
       _identifiedUserId = currentUser?.uid;
       _profileSubscription = _sdk.profileUpdates.listen(_onProfileUpdate);
-      _eventSubscription = _sdk.events.listen(_onSdkEvent);
       _authSubscription = _session.authStateChanges.listen(_queueIdentity);
       if (currentUser != null) {
         try {
@@ -98,7 +101,11 @@ final class AdaptyPremiumSubscriptionRepository
         }
       }
     } catch (error, stackTrace) {
-      _initializationError = error;
+      _initializationError = _subscriptionFailure(
+        error,
+        fallbackType: PremiumFailureType.paywallUnavailable,
+        fallbackMessage: 'Premium purchasing is unavailable right now.',
+      );
       developer.log(
         'Premium subscription initialization failed',
         name: 'plantcare_ai.subscriptions',
@@ -130,8 +137,7 @@ final class AdaptyPremiumSubscriptionRepository
   Future<void> _synchronizeIdentity(AppUser? user, int generation) async {
     final nextUserId = user?.uid;
     if (generation != _identityGeneration) return;
-    _flow = null;
-    _offer = null;
+    _clearProduct();
     if (_identifiedUserId != null) await _sdk.logout();
     _identifiedUserId = null;
     if (nextUserId == null) {
@@ -159,16 +165,19 @@ final class AdaptyPremiumSubscriptionRepository
   }
 
   Future<String> _readyUser() async {
+    if (platform != PurchasePlatform.android) {
+      throw const PremiumSubscriptionFailure(
+        PremiumFailureType.unsupported,
+        'Premium purchasing is currently available on Android.',
+      );
+    }
     await initialize();
     await _tail;
     if (_initializationError case final Object error) {
-      throw PremiumSubscriptionFailure(
-        error is PremiumSubscriptionFailure
-            ? error.type
-            : PremiumFailureType.unavailable,
-        error is PremiumSubscriptionFailure
-            ? error.message
-            : 'Premium purchasing is unavailable right now.',
+      if (error is PremiumSubscriptionFailure) throw error;
+      throw const PremiumSubscriptionFailure(
+        PremiumFailureType.paywallUnavailable,
+        'Premium purchasing is unavailable right now.',
       );
     }
     final userId = _session.currentUser?.uid;
@@ -186,73 +195,74 @@ final class AdaptyPremiumSubscriptionRepository
     if (platform != PurchasePlatform.android) {
       return const PaywallPreparation(PaywallAvailability.unsupported);
     }
+    _clearProduct();
     try {
       final userId = await _readyUser();
       final generation = _identityGeneration;
       final flow = await _sdk.getFlow(PremiumSubscriptionIds.placement);
-      if (!_isCurrentIdentity(userId, generation)) {
-        throw const PremiumSubscriptionFailure(
-          PremiumFailureType.notReady,
-          'Your account changed while Premium was loading. Please try again.',
-        );
-      }
-      if (!flow.hasViewConfiguration) {
-        _flow = null;
-        return const PaywallPreparation(
-          PaywallAvailability.paywallUnavailable,
-          message: 'The premium offer is unavailable right now.',
-        );
-      }
+      _ensureCurrentIdentity(userId, generation);
       final products = await _sdk.getProducts(flow);
-      if (!_isCurrentIdentity(userId, generation)) {
-        throw const PremiumSubscriptionFailure(
-          PremiumFailureType.notReady,
-          'Your account changed while Premium was loading. Please try again.',
-        );
-      }
+      _ensureCurrentIdentity(userId, generation);
       final product = products.where(_isExpectedProduct).firstOrNull;
       if (product == null) {
-        _flow = null;
         return const PaywallPreparation(
           PaywallAvailability.productUnavailable,
+          failureType: PremiumFailureType.productUnavailable,
           message: 'The monthly Google Play product is unavailable right now.',
         );
       }
+      final title = product.localizedTitle?.trim();
       final price = product.localizedPrice?.trim();
       final period = product.localizedPeriod?.trim();
-      if (price == null || price.isEmpty || period == null || period.isEmpty) {
-        _flow = null;
+      if (title == null ||
+          title.isEmpty ||
+          price == null ||
+          price.isEmpty ||
+          period == null ||
+          period.isEmpty) {
         return const PaywallPreparation(
           PaywallAvailability.productUnavailable,
-          message: 'Google Play pricing is unavailable right now.',
+          failureType: PremiumFailureType.productUnavailable,
+          message: 'Google Play product details are unavailable right now.',
         );
       }
       final offer = PremiumOffer(
         productId: product.vendorProductId,
         basePlanId: product.basePlanId!,
+        localizedTitle: title,
         localizedPrice: price,
         billingPeriod: period,
       );
-      _flow = flow;
+      _product = product;
       _offer = offer;
+      _productUserId = userId;
+      _productGeneration = generation;
       return PaywallPreparation(PaywallAvailability.ready, offer: offer);
     } on PremiumSubscriptionFailure catch (error) {
       return PaywallPreparation(
         error.type == PremiumFailureType.configuration
             ? PaywallAvailability.configurationUnavailable
             : PaywallAvailability.paywallUnavailable,
+        failureType: error.type,
         message: error.message,
       );
     } catch (error, stackTrace) {
+      final failure = _subscriptionFailure(
+        error,
+        fallbackType: PremiumFailureType.paywallUnavailable,
+        fallbackMessage:
+            'The premium offer could not be loaded. Please try again.',
+      );
       developer.log(
-        'Premium Flow loading failed',
+        'Premium product loading failed',
         name: 'plantcare_ai.subscriptions',
         error: error.runtimeType,
         stackTrace: stackTrace,
       );
-      return const PaywallPreparation(
+      return PaywallPreparation(
         PaywallAvailability.paywallUnavailable,
-        message: 'The premium offer could not be loaded. Please try again.',
+        failureType: failure.type,
+        message: failure.message,
       );
     }
   }
@@ -262,29 +272,81 @@ final class AdaptyPremiumSubscriptionRepository
       product.basePlanId == PremiumSubscriptionIds.basePlan &&
       !product.hasOffer;
 
+  void _ensureCurrentIdentity(String userId, int generation) {
+    if (!_isCurrentIdentity(userId, generation)) {
+      throw const PremiumSubscriptionFailure(
+        PremiumFailureType.notReady,
+        'Your account changed while Premium was loading. Please try again.',
+      );
+    }
+  }
+
   bool _isCurrentIdentity(String userId, int generation) =>
       generation == _identityGeneration &&
       userId == _identifiedUserId &&
       _session.currentUser?.uid == userId;
 
   @override
-  Future<void> presentPaywall() async {
-    await _readyUser();
-    final flow = _flow;
-    if (flow == null || _offer == null) {
+  Future<PremiumPurchaseResult> purchase() async {
+    final userId = await _readyUser();
+    final generation = _identityGeneration;
+    final product = _product;
+    if (product == null ||
+        _offer == null ||
+        _productUserId != userId ||
+        _productGeneration != generation ||
+        !_isCurrentIdentity(userId, generation)) {
       throw const PremiumSubscriptionFailure(
         PremiumFailureType.notReady,
         'Reload the premium offer before continuing.',
       );
     }
     try {
-      await _sdk.present(flow);
-    } catch (_) {
-      throw const PremiumSubscriptionFailure(
-        PremiumFailureType.purchase,
-        'The premium offer could not be displayed. Please try again.',
+      final result = await _sdk.makePurchase(product);
+      _ensureCurrentIdentity(userId, generation);
+      return switch (result) {
+        AdaptySdkPurchasePending() => const PremiumPurchasePending(),
+        AdaptySdkPurchaseCancelled() => const PremiumPurchaseCancelled(),
+        AdaptySdkPurchaseSuccess(:final profile) => await _verifyPurchase(
+          profile,
+          userId,
+          generation,
+        ),
+      };
+    } catch (error) {
+      if (error is PremiumSubscriptionFailure) rethrow;
+      if (error case AdaptySdkFailure(type: AdaptySdkFailureType.cancelled)) {
+        return const PremiumPurchaseCancelled();
+      }
+      if (error case AdaptySdkFailure(type: AdaptySdkFailureType.pending)) {
+        return const PremiumPurchasePending();
+      }
+      throw _subscriptionFailure(
+        error,
+        fallbackType: PremiumFailureType.purchaseFailed,
+        fallbackMessage: 'Purchase could not be completed. Please try again.',
       );
     }
+  }
+
+  Future<PremiumPurchaseResult> _verifyPurchase(
+    AdaptySdkProfile profile,
+    String userId,
+    int generation,
+  ) async {
+    var verified = _applyProfile(profile, expectedUserId: userId);
+    if (!verified) {
+      final current = await _sdk.getProfile();
+      _ensureCurrentIdentity(userId, generation);
+      verified = _applyProfile(current, expectedUserId: userId);
+    }
+    if (!verified) {
+      throw const PremiumSubscriptionFailure(
+        PremiumFailureType.invalidEntitlement,
+        'Google Play did not confirm premium access. Please retry or restore purchases.',
+      );
+    }
+    return const PremiumPurchaseVerified();
   }
 
   @override
@@ -299,10 +361,11 @@ final class AdaptyPremiumSubscriptionRepository
       );
       _paywallEvents.add(PaywallRestoreCompleted(hasPremium: hasPremium));
       return RestorePurchasesResult(hasPremium: hasPremium);
-    } catch (_) {
-      const failure = PremiumSubscriptionFailure(
-        PremiumFailureType.restore,
-        'Purchases could not be restored. Please try again.',
+    } catch (error) {
+      final failure = _subscriptionFailure(
+        error,
+        fallbackType: PremiumFailureType.restorationFailed,
+        fallbackMessage: 'Purchases could not be restored. Please try again.',
       );
       _paywallEvents.add(PaywallOperationFailed(failure.message));
       throw failure;
@@ -327,53 +390,6 @@ final class AdaptyPremiumSubscriptionRepository
     _applyProfile(profile, expectedUserId: _identifiedUserId);
   }
 
-  Future<void> _onSdkEvent(AdaptySdkEvent event) async {
-    switch (event) {
-      case AdaptySdkPurchaseStarted():
-        _paywallEvents.add(const PaywallPurchaseStarted());
-      case AdaptySdkPurchasePending():
-        _paywallEvents.add(const PaywallPurchasePending());
-      case AdaptySdkPurchaseCancelled():
-        _paywallEvents.add(const PaywallPurchaseCancelled());
-      case AdaptySdkPurchaseSucceeded(:final profile):
-        var verified = _applyProfile(
-          profile,
-          expectedUserId: _identifiedUserId,
-        );
-        if (!verified) {
-          try {
-            final current = await _sdk.getProfile();
-            verified = _applyProfile(
-              current,
-              expectedUserId: _identifiedUserId,
-            );
-          } catch (_) {
-            verified = false;
-          }
-        }
-        _paywallEvents.add(
-          verified
-              ? const PaywallPurchaseVerified()
-              : const PaywallOperationFailed(
-                  'Google Play did not confirm premium access. Please retry or restore purchases.',
-                ),
-        );
-      case AdaptySdkRestoreStarted():
-        _paywallEvents.add(const PaywallRestoreStarted());
-      case AdaptySdkRestoreSucceeded(:final profile):
-        final restored = _applyProfile(
-          profile,
-          expectedUserId: _identifiedUserId,
-        );
-        _paywallEvents.add(PaywallRestoreCompleted(hasPremium: restored));
-      case AdaptySdkViewDismissed():
-        _paywallEvents.add(const PaywallDismissed());
-      case AdaptySdkFailed(:final message):
-        _warnIfActive(message);
-        _paywallEvents.add(PaywallOperationFailed(message));
-    }
-  }
-
   bool _applyProfile(
     AdaptySdkProfile profile, {
     required String? expectedUserId,
@@ -384,21 +400,34 @@ final class AdaptyPremiumSubscriptionRepository
             profile.customerUserId != expectedUserId)) {
       return false;
     }
+    final expiresAt = profile.premiumExpiresAt;
+    final hasPremium =
+        profile.isPremiumActive &&
+        (expiresAt == null || expiresAt.isAfter(_now()));
     _emitAccess(
       PremiumAccessSnapshot(
         userId: expectedUserId,
-        status: profile.hasPremium
+        status: hasPremium
             ? PremiumAccessStatus.active
             : PremiumAccessStatus.inactive,
       ),
     );
-    return profile.hasPremium;
+    return hasPremium;
   }
 
-  void _warnIfActive(String message) {
-    if (_currentAccess.isActive) {
-      _emitAccess(_currentAccess.withWarning(message));
+  PremiumSubscriptionFailure _subscriptionFailure(
+    Object error, {
+    required PremiumFailureType fallbackType,
+    required String fallbackMessage,
+  }) {
+    if (error is PremiumSubscriptionFailure) return error;
+    if (error case AdaptySdkFailure(type: AdaptySdkFailureType.network)) {
+      return const PremiumSubscriptionFailure(
+        PremiumFailureType.network,
+        'A network connection is required. Please try again.',
+      );
     }
+    return PremiumSubscriptionFailure(fallbackType, fallbackMessage);
   }
 
   void _warnOrInactive(String? userId, String message) {
@@ -420,11 +449,17 @@ final class AdaptyPremiumSubscriptionRepository
     _access.add(snapshot);
   }
 
+  void _clearProduct() {
+    _product = null;
+    _offer = null;
+    _productUserId = null;
+    _productGeneration = null;
+  }
+
   @override
   Future<void> dispose() async {
     await _authSubscription?.cancel();
     await _profileSubscription?.cancel();
-    await _eventSubscription?.cancel();
     await _sdk.dispose();
     await _access.close();
     await _paywallEvents.close();

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:plantcare_app/app/application/local_plant_image_lifecycle_service.dart';
+import 'package:plantcare_app/app/application/premium_subscription_lifecycle_service.dart';
 import 'package:plantcare_app/app/application/reminder_lifecycle_service.dart';
 import 'package:plantcare_app/app/bootstrap/app_initializer.dart';
 import 'package:plantcare_app/app/bootstrap/firebase_app_check_activator.dart';
@@ -136,6 +137,7 @@ abstract class AppModule {
     startApplicationServices: () async {
       await Future.wait([
         GetIt.instance<PremiumSubscriptionRepository>().initialize(),
+        GetIt.instance<PremiumSubscriptionLifecycleService>().start(),
         GetIt.instance<ReminderLifecycleService>().start(),
         GetIt.instance<LocalPlantImageLifecycleService>().start(),
       ]);

@@ -23,6 +23,7 @@ void main() {
     const offer = PremiumOffer(
       productId: PremiumSubscriptionIds.product,
       basePlanId: PremiumSubscriptionIds.basePlan,
+      localizedTitle: 'PlantCare Premium Monthly',
       localizedPrice: r'$1.99',
       billingPeriod: 'month',
     );
@@ -38,6 +39,28 @@ void main() {
       const PaywallPreparation(PaywallAvailability.productUnavailable)
           .canPresent,
       isFalse,
+    );
+  });
+
+  test('subscription identifiers and purchase results are stable values', () {
+    expect(PremiumSubscriptionIds.placement, 'plantcare_main_paywall');
+    expect(const PremiumPurchaseVerified(), const PremiumPurchaseVerified());
+    expect(const PremiumPurchasePending(), const PremiumPurchasePending());
+    expect(const PremiumPurchaseCancelled(), const PremiumPurchaseCancelled());
+    expect(
+      PremiumFailureType.values,
+      containsAll([
+        PremiumFailureType.configuration,
+        PremiumFailureType.unsupported,
+        PremiumFailureType.network,
+        PremiumFailureType.paywallUnavailable,
+        PremiumFailureType.productUnavailable,
+        PremiumFailureType.purchaseCancelled,
+        PremiumFailureType.purchasePending,
+        PremiumFailureType.purchaseFailed,
+        PremiumFailureType.restorationFailed,
+        PremiumFailureType.invalidEntitlement,
+      ]),
     );
   });
 

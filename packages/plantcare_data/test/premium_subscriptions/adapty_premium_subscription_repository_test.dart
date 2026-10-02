@@ -12,6 +12,7 @@ void main() {
     privacyPolicyUrl: null,
     termsOfServiceUrl: null,
   );
+  final now = DateTime.utc(2026, 10);
   late _FakeSession session;
   late _FakeAdapty sdk;
   late AdaptyPremiumSubscriptionRepository repository;
@@ -26,6 +27,7 @@ void main() {
       configuration,
       sdk: sdk,
       platform: PurchasePlatform.android,
+      now: () => now,
     );
   });
 
@@ -35,170 +37,162 @@ void main() {
   });
 
   test(
-    'activates with current UID before retrieving profile and Flow',
+    'activates before profile and custom paywall product retrieval',
     () async {
       await repository.initialize();
       final result = await repository.preparePaywall();
 
       expect(result.availability, PaywallAvailability.ready);
+      expect(result.offer?.localizedTitle, 'PlantCare Premium Monthly');
       expect(result.offer?.localizedPrice, r'$1.99');
       expect(result.offer?.billingPeriod, 'month');
       expect(sdk.calls, [
         'activate:user-1',
         'profile',
-        'flow:main_paywall',
+        'flow:plantcare_main_paywall',
         'products',
       ]);
     },
   );
 
-  test(
-    'distinguishes missing view configuration from missing product',
-    () async {
-      sdk.flow = const AdaptySdkFlow(
-        handle: 'flow',
-        hasViewConfiguration: false,
-      );
-      await repository.initialize();
-      expect(
-        (await repository.preparePaywall()).availability,
-        PaywallAvailability.paywallUnavailable,
-      );
+  test('custom paywall does not require builder view configuration', () async {
+    await repository.initialize();
 
-      sdk.flow = const AdaptySdkFlow(
-        handle: 'flow',
-        hasViewConfiguration: true,
-      );
-      sdk.products = const [];
-      expect(
-        (await repository.preparePaywall()).availability,
-        PaywallAvailability.productUnavailable,
-      );
-    },
-  );
-
-  test(
-    'rejects wrong plan, an offer, missing price, and missing period',
-    () async {
-      await repository.initialize();
-      final invalid = [
-        _product(productId: 'other'),
-        _product(basePlanId: 'annual'),
-        _product(hasOffer: true),
-        _product(localizedPrice: null),
-        _product(localizedPeriod: null),
-      ];
-
-      for (final product in invalid) {
-        sdk.products = [product];
-        expect(
-          (await repository.preparePaywall()).availability,
-          PaywallAvailability.productUnavailable,
-        );
-      }
-    },
-  );
-
-  for (final platform in [PurchasePlatform.web, PurchasePlatform.ios]) {
-    test(
-      '$platform never activates, retrieves, or makes profile calls',
-      () async {
-        final unsupportedSdk = _FakeAdapty();
-        final unsupported = AdaptyPremiumSubscriptionRepository(
-          session,
-          configuration,
-          sdk: unsupportedSdk,
-          platform: platform,
-        );
-        addTearDown(unsupported.dispose);
-
-        await unsupported.initialize();
-        expect(
-          (await unsupported.preparePaywall()).availability,
-          PaywallAvailability.unsupported,
-        );
-        await expectLater(
-          unsupported.refreshProfile(),
-          throwsA(isA<PremiumSubscriptionFailure>()),
-        );
-        expect(unsupportedSdk.calls, isEmpty);
-      },
-    );
-  }
-
-  test(
-    'missing public key is non-fatal and reported as configuration',
-    () async {
-      final missingSdk = _FakeAdapty();
-      final missing = AdaptyPremiumSubscriptionRepository(
-        session,
-        const PremiumSubscriptionConfiguration(
-          publicSdkKey: null,
-          privacyPolicyUrl: null,
-          termsOfServiceUrl: null,
-        ),
-        sdk: missingSdk,
-        platform: PurchasePlatform.android,
-      );
-      addTearDown(missing.dispose);
-
-      await missing.initialize();
-      expect(
-        (await missing.preparePaywall()).availability,
-        PaywallAvailability.configurationUnavailable,
-      );
-      expect(missingSdk.calls, isEmpty);
-    },
-  );
-
-  test(
-    'account changes serialize logout, identify, and profile refresh',
-    () async {
-      await repository.initialize();
-      session.emit(const AppUser(uid: 'user-2', email: null));
-      await Future<void>.delayed(Duration.zero);
-      await repository.preparePaywall();
-
-      expect(
-        sdk.calls,
-        containsAllInOrder(['logout', 'identify:user-2', 'profile']),
-      );
-      expect(repository.currentAccess.userId, 'user-2');
-    },
-  );
-
-  test('operations wait for an identified signed-in user', () async {
-    final signedOutSession = _FakeSession(null);
-    final signedOutSdk = _FakeAdapty();
-    final signedOutRepository = AdaptyPremiumSubscriptionRepository(
-      signedOutSession,
-      configuration,
-      sdk: signedOutSdk,
-      platform: PurchasePlatform.android,
-    );
-    addTearDown(signedOutRepository.dispose);
-    addTearDown(signedOutSession.dispose);
-
-    await signedOutRepository.initialize();
     expect(
-      (await signedOutRepository.preparePaywall()).availability,
-      PaywallAvailability.paywallUnavailable,
-    );
-    expect(signedOutSdk.calls, ['activate:null']);
-
-    signedOutSession.emit(const AppUser(uid: 'user-2', email: null));
-    await Future<void>.delayed(Duration.zero);
-    expect(
-      (await signedOutRepository.preparePaywall()).availability,
+      (await repository.preparePaywall()).availability,
       PaywallAvailability.ready,
     );
-    expect(
-      signedOutSdk.calls,
-      containsAllInOrder(['identify:user-2', 'profile', 'flow:main_paywall']),
-    );
+    expect(sdk.calls, isNot(contains('present')));
   });
 
-  test('discards a Flow result when the Firebase UID changes', () async {
+  test('selects expected product by identifiers instead of position', () async {
+    sdk.products = [
+      _product(productId: 'other'),
+      _product(),
+      _product(basePlanId: 'annual'),
+    ];
+    await repository.initialize();
+    final result = await repository.preparePaywall();
+    await repository.purchase();
+
+    expect(result.offer?.productId, PremiumSubscriptionIds.product);
+    expect(sdk.purchasedHandle, 'expected-handle');
+  });
+
+  test('rejects wrong plan, offer, missing title, price, and period', () async {
+    await repository.initialize();
+    final invalid = [
+      _product(productId: 'other'),
+      _product(basePlanId: 'annual'),
+      _product(hasOffer: true),
+      _product(localizedTitle: null),
+      _product(localizedPrice: null),
+      _product(localizedPeriod: null),
+    ];
+
+    for (final product in invalid) {
+      sdk.products = [product];
+      final result = await repository.preparePaywall();
+      expect(result.availability, PaywallAvailability.productUnavailable);
+      expect(result.failureType, PremiumFailureType.productUnavailable);
+    }
+  });
+
+  test('network and placement failures remain typed', () async {
+    await repository.initialize();
+    sdk.flowError = const AdaptySdkFailure(AdaptySdkFailureType.network);
+    var result = await repository.preparePaywall();
+    expect(result.failureType, PremiumFailureType.network);
+
+    sdk.flowError = const AdaptySdkFailure(AdaptySdkFailureType.other);
+    result = await repository.preparePaywall();
+    expect(result.failureType, PremiumFailureType.paywallUnavailable);
+  });
+
+  for (final platform in [PurchasePlatform.web, PurchasePlatform.ios]) {
+    test('$platform never invokes the Adapty SDK', () async {
+      final unsupportedSdk = _FakeAdapty();
+      final unsupported = AdaptyPremiumSubscriptionRepository(
+        session,
+        configuration,
+        sdk: unsupportedSdk,
+        platform: platform,
+      );
+      addTearDown(unsupported.dispose);
+
+      await unsupported.initialize();
+      expect(
+        (await unsupported.preparePaywall()).availability,
+        PaywallAvailability.unsupported,
+      );
+      await expectLater(
+        unsupported.purchase(),
+        throwsA(
+          isA<PremiumSubscriptionFailure>().having(
+            (error) => error.type,
+            'type',
+            PremiumFailureType.unsupported,
+          ),
+        ),
+      );
+      await expectLater(
+        unsupported.restorePurchases(),
+        throwsA(isA<PremiumSubscriptionFailure>()),
+      );
+      expect(unsupportedSdk.calls, isEmpty);
+    });
+  }
+
+  test('missing public key is non-fatal and typed as configuration', () async {
+    final missingSdk = _FakeAdapty();
+    final missing = AdaptyPremiumSubscriptionRepository(
+      session,
+      const PremiumSubscriptionConfiguration(
+        publicSdkKey: null,
+        privacyPolicyUrl: null,
+        termsOfServiceUrl: null,
+      ),
+      sdk: missingSdk,
+      platform: PurchasePlatform.android,
+    );
+    addTearDown(missing.dispose);
+
+    await missing.initialize();
+    final result = await missing.preparePaywall();
+    expect(result.availability, PaywallAvailability.configurationUnavailable);
+    expect(result.failureType, PremiumFailureType.configuration);
+    expect(missingSdk.calls, isEmpty);
+  });
+
+  test('account changes serialize logout, identify, and refresh', () async {
+    await repository.initialize();
+    await repository.preparePaywall();
+    session.emit(const AppUser(uid: 'user-2', email: null));
+    await Future<void>.delayed(Duration.zero);
+    await repository.preparePaywall();
+
+    expect(
+      sdk.calls,
+      containsAllInOrder(['logout', 'identify:user-2', 'profile']),
+    );
+    expect(repository.currentAccess.userId, 'user-2');
+  });
+
+  test('sign-out clears access and retained product', () async {
+    await repository.initialize();
+    await repository.preparePaywall();
+    session.emit(null);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repository.currentAccess, const PremiumAccessSnapshot.signedOut());
+    await expectLater(
+      repository.purchase(),
+      throwsA(isA<PremiumSubscriptionFailure>()),
+    );
+    expect(sdk.calls.where((call) => call == 'purchase'), isEmpty);
+  });
+
+  test('discards product retrieval when Firebase UID changes', () async {
     await repository.initialize();
     final flowCompletion = Completer<AdaptySdkFlow>();
     sdk.flowCompletion = flowCompletion;
@@ -209,197 +203,183 @@ void main() {
     await Future<void>.delayed(Duration.zero);
     flowCompletion.complete(sdk.flow);
 
-    expect(
-      (await preparation).availability,
-      PaywallAvailability.paywallUnavailable,
-    );
+    expect((await preparation).failureType, PremiumFailureType.notReady);
     expect(sdk.calls.where((call) => call == 'products'), isEmpty);
   });
 
-  test('verified purchase is emitted only from an active profile', () async {
+  test('purchase verifies active unexpired returned profile', () async {
     await repository.initialize();
-    final events = <PaywallEvent>[];
-    final subscription = repository.paywallEvents.listen(events.add);
-    addTearDown(subscription.cancel);
+    await repository.preparePaywall();
+    sdk.purchaseResult = AdaptySdkPurchaseSuccess(
+      _profile(active: true, expiresAt: now.add(const Duration(days: 30))),
+    );
 
-    sdk.emitEvent(
-      const AdaptySdkPurchaseSucceeded(
-        AdaptySdkProfile(customerUserId: 'user-1', hasPremium: true),
+    expect(await repository.purchase(), const PremiumPurchaseVerified());
+    expect(repository.currentAccess.isActive, isTrue);
+  });
+
+  test(
+    'inactive purchase result checks current profile exactly once',
+    () async {
+      await repository.initialize();
+      await repository.preparePaywall();
+      sdk.purchaseResult = AdaptySdkPurchaseSuccess(_profile(active: false));
+      sdk.profile = _profile(
+        active: true,
+        expiresAt: now.add(const Duration(days: 1)),
+      );
+      final profileCallsBefore = sdk.calls
+          .where((call) => call == 'profile')
+          .length;
+
+      expect(await repository.purchase(), const PremiumPurchaseVerified());
+      expect(
+        sdk.calls.where((call) => call == 'profile').length,
+        profileCallsBefore + 1,
+      );
+    },
+  );
+
+  test('unverified purchase throws invalid entitlement', () async {
+    await repository.initialize();
+    await repository.preparePaywall();
+    sdk.purchaseResult = AdaptySdkPurchaseSuccess(_profile(active: false));
+    sdk.profile = _profile(active: false);
+
+    await expectLater(
+      repository.purchase(),
+      throwsA(
+        isA<PremiumSubscriptionFailure>().having(
+          (error) => error.type,
+          'type',
+          PremiumFailureType.invalidEntitlement,
+        ),
+      ),
+    );
+    expect(repository.currentAccess.isActive, isFalse);
+  });
+
+  test('maps pending, cancellation, network, and purchase failure', () async {
+    await repository.initialize();
+    await repository.preparePaywall();
+    sdk.purchaseResult = const AdaptySdkPurchasePending();
+    expect(await repository.purchase(), const PremiumPurchasePending());
+
+    sdk.purchaseResult = const AdaptySdkPurchaseCancelled();
+    expect(await repository.purchase(), const PremiumPurchaseCancelled());
+
+    sdk.purchaseError = const AdaptySdkFailure(AdaptySdkFailureType.network);
+    await expectLater(
+      repository.purchase(),
+      throwsA(
+        isA<PremiumSubscriptionFailure>().having(
+          (error) => error.type,
+          'type',
+          PremiumFailureType.network,
+        ),
+      ),
+    );
+
+    sdk.purchaseError = const AdaptySdkFailure(AdaptySdkFailureType.other);
+    await expectLater(
+      repository.purchase(),
+      throwsA(
+        isA<PremiumSubscriptionFailure>().having(
+          (error) => error.type,
+          'type',
+          PremiumFailureType.purchaseFailed,
+        ),
+      ),
+    );
+  });
+
+  test('active with no expiration is premium', () async {
+    await repository.initialize();
+    sdk.emitProfile(_profile(active: true));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repository.currentAccess.isActive, isTrue);
+  });
+
+  test('expired active flag does not grant premium', () async {
+    await repository.initialize();
+    sdk.emitProfile(
+      _profile(
+        active: true,
+        expiresAt: now.subtract(const Duration(seconds: 1)),
       ),
     );
     await Future<void>.delayed(Duration.zero);
 
-    expect(repository.currentAccess.isActive, isTrue);
-    expect(events, contains(isA<PaywallPurchaseVerified>()));
+    expect(repository.currentAccess.isActive, isFalse);
   });
 
-  test(
-    'inactive success checks current profile before refusing access',
-    () async {
-      await repository.initialize();
-      sdk.profile = const AdaptySdkProfile(
-        customerUserId: 'user-1',
-        hasPremium: false,
-      );
-      final events = <PaywallEvent>[];
-      final subscription = repository.paywallEvents.listen(events.add);
-      addTearDown(subscription.cancel);
-
-      sdk.emitEvent(
-        const AdaptySdkPurchaseSucceeded(
-          AdaptySdkProfile(customerUserId: 'user-1', hasPremium: false),
-        ),
-      );
-      await Future<void>.delayed(Duration.zero);
-
-      expect(repository.currentAccess.isActive, isFalse);
-      expect(events, contains(isA<PaywallOperationFailed>()));
-    },
-  );
-
-  test('later failure preserves verified premium with warning', () async {
+  test('refresh failure preserves verified premium with warning', () async {
     await repository.initialize();
-    sdk.emitProfile(
-      const AdaptySdkProfile(customerUserId: 'user-1', hasPremium: true),
-    );
+    sdk.emitProfile(_profile(active: true));
     await Future<void>.delayed(Duration.zero);
-    sdk.profileError = StateError('offline');
+    sdk.profileError = const AdaptySdkFailure(AdaptySdkFailureType.network);
 
-    await expectLater(repository.refreshProfile(), throwsStateError);
-
+    await expectLater(
+      repository.refreshProfile(),
+      throwsA(isA<AdaptySdkFailure>()),
+    );
     expect(repository.currentAccess.isActive, isTrue);
     expect(repository.currentAccess.warningMessage, isNotNull);
-  });
-
-  test('a newer inactive profile expires previously active access', () async {
-    await repository.initialize();
-    sdk.emitProfile(
-      const AdaptySdkProfile(customerUserId: 'user-1', hasPremium: true),
-    );
-    await Future<void>.delayed(Duration.zero);
-    sdk.emitProfile(
-      const AdaptySdkProfile(customerUserId: 'user-1', hasPremium: false),
-    );
-    await Future<void>.delayed(Duration.zero);
-
-    expect(repository.currentAccess.status, PremiumAccessStatus.inactive);
   });
 
   test(
     'restore verifies active access and reports no-access neutrally',
     () async {
       await repository.initialize();
-      sdk.restoreProfile = const AdaptySdkProfile(
-        customerUserId: 'user-1',
-        hasPremium: true,
-      );
+      sdk.restoreProfile = _profile(active: true);
       expect((await repository.restorePurchases()).hasPremium, isTrue);
 
-      sdk.restoreProfile = const AdaptySdkProfile(
-        customerUserId: 'user-1',
-        hasPremium: false,
-      );
+      sdk.restoreProfile = _profile(active: false);
       expect((await repository.restorePurchases()).hasPremium, isFalse);
     },
   );
 
-  test('restore failure is recoverable and emits a failure event', () async {
+  test('restore failure is typed and recoverable', () async {
     await repository.initialize();
-    sdk.restoreError = StateError('offline');
-    final events = <PaywallEvent>[];
-    final subscription = repository.paywallEvents.listen(events.add);
-    addTearDown(subscription.cancel);
+    sdk.restoreError = const AdaptySdkFailure(AdaptySdkFailureType.other);
 
     await expectLater(
       repository.restorePurchases(),
-      throwsA(isA<PremiumSubscriptionFailure>()),
+      throwsA(
+        isA<PremiumSubscriptionFailure>().having(
+          (error) => error.type,
+          'type',
+          PremiumFailureType.restorationFailed,
+        ),
+      ),
     );
-    await Future<void>.delayed(Duration.zero);
-    expect(events, contains(isA<PaywallOperationFailed>()));
-  });
-
-  test(
-    'maps purchase, restore, dismissal, failure and profile events',
-    () async {
-      await repository.initialize();
-      final events = <PaywallEvent>[];
-      final subscription = repository.paywallEvents.listen(events.add);
-      addTearDown(subscription.cancel);
-
-      sdk
-        ..emitEvent(const AdaptySdkPurchaseStarted())
-        ..emitEvent(const AdaptySdkPurchasePending())
-        ..emitEvent(const AdaptySdkPurchaseCancelled())
-        ..emitEvent(const AdaptySdkRestoreStarted())
-        ..emitEvent(
-          const AdaptySdkRestoreSucceeded(
-            AdaptySdkProfile(customerUserId: 'user-1', hasPremium: true),
-          ),
-        )
-        ..emitEvent(const AdaptySdkViewDismissed())
-        ..emitEvent(const AdaptySdkFailed('recoverable'));
-      sdk.emitProfile(
-        const AdaptySdkProfile(customerUserId: 'user-1', hasPremium: true),
-      );
-      await Future<void>.delayed(Duration.zero);
-
-      expect(
-        events,
-        containsAll([
-          isA<PaywallPurchaseStarted>(),
-          isA<PaywallPurchasePending>(),
-          isA<PaywallPurchaseCancelled>(),
-          isA<PaywallRestoreStarted>(),
-          isA<PaywallRestoreCompleted>(),
-          isA<PaywallDismissed>(),
-          isA<PaywallOperationFailed>(),
-        ]),
-      );
-      expect(repository.currentAccess.isActive, isTrue);
-    },
-  );
-
-  test('unsupported presentation and restore never call the SDK', () async {
-    final unsupportedSdk = _FakeAdapty();
-    final unsupported = AdaptyPremiumSubscriptionRepository(
-      session,
-      configuration,
-      sdk: unsupportedSdk,
-      platform: PurchasePlatform.ios,
-    );
-    addTearDown(unsupported.dispose);
-
-    await expectLater(
-      unsupported.presentPaywall(),
-      throwsA(isA<PremiumSubscriptionFailure>()),
-    );
-    await expectLater(
-      unsupported.restorePurchases(),
-      throwsA(isA<PremiumSubscriptionFailure>()),
-    );
-    expect(unsupportedSdk.calls, isEmpty);
-  });
-
-  test('every presentation creates a facade presentation request', () async {
-    await repository.initialize();
-    await repository.preparePaywall();
-
-    await repository.presentPaywall();
-    await repository.presentPaywall();
-
-    expect(sdk.calls.where((call) => call == 'present'), hasLength(2));
   });
 }
+
+AdaptySdkProfile _profile({
+  bool active = false,
+  DateTime? expiresAt,
+  String customerUserId = 'user-1',
+}) => AdaptySdkProfile(
+  customerUserId: customerUserId,
+  isPremiumActive: active,
+  premiumExpiresAt: expiresAt,
+);
 
 AdaptySdkProduct _product({
   String productId = PremiumSubscriptionIds.product,
   String? basePlanId = PremiumSubscriptionIds.basePlan,
+  String? localizedTitle = 'PlantCare Premium Monthly',
   String? localizedPrice = r'$1.99',
   String? localizedPeriod = 'month',
   bool hasOffer = false,
+  Object handle = 'expected-handle',
 }) => AdaptySdkProduct(
+  handle: handle,
   vendorProductId: productId,
   basePlanId: basePlanId,
+  localizedTitle: localizedTitle,
   localizedPrice: localizedPrice,
   localizedPeriod: localizedPeriod,
   hasOffer: hasOffer,
@@ -431,26 +411,19 @@ final class _FakeSession implements AuthenticationSession {
 final class _FakeAdapty implements AdaptySdkFacade {
   final calls = <String>[];
   final _profiles = StreamController<AdaptySdkProfile>.broadcast();
-  final _events = StreamController<AdaptySdkEvent>.broadcast();
-  AdaptySdkFlow flow = const AdaptySdkFlow(
-    handle: 'flow',
-    hasViewConfiguration: true,
-  );
+  AdaptySdkFlow flow = const AdaptySdkFlow(handle: 'flow');
   List<AdaptySdkProduct> products = [_product()];
-  AdaptySdkProfile profile = const AdaptySdkProfile(
-    customerUserId: 'user-1',
-    hasPremium: false,
+  AdaptySdkProfile profile = _profile();
+  AdaptySdkProfile restoreProfile = _profile();
+  AdaptySdkPurchaseResult purchaseResult = AdaptySdkPurchaseSuccess(
+    _profile(active: true),
   );
-  AdaptySdkProfile restoreProfile = const AdaptySdkProfile(
-    customerUserId: 'user-1',
-    hasPremium: false,
-  );
+  Object? flowError;
   Object? profileError;
+  Object? purchaseError;
   Object? restoreError;
+  Object? purchasedHandle;
   Completer<AdaptySdkFlow>? flowCompletion;
-
-  @override
-  Stream<AdaptySdkEvent> get events => _events.stream;
 
   @override
   Stream<AdaptySdkProfile> get profileUpdates => _profiles.stream;
@@ -464,8 +437,26 @@ final class _FakeAdapty implements AdaptySdkFacade {
   }
 
   @override
+  Future<void> identify(String customerUserId) async {
+    calls.add('identify:$customerUserId');
+    profile = _profile(customerUserId: customerUserId);
+    restoreProfile = _profile(customerUserId: customerUserId);
+  }
+
+  @override
+  Future<void> logout() async => calls.add('logout');
+
+  @override
+  Future<AdaptySdkProfile> getProfile() async {
+    calls.add('profile');
+    if (profileError case final Object error) throw error;
+    return profile;
+  }
+
+  @override
   Future<AdaptySdkFlow> getFlow(String placementId) async {
     calls.add('flow:$placementId');
+    if (flowError case final Object error) throw error;
     return flowCompletion?.future ?? flow;
   }
 
@@ -476,26 +467,12 @@ final class _FakeAdapty implements AdaptySdkFacade {
   }
 
   @override
-  Future<AdaptySdkProfile> getProfile() async {
-    calls.add('profile');
-    if (profileError case final Object error) throw error;
-    return profile;
+  Future<AdaptySdkPurchaseResult> makePurchase(AdaptySdkProduct product) async {
+    calls.add('purchase');
+    purchasedHandle = product.handle;
+    if (purchaseError case final Object error) throw error;
+    return purchaseResult;
   }
-
-  @override
-  Future<void> identify(String customerUserId) async {
-    calls.add('identify:$customerUserId');
-    profile = AdaptySdkProfile(
-      customerUserId: customerUserId,
-      hasPremium: false,
-    );
-  }
-
-  @override
-  Future<void> logout() async => calls.add('logout');
-
-  @override
-  Future<void> present(AdaptySdkFlow flow) async => calls.add('present');
 
   @override
   Future<AdaptySdkProfile> restorePurchases() async {
@@ -504,13 +481,8 @@ final class _FakeAdapty implements AdaptySdkFacade {
     return restoreProfile;
   }
 
-  void emitEvent(AdaptySdkEvent event) => _events.add(event);
-
-  void emitProfile(AdaptySdkProfile profile) => _profiles.add(profile);
+  void emitProfile(AdaptySdkProfile value) => _profiles.add(value);
 
   @override
-  Future<void> dispose() async {
-    await _profiles.close();
-    await _events.close();
-  }
+  Future<void> dispose() => _profiles.close();
 }

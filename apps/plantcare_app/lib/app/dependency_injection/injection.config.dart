@@ -17,6 +17,8 @@ import 'package:go_router/go_router.dart' as _i583;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:plantcare_app/app/application/local_plant_image_lifecycle_service.dart'
     as _i854;
+import 'package:plantcare_app/app/application/premium_subscription_lifecycle_service.dart'
+    as _i544;
 import 'package:plantcare_app/app/application/reminder_lifecycle_service.dart'
     as _i745;
 import 'package:plantcare_app/app/bootstrap/app_initializer.dart' as _i484;
@@ -28,7 +30,7 @@ import 'package:plantcare_app/app/theme/theme_bloc.dart' as _i393;
 import 'package:plantcare_data/data_module.dart' as _i74;
 import 'package:plantcare_domain/account_management.dart' as _i768;
 import 'package:plantcare_domain/authentication.dart' as _i521;
-import 'package:plantcare_domain/local_plant_images.dart' as _i544;
+import 'package:plantcare_domain/local_plant_images.dart' as _i545;
 import 'package:plantcare_domain/plants.dart' as _i867;
 import 'package:plantcare_domain/premium_subscriptions.dart' as _i902;
 import 'package:plantcare_domain/reminders.dart' as _i412;
@@ -119,7 +121,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i902.PremiumSubscriptionConfiguration>(),
       ),
     );
-    gh.lazySingleton<_i544.LocalPlantImageRepository>(
+    gh.lazySingleton<_i544.PremiumSubscriptionLifecycleService>(
+      () => _i544.PremiumSubscriptionLifecycleService(
+        gh<_i521.AuthenticationSession>(),
+        gh<_i902.PremiumSubscriptionRepository>(),
+      ),
+      dispose: (i) => i.dispose(),
+    );
+    gh.lazySingleton<_i545.LocalPlantImageRepository>(
       () => appModule.localPlantImageRepository(
         gh<_i521.AuthenticationSession>(),
       ),
@@ -135,7 +144,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i854.LocalPlantImageLifecycleService>(
       () => _i854.LocalPlantImageLifecycleService(
         gh<_i521.AuthenticationSession>(),
-        gh<_i544.LocalPlantImageRepository>(),
+        gh<_i545.LocalPlantImageRepository>(),
       ),
       dispose: (i) => i.dispose(),
     );

@@ -22,17 +22,19 @@ final class FakePremiumSubscriptionRepository
     offer: PremiumOffer(
       productId: 'plantcare_premium',
       basePlanId: 'monthly',
+      localizedTitle: 'PlantCare Premium Monthly',
       localizedPrice: r'$1.99',
       billingPeriod: 'month',
     ),
   );
-  Object? presentError;
+  Object? purchaseError;
+  PremiumPurchaseResult purchaseResult = const PremiumPurchaseVerified();
   Object? restoreError;
   RestorePurchasesResult restoreResult = const RestorePurchasesResult(
     hasPremium: false,
   );
   int prepareCalls = 0;
-  int presentCalls = 0;
+  int purchaseCalls = 0;
   int restoreCalls = 0;
 
   @override
@@ -61,9 +63,10 @@ final class FakePremiumSubscriptionRepository
   }
 
   @override
-  Future<void> presentPaywall() async {
-    presentCalls++;
-    if (presentError case final Object error) throw error;
+  Future<PremiumPurchaseResult> purchase() async {
+    purchaseCalls++;
+    if (purchaseError case final Object error) throw error;
+    return purchaseResult;
   }
 
   @override

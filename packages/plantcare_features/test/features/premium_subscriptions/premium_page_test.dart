@@ -23,7 +23,9 @@ void main() {
       'Premium',
       'Unlimited saved plants',
       'Everything in Free',
+      'PlantCare Premium Monthly',
       r'$1.99 / month',
+      'Subscription renews automatically every month unless cancelled through Google Play before the next billing date.',
     ]) {
       expect(find.text(label), findsOneWidget);
     }
@@ -37,15 +39,17 @@ void main() {
     expect(
       tester
           .widget<FilledButton>(
-            find.widgetWithText(FilledButton, 'View Premium'),
+            find.widgetWithText(FilledButton, 'Subscribe monthly'),
           )
           .onPressed,
       isNotNull,
     );
 
-    await tester.tap(find.text('View Premium'));
-    await tester.pump();
-    expect(harness.repository.presentCalls, 1);
+    await tester.ensureVisible(find.text('Subscribe monthly'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Subscribe monthly'));
+    await tester.pumpAndSettle();
+    expect(harness.repository.purchaseCalls, 1);
   });
 
   testWidgets('web explains mobile availability and disables store actions', (
@@ -58,7 +62,7 @@ void main() {
       find.text('Mobile purchasing is not currently available on web.'),
       findsOneWidget,
     );
-    expect(find.text('View Premium'), findsNothing);
+    expect(find.text('Subscribe monthly'), findsNothing);
     expect(
       tester
           .widget<OutlinedButton>(
@@ -79,7 +83,7 @@ void main() {
       find.text('Premium purchasing is currently available on Android.'),
       findsOneWidget,
     );
-    expect(find.text('View Premium'), findsNothing);
+    expect(find.text('Subscribe monthly'), findsNothing);
   });
 
   testWidgets('missing legal configuration disables legal actions', (
@@ -134,51 +138,57 @@ void main() {
     expect(repository.prepareCalls, 2);
   });
 
-  testWidgets(
-    'purchase events show pending, neutral cancellation and success',
-    (tester) async {
-      final harness = await _pump(tester, platform: PurchasePlatform.android);
-      await tester.pumpAndSettle();
+  testWidgets('direct purchase shows pending without a technical error', (
+    tester,
+  ) async {
+    final repository = FakePremiumSubscriptionRepository()
+      ..purchaseResult = const PremiumPurchasePending();
+    await _pump(
+      tester,
+      platform: PurchasePlatform.android,
+      repository: repository,
+    );
+    await tester.pumpAndSettle();
 
-      harness.repository.emitEvent(const PaywallPurchaseStarted());
-      await tester.pump();
-      await tester.pump();
-      expect(find.byKey(const ValueKey('premium-progress')), findsOneWidget);
+    await tester.ensureVisible(find.text('Subscribe monthly'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Subscribe monthly'));
+    await tester.pumpAndSettle();
 
-      harness.repository.emitEvent(const PaywallPurchasePending());
-      await tester.pump();
-      await tester.pump();
-      expect(
-        find.text('Your purchase is pending in Google Play.'),
-        findsOneWidget,
-      );
+    expect(
+      find.text('Your purchase is pending in Google Play.'),
+      findsOneWidget,
+    );
+    expect(repository.purchaseCalls, 1);
+  });
 
-      harness.repository.emitEvent(const PaywallPurchaseCancelled());
-      await tester.pump();
-      await tester.pump();
-      expect(
-        find.byKey(const ValueKey('premium-status-message')),
-        findsNothing,
-      );
+  testWidgets('direct purchase cancellation returns to ready neutrally', (
+    tester,
+  ) async {
+    final repository = FakePremiumSubscriptionRepository()
+      ..purchaseResult = const PremiumPurchaseCancelled();
+    await _pump(
+      tester,
+      platform: PurchasePlatform.android,
+      repository: repository,
+    );
+    await tester.pumpAndSettle();
 
-      harness.repository.emitAccess(
-        const PremiumAccessSnapshot(
-          userId: 'user-1',
-          status: PremiumAccessStatus.active,
-        ),
-      );
-      harness.repository.emitEvent(const PaywallPurchaseVerified());
-      await tester.pump();
-      expect(find.text('Premium is active'), findsWidgets);
+    await tester.ensureVisible(find.text('Subscribe monthly'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Subscribe monthly'));
+    await tester.pumpAndSettle();
 
-      harness.repository.emitEvent(
-        const PaywallOperationFailed('refresh failed'),
-      );
-      harness.repository.emitEvent(const PaywallDismissed());
-      await tester.pump();
-      expect(find.text('Premium is active'), findsWidgets);
-    },
-  );
+    expect(find.byKey(const ValueKey('premium-status-message')), findsNothing);
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.widgetWithText(FilledButton, 'Subscribe monthly'),
+          )
+          .onPressed,
+      isNotNull,
+    );
+  });
 
   testWidgets('legal and management controls dispatch through the BLoC', (
     tester,
@@ -225,7 +235,8 @@ void main() {
     await tester.pumpAndSettle();
 
     for (final key in const [
-      ValueKey('present-premium-flow'),
+      ValueKey('close-premium'),
+      ValueKey('purchase-premium'),
       ValueKey('restore-purchases'),
       ValueKey('manage-subscription'),
     ]) {

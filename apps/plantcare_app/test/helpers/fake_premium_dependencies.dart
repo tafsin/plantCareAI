@@ -19,6 +19,7 @@ final class FakePremiumSubscriptionRepository
   final _access = StreamController<PremiumAccessSnapshot>.broadcast();
   final _events = StreamController<PaywallEvent>.broadcast();
   PremiumAccessSnapshot _currentAccess;
+  int refreshCalls = 0;
 
   @override
   Stream<PremiumAccessSnapshot> get accessChanges => _access.stream;
@@ -45,16 +46,20 @@ final class FakePremiumSubscriptionRepository
     offer: PremiumOffer(
       productId: PremiumSubscriptionIds.product,
       basePlanId: PremiumSubscriptionIds.basePlan,
+      localizedTitle: 'PlantCare Premium Monthly',
       localizedPrice: r'$1.99',
       billingPeriod: 'month',
     ),
   );
 
   @override
-  Future<void> presentPaywall() async {}
+  Future<PremiumPurchaseResult> purchase() async =>
+      const PremiumPurchaseCancelled();
 
   @override
-  Future<void> refreshProfile() async {}
+  Future<void> refreshProfile() async {
+    refreshCalls += 1;
+  }
 
   @override
   Future<RestorePurchasesResult> restorePurchases() async =>

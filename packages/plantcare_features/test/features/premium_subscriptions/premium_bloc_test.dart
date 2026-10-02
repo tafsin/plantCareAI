@@ -99,12 +99,12 @@ void main() {
     });
 
     blocTest<PaywallBloc, PaywallState>(
-      'loads localized offer and presents once per event',
+      'loads localized offer and purchases once per event',
       build: () => PaywallBloc(repository, launcher),
       act: (bloc) async {
         bloc.add(const PaywallLoadRequested());
         await Future<void>.delayed(Duration.zero);
-        bloc.add(const PaywallPresentRequested());
+        bloc.add(const PaywallPurchaseRequested());
       },
       expect: () => [
         isA<PaywallState>().having(
@@ -121,11 +121,16 @@ void main() {
             ),
         isA<PaywallState>().having(
           (state) => state.status,
-          'presenting',
-          PaywallStatus.presenting,
+          'purchasing',
+          PaywallStatus.purchasing,
+        ),
+        isA<PaywallState>().having(
+          (state) => state.status,
+          'active',
+          PaywallStatus.premiumActive,
         ),
       ],
-      verify: (_) => expect(repository.presentCalls, 1),
+      verify: (_) => expect(repository.purchaseCalls, 1),
     );
 
     for (final entry in {
@@ -155,45 +160,65 @@ void main() {
       );
     }
 
+    for (final entry in <PremiumPurchaseResult, PaywallStatus>{
+      const PremiumPurchasePending(): PaywallStatus.pending,
+      const PremiumPurchaseCancelled(): PaywallStatus.ready,
+    }.entries) {
+      blocTest<PaywallBloc, PaywallState>(
+        'maps ${entry.key.runtimeType} without a technical error',
+        setUp: () => repository.purchaseResult = entry.key,
+        build: () => PaywallBloc(repository, launcher),
+        seed: () => PaywallState(
+          platform: PurchasePlatform.android,
+          hasPrivacyPolicy: true,
+          hasTermsOfService: true,
+          status: PaywallStatus.ready,
+          offer: repository.preparation.offer,
+        ),
+        act: (bloc) {
+          bloc.add(const PaywallPurchaseRequested());
+          bloc.add(const PaywallPurchaseRequested());
+        },
+        expect: () => [
+          isA<PaywallState>().having(
+            (state) => state.status,
+            'purchasing',
+            PaywallStatus.purchasing,
+          ),
+          isA<PaywallState>().having(
+            (state) => state.status,
+            'result',
+            entry.value,
+          ),
+        ],
+        verify: (_) => expect(repository.purchaseCalls, 1),
+      );
+    }
+
     blocTest<PaywallBloc, PaywallState>(
-      'maps pending, cancellation, verified success and preserves success',
+      'purchase failure is recoverable',
+      setUp: () => repository.purchaseError = const PremiumSubscriptionFailure(
+        PremiumFailureType.purchaseFailed,
+        'Purchase failed.',
+      ),
       build: () => PaywallBloc(repository, launcher),
-      act: (bloc) async {
-        repository.emitEvent(const PaywallPurchaseStarted());
-        repository.emitEvent(const PaywallPurchasePending());
-        repository.emitEvent(const PaywallPurchaseCancelled());
-        repository.emitEvent(const PaywallPurchaseVerified());
-        repository.emitEvent(const PaywallOperationFailed('refresh failed'));
-        repository.emitEvent(const PaywallDismissed());
-      },
+      seed: () => PaywallState(
+        platform: PurchasePlatform.android,
+        hasPrivacyPolicy: true,
+        hasTermsOfService: true,
+        status: PaywallStatus.ready,
+        offer: repository.preparation.offer,
+      ),
+      act: (bloc) => bloc.add(const PaywallPurchaseRequested()),
       expect: () => [
         isA<PaywallState>().having(
           (state) => state.status,
           'purchasing',
           PaywallStatus.purchasing,
         ),
-        isA<PaywallState>().having(
-          (state) => state.status,
-          'pending',
-          PaywallStatus.pending,
-        ),
-        isA<PaywallState>().having(
-          (state) => state.status,
-          'cancelled neutrally',
-          PaywallStatus.ready,
-        ),
-        isA<PaywallState>().having(
-          (state) => state.status,
-          'active',
-          PaywallStatus.premiumActive,
-        ),
         isA<PaywallState>()
-            .having(
-              (state) => state.status,
-              'still active',
-              PaywallStatus.premiumActive,
-            )
-            .having((state) => state.message, 'warning', 'refresh failed'),
+            .having((state) => state.status, 'failure', PaywallStatus.failure)
+            .having((state) => state.message, 'message', 'Purchase failed.'),
       ],
     );
 

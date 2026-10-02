@@ -15,8 +15,8 @@ final class PaywallLoadRequested extends PaywallBlocEvent {
   const PaywallLoadRequested();
 }
 
-final class PaywallPresentRequested extends PaywallBlocEvent {
-  const PaywallPresentRequested();
+final class PaywallPurchaseRequested extends PaywallBlocEvent {
+  const PaywallPurchaseRequested();
 }
 
 final class PaywallRestoreRequested extends PaywallBlocEvent {
@@ -50,7 +50,6 @@ enum PaywallStatus {
   ready,
   paywallUnavailable,
   productUnavailable,
-  presenting,
   purchasing,
   restoring,
   pending,
@@ -80,7 +79,6 @@ final class PaywallState extends Equatable {
 
   bool get isBusy => const {
     PaywallStatus.loading,
-    PaywallStatus.presenting,
     PaywallStatus.purchasing,
     PaywallStatus.restoring,
   }.contains(status);
@@ -129,7 +127,7 @@ final class PaywallBloc extends Bloc<PaywallBlocEvent, PaywallState> {
         ),
       ) {
     on<PaywallLoadRequested>(_load);
-    on<PaywallPresentRequested>(_present);
+    on<PaywallPurchaseRequested>(_purchase);
     on<PaywallRestoreRequested>(_restore);
     on<PaywallManageRequested>(_manage);
     on<PaywallPrivacyRequested>(_privacy);
@@ -143,6 +141,7 @@ final class PaywallBloc extends Bloc<PaywallBlocEvent, PaywallState> {
   final PremiumSubscriptionRepository _repository;
   final PremiumDestinationLauncher _launcher;
   late final StreamSubscription<PaywallEvent> _eventSubscription;
+  bool _purchaseInFlight = false;
 
   Future<void> _load(
     PaywallLoadRequested event,
@@ -180,18 +179,35 @@ final class PaywallBloc extends Bloc<PaywallBlocEvent, PaywallState> {
     });
   }
 
-  Future<void> _present(
-    PaywallPresentRequested event,
+  Future<void> _purchase(
+    PaywallPurchaseRequested event,
     Emitter<PaywallState> emit,
   ) async {
-    if (!state.canPurchase || state.isBusy) return;
-    emit(state.copyWith(status: PaywallStatus.presenting, clearMessage: true));
+    if (!state.canPurchase || state.isBusy || _purchaseInFlight) return;
+    _purchaseInFlight = true;
+    emit(state.copyWith(status: PaywallStatus.purchasing, clearMessage: true));
     try {
-      await _repository.presentPaywall();
+      final result = await _repository.purchase();
+      emit(switch (result) {
+        PremiumPurchaseVerified() => state.copyWith(
+          status: PaywallStatus.premiumActive,
+          message: 'Premium is active.',
+        ),
+        PremiumPurchasePending() => state.copyWith(
+          status: PaywallStatus.pending,
+          message: 'Your purchase is pending in Google Play.',
+        ),
+        PremiumPurchaseCancelled() => state.copyWith(
+          status: PaywallStatus.ready,
+          clearMessage: true,
+        ),
+      });
     } on PremiumSubscriptionFailure catch (error) {
       emit(_failure(error.message));
     } catch (_) {
-      emit(_failure('The premium offer could not be displayed. Try again.'));
+      emit(_failure('Purchase could not be completed. Please try again.'));
+    } finally {
+      Timer.run(() => _purchaseInFlight = false);
     }
   }
 
@@ -253,7 +269,7 @@ final class PaywallBloc extends Bloc<PaywallBlocEvent, PaywallState> {
             message: 'Your purchase is pending in Google Play.',
           ),
         );
-      case PaywallPurchaseCancelled() || PaywallDismissed():
+      case PaywallPurchaseCancelled():
         if (state.status != PaywallStatus.premiumActive) {
           emit(state.copyWith(status: PaywallStatus.ready, clearMessage: true));
         }

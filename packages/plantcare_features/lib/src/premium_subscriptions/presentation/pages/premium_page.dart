@@ -40,6 +40,21 @@ class PremiumPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        key: const ValueKey('close-premium'),
+                        tooltip: 'Close Premium',
+                        onPressed: () {
+                          if (context.canPop()) {
+                            context.pop();
+                          } else {
+                            context.go('/');
+                          }
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                    ),
                     Text(
                       access.isActive
                           ? 'Premium is active'
@@ -194,9 +209,22 @@ class _PurchasePanel extends StatelessWidget {
           children: [
             if (offer != null) ...[
               Text(
+                offer.localizedTitle,
+                key: const ValueKey('localized-product-title'),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
                 '${offer.localizedPrice} / ${offer.billingPeriod}',
                 key: const ValueKey('localized-offer'),
                 style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Subscription renews automatically every month unless cancelled through Google Play before the next billing date.',
+                key: ValueKey('billing-disclosure'),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
             ],
@@ -234,14 +262,14 @@ class _PurchasePanel extends StatelessWidget {
               )
             else if (!access.isActive)
               FilledButton.icon(
-                key: const ValueKey('present-premium-flow'),
+                key: const ValueKey('purchase-premium'),
                 onPressed: state.canPurchase
                     ? () => context.read<PaywallBloc>().add(
-                        const PaywallPresentRequested(),
+                        const PaywallPurchaseRequested(),
                       )
                     : null,
                 icon: const Icon(Icons.workspace_premium),
-                label: const Text('View Premium'),
+                label: const Text('Subscribe monthly'),
               ),
           ],
         ),

@@ -105,18 +105,19 @@ unlimited plants.” A verified upgrade returns to the intended manual or photo
 creation flow. Unknown, checking, or temporarily unavailable subscription state
 retains all Free functionality and uses the Free saved-plant allowance.
 
-Android purchasing uses the published Adapty Flow at placement `main_paywall`,
-access level `premium`, and the Google Play product `plantcare_premium` with
-base plan `monthly`. The expected catalog has no free trial or introductory
-offer. Price and billing period are rendered only from localized Google Play
-product metadata.
+Android purchasing uses the PlantCare Material 3 paywall with Adapty placement
+`plantcare_main_paywall`, access level `premium`, and the Google Play product
+`plantcare_premium` with base plan `monthly`. Adapty supplies the product and
+handles the direct purchase, but does not render the purchase screen. The
+expected catalog has no free trial or introductory offer. Product title, price,
+and billing period are rendered only from localized Google Play metadata.
 
 Adapty activates after Firebase bootstrap and App Check startup. When a
 Firebase user is already signed in, the UID is supplied during activation;
 otherwise, the SDK is identified after authentication. Paywall and product
 requests wait for that identity synchronization. A purchase is treated as
-Premium only after the returned or current Adapty profile confirms the
-`premium` access level. A later recoverable refresh or view error preserves a
+Premium only after the returned or current Adapty profile confirms an active,
+unexpired `premium` access level. A later recoverable refresh error preserves a
 previously verified successful result and surfaces a warning.
 
 The following non-secret compile-time values must be provided by the release

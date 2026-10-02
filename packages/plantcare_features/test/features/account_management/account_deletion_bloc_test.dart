@@ -465,7 +465,8 @@ final class _Premium implements PremiumSubscriptionRepository {
   Future<PaywallPreparation> preparePaywall() async =>
       const PaywallPreparation(PaywallAvailability.unsupported);
   @override
-  Future<void> presentPaywall() async {}
+  Future<PremiumPurchaseResult> purchase() async =>
+      const PremiumPurchaseCancelled();
   @override
   Future<RestorePurchasesResult> restorePurchases() async =>
       const RestorePurchasesResult(hasPremium: false);

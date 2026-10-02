@@ -9,13 +9,17 @@ states, but it does not prove a real Play Billing purchase.
 Before distributing the build, an authorized operator must verify in the
 Adapty and Google Play dashboards that:
 
-- the published Flow for `main_paywall` is enabled for Android device display;
-- it selects product `plantcare_premium`, base plan `monthly`, and access level
-  `premium`;
+- access level `premium` exists;
+- Adapty product **PlantCare Premium Monthly** maps to Google Play product
+  `plantcare_premium` and base plan `monthly`;
+- a custom paywall contains only that product and is assigned to placement
+  `plantcare_main_paywall` for the **All Users** audience;
 - the selected product has no free trial or introductory offer;
-- Flow copy contains no trial or introductory-offer claim;
-- restore behavior is present and the Privacy Policy and Terms destinations are
-  the approved production HTTPS pages;
+- the Google Play service-account JSON is configured in Adapty;
+- Google Play real-time developer notifications (RTDN) are configured and a
+  test notification succeeds;
+- the Privacy Policy and Terms destinations are the approved production HTTPS
+  pages;
 - the Play Console account-deletion URL is
   `https://plantcare-ai-dev-tasnimalam.web.app/account-deletion`; verify a local
   release build and Hosting deep-link refresh before entering or publishing it;
@@ -25,6 +29,22 @@ Adapty and Google Play dashboards that:
 Those dashboard settings cannot be inspected from this repository and remain
 manual release blockers until an authorized operator records evidence of each
 item. Do not infer their state from unit tests or a successful build.
+
+## Repository release audit
+
+- Android application ID and namespace are
+  `com.tasnimalam.plantcare_ai`; release signing continues to use the existing
+  `plantcare-upload` configuration.
+- The main Android manifest declares internet access and does not contain an
+  SDK key or a second subscription initializer.
+- The resolved Flutter dependency is `adapty_flutter` 4.0.4. Its Android SDK
+  resolves Google Play Billing Library 8; confirm the exact dependency report
+  again for the final release artifact.
+- The iOS project remains at deployment target 15.0. No App Store product is
+  configured by this Android milestone.
+- No Codemagic YAML is stored in this repository. The external Codemagic
+  workflow must forward `ADAPTY_PUBLIC_SDK_KEY`, `PRIVACY_POLICY_URL`, and
+  `TERMS_OF_SERVICE_URL` using `--dart-define`; never echo their values.
 
 ## License-tester procedure
 
@@ -39,7 +59,8 @@ item. Do not infer their state from unit tests or a successful build.
    as Premium-only.
 4. Confirm the price and monthly billing period match localized Google Play
    output for the tester account. Confirm no trial or introductory wording is
-   visible in either Flutter UI or the native Adapty Flow.
+   visible in the Flutter paywall. Confirm the localized product title is also
+   supplied by Google Play through Adapty.
 5. Start the purchase and cancel from Google Play. Confirm cancellation is
    neutral and the page remains usable. If Play test instruments provide a
    pending method, exercise it and confirm the pending message appears without
@@ -61,9 +82,9 @@ item. Do not infer their state from unit tests or a successful build.
 10. Repeat paywall load, restore, management, and legal-link actions while
     offline or after a recoverable interruption. Confirm useful retry messages,
     and confirm a previously verified purchase remains successful if only a
-    later refresh or dismissal fails.
+    later profile refresh fails.
 11. Switch between two Firebase accounts. Confirm each Adapty profile uses the
-    current UID and no price, Flow, or entitlement result from the previous
+    current UID and no price, product, or entitlement result from the previous
     account is reused.
 12. On web, confirm the page says mobile purchasing is not currently available
     and has no enabled purchase or restore action. On iOS, confirm the Android

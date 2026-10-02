@@ -6,85 +6,69 @@ import 'package:plantcare_domain/premium_subscriptions.dart';
 final class AdaptySdkProfile {
   const AdaptySdkProfile({
     required this.customerUserId,
-    required this.hasPremium,
+    required this.isPremiumActive,
+    required this.premiumExpiresAt,
   });
 
   final String? customerUserId;
-  final bool hasPremium;
+  final bool isPremiumActive;
+  final DateTime? premiumExpiresAt;
 }
 
 final class AdaptySdkFlow {
-  const AdaptySdkFlow({
-    required this.handle,
-    required this.hasViewConfiguration,
-  });
+  const AdaptySdkFlow({required this.handle});
 
   final Object handle;
-  final bool hasViewConfiguration;
 }
 
 final class AdaptySdkProduct {
   const AdaptySdkProduct({
+    required this.handle,
     required this.vendorProductId,
     required this.basePlanId,
+    required this.localizedTitle,
     required this.localizedPrice,
     required this.localizedPeriod,
     required this.hasOffer,
   });
 
+  final Object handle;
   final String vendorProductId;
   final String? basePlanId;
+  final String? localizedTitle;
   final String? localizedPrice;
   final String? localizedPeriod;
   final bool hasOffer;
 }
 
-sealed class AdaptySdkEvent {
-  const AdaptySdkEvent();
+sealed class AdaptySdkPurchaseResult {
+  const AdaptySdkPurchaseResult();
 }
 
-final class AdaptySdkPurchaseStarted extends AdaptySdkEvent {
-  const AdaptySdkPurchaseStarted();
+final class AdaptySdkPurchaseSuccess extends AdaptySdkPurchaseResult {
+  const AdaptySdkPurchaseSuccess(this.profile);
+
+  final AdaptySdkProfile profile;
 }
 
-final class AdaptySdkPurchasePending extends AdaptySdkEvent {
+final class AdaptySdkPurchasePending extends AdaptySdkPurchaseResult {
   const AdaptySdkPurchasePending();
 }
 
-final class AdaptySdkPurchaseCancelled extends AdaptySdkEvent {
+final class AdaptySdkPurchaseCancelled extends AdaptySdkPurchaseResult {
   const AdaptySdkPurchaseCancelled();
 }
 
-final class AdaptySdkPurchaseSucceeded extends AdaptySdkEvent {
-  const AdaptySdkPurchaseSucceeded(this.profile);
+enum AdaptySdkFailureType { network, cancelled, pending, other }
 
-  final AdaptySdkProfile profile;
-}
+final class AdaptySdkFailure implements Exception {
+  const AdaptySdkFailure(this.type);
 
-final class AdaptySdkRestoreStarted extends AdaptySdkEvent {
-  const AdaptySdkRestoreStarted();
-}
-
-final class AdaptySdkRestoreSucceeded extends AdaptySdkEvent {
-  const AdaptySdkRestoreSucceeded(this.profile);
-
-  final AdaptySdkProfile profile;
-}
-
-final class AdaptySdkViewDismissed extends AdaptySdkEvent {
-  const AdaptySdkViewDismissed();
-}
-
-final class AdaptySdkFailed extends AdaptySdkEvent {
-  const AdaptySdkFailed(this.message);
-
-  final String message;
+  final AdaptySdkFailureType type;
 }
 
 abstract interface class AdaptySdkFacade {
   Stream<AdaptySdkProfile> get profileUpdates;
-
-  Stream<AdaptySdkEvent> get events;
 
   Future<void> activate({required String apiKey, String? customerUserId});
 
@@ -98,26 +82,21 @@ abstract interface class AdaptySdkFacade {
 
   Future<List<AdaptySdkProduct>> getProducts(AdaptySdkFlow flow);
 
-  Future<void> present(AdaptySdkFlow flow);
+  Future<AdaptySdkPurchaseResult> makePurchase(AdaptySdkProduct product);
 
   Future<AdaptySdkProfile> restorePurchases();
 
   Future<void> dispose();
 }
 
-final class FlutterAdaptySdkFacade extends AdaptyUIFlowsEventsObserver
-    implements AdaptySdkFacade {
+final class FlutterAdaptySdkFacade implements AdaptySdkFacade {
   FlutterAdaptySdkFacade();
 
   final _profiles = StreamController<AdaptySdkProfile>.broadcast();
-  final _events = StreamController<AdaptySdkEvent>.broadcast();
   StreamSubscription<AdaptyProfile>? _profileSubscription;
 
   @override
   Stream<AdaptySdkProfile> get profileUpdates => _profiles.stream;
-
-  @override
-  Stream<AdaptySdkEvent> get events => _events.stream;
 
   @override
   Future<void> activate({
@@ -125,12 +104,11 @@ final class FlutterAdaptySdkFacade extends AdaptyUIFlowsEventsObserver
     String? customerUserId,
   }) async {
     final configuration = AdaptyConfiguration(apiKey: apiKey)
-      ..withActivateUI(true);
+      ..withActivateUI(false);
     if (customerUserId != null) {
       configuration.withCustomerUserId(customerUserId);
     }
-    await Adapty().activate(configuration: configuration);
-    AdaptyUI().setFlowsEventsObserver(this);
+    await _call(() => Adapty().activate(configuration: configuration));
     _profileSubscription ??= Adapty().didUpdateProfileStream.listen(
       (profile) => _profiles.add(_profile(profile)),
     );
@@ -138,34 +116,32 @@ final class FlutterAdaptySdkFacade extends AdaptyUIFlowsEventsObserver
 
   @override
   Future<void> identify(String customerUserId) =>
-      Adapty().identify(customerUserId);
+      _call(() => Adapty().identify(customerUserId));
 
   @override
-  Future<void> logout() => Adapty().logout();
+  Future<void> logout() => _call(Adapty().logout);
 
   @override
   Future<AdaptySdkProfile> getProfile() async =>
-      _profile(await Adapty().getProfile());
+      _profile(await _call(Adapty().getProfile));
 
   @override
-  Future<AdaptySdkFlow> getFlow(String placementId) async {
-    final flow = await Adapty().getFlow(placementId: placementId);
-    return AdaptySdkFlow(
-      handle: flow,
-      hasViewConfiguration: flow.hasViewConfiguration,
-    );
-  }
+  Future<AdaptySdkFlow> getFlow(String placementId) async => AdaptySdkFlow(
+    handle: await _call(() => Adapty().getFlow(placementId: placementId)),
+  );
 
   @override
   Future<List<AdaptySdkProduct>> getProducts(AdaptySdkFlow flow) async {
-    final products = await Adapty().getPaywallProducts(
-      flow: flow.handle as AdaptyFlow,
+    final products = await _call(
+      () => Adapty().getPaywallProducts(flow: flow.handle as AdaptyFlow),
     );
     return products
         .map(
           (product) => AdaptySdkProduct(
+            handle: product,
             vendorProductId: product.vendorProductId,
             basePlanId: product.subscription?.basePlanId,
+            localizedTitle: product.localizedTitle,
             localizedPrice: product.price.localizedString,
             localizedPeriod: product.subscription?.localizedPeriod,
             hasOffer: product.subscription?.offer != null,
@@ -175,99 +151,57 @@ final class FlutterAdaptySdkFacade extends AdaptyUIFlowsEventsObserver
   }
 
   @override
-  Future<void> present(AdaptySdkFlow flow) async {
-    final view = await AdaptyUI().createFlowView(
-      flow: flow.handle as AdaptyFlow,
-      preloadProducts: true,
+  Future<AdaptySdkPurchaseResult> makePurchase(AdaptySdkProduct product) async {
+    final result = await _call(
+      () => Adapty().makePurchase(
+        product: product.handle as AdaptyPaywallProduct,
+      ),
     );
-    await view.present();
+    return switch (result) {
+      AdaptyPurchaseResultSuccess(:final profile) => AdaptySdkPurchaseSuccess(
+        _profile(profile),
+      ),
+      AdaptyPurchaseResultPending() => const AdaptySdkPurchasePending(),
+      AdaptyPurchaseResultUserCancelled() => const AdaptySdkPurchaseCancelled(),
+    };
   }
 
   @override
   Future<AdaptySdkProfile> restorePurchases() async =>
-      _profile(await Adapty().restorePurchases());
+      _profile(await _call(Adapty().restorePurchases));
 
-  @override
-  void flowViewDidStartPurchase(
-    AdaptyUIFlowView view,
-    AdaptyPaywallProduct product,
-  ) => _events.add(const AdaptySdkPurchaseStarted());
+  AdaptySdkProfile _profile(AdaptyProfile profile) {
+    final premium = profile.accessLevels[PremiumSubscriptionIds.accessLevel];
+    return AdaptySdkProfile(
+      customerUserId: profile.customerUserId,
+      isPremiumActive: premium?.isActive ?? false,
+      premiumExpiresAt: premium?.expiresAt,
+    );
+  }
 
-  @override
-  void flowViewDidFinishPurchase(
-    AdaptyUIFlowView view,
-    AdaptyPaywallProduct product,
-    AdaptyPurchaseResult purchaseResult,
-  ) {
-    switch (purchaseResult) {
-      case AdaptyPurchaseResultSuccess(:final profile):
-        _events.add(AdaptySdkPurchaseSucceeded(_profile(profile)));
-      case AdaptyPurchaseResultPending():
-        _events.add(const AdaptySdkPurchasePending());
-      case AdaptyPurchaseResultUserCancelled():
-        _events.add(const AdaptySdkPurchaseCancelled());
+  Future<T> _call<T>(Future<T> Function() action) async {
+    try {
+      return await action();
+    } on AdaptyError catch (error) {
+      throw AdaptySdkFailure(_failureType(error.code));
     }
   }
 
-  @override
-  void flowViewDidFailPurchase(
-    AdaptyUIFlowView view,
-    AdaptyPaywallProduct product,
-    AdaptyError error,
-  ) => _events.add(
-    const AdaptySdkFailed('Purchase could not be completed. Please try again.'),
-  );
-
-  @override
-  void flowViewDidStartRestore(AdaptyUIFlowView view) =>
-      _events.add(const AdaptySdkRestoreStarted());
-
-  @override
-  void flowViewDidFinishRestore(AdaptyUIFlowView view, AdaptyProfile profile) =>
-      _events.add(AdaptySdkRestoreSucceeded(_profile(profile)));
-
-  @override
-  void flowViewDidFailRestore(AdaptyUIFlowView view, AdaptyError error) =>
-      _events.add(
-        const AdaptySdkFailed(
-          'Purchases could not be restored. Please try again.',
-        ),
-      );
-
-  @override
-  void flowViewDidDisappear(AdaptyUIFlowView view) =>
-      _events.add(const AdaptySdkViewDismissed());
-
-  @override
-  void flowViewDidReceiveError(AdaptyUIFlowView view, AdaptyError error) =>
-      _events.add(
-        const AdaptySdkFailed(
-          'The premium offer could not be displayed. Please try again.',
-        ),
-      );
-
-  @override
-  void flowViewDidFailLoadingProducts(
-    AdaptyUIFlowView view,
-    AdaptyError error,
-  ) => _events.add(
-    const AdaptySdkFailed(
-      'Google Play products are unavailable right now. Please try again.',
-    ),
-  );
-
-  AdaptySdkProfile _profile(AdaptyProfile profile) => AdaptySdkProfile(
-    customerUserId: profile.customerUserId,
-    hasPremium:
-        profile.accessLevels[PremiumSubscriptionIds.accessLevel]?.isActive ??
-        false,
-  );
+  AdaptySdkFailureType _failureType(int code) => switch (code) {
+    AdaptyErrorCode.networkFailed ||
+    AdaptyErrorCode.serverError ||
+    AdaptyErrorCode.fetchTimeoutError ||
+    AdaptyErrorCode.billingServiceTimeout ||
+    AdaptyErrorCode.billingServiceDisconnected ||
+    AdaptyErrorCode.billingServiceUnavailable => AdaptySdkFailureType.network,
+    AdaptyErrorCode.paymentCancelled => AdaptySdkFailureType.cancelled,
+    AdaptyErrorCode.pendingPurchase => AdaptySdkFailureType.pending,
+    _ => AdaptySdkFailureType.other,
+  };
 
   @override
   Future<void> dispose() async {
-    AdaptyUI().setFlowsEventsObserver(null);
     await _profileSubscription?.cancel();
     await _profiles.close();
-    await _events.close();
   }
 }

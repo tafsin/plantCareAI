@@ -3,7 +3,7 @@ import 'package:plantcare_shared/errors.dart';
 
 abstract final class PremiumSubscriptionIds {
   static const accessLevel = 'premium';
-  static const placement = 'main_paywall';
+  static const placement = 'plantcare_main_paywall';
   static const product = 'plantcare_premium';
   static const basePlan = 'monthly';
   static const androidPackage = 'com.tasnimalam.plantcare_ai';
@@ -45,12 +45,14 @@ final class PremiumOffer extends Equatable {
   const PremiumOffer({
     required this.productId,
     required this.basePlanId,
+    required this.localizedTitle,
     required this.localizedPrice,
     required this.billingPeriod,
   });
 
   final String productId;
   final String basePlanId;
+  final String localizedTitle;
   final String localizedPrice;
   final String billingPeriod;
 
@@ -58,6 +60,7 @@ final class PremiumOffer extends Equatable {
   List<Object?> get props => [
     productId,
     basePlanId,
+    localizedTitle,
     localizedPrice,
     billingPeriod,
   ];
@@ -72,17 +75,23 @@ enum PaywallAvailability {
 }
 
 final class PaywallPreparation extends Equatable {
-  const PaywallPreparation(this.availability, {this.offer, this.message});
+  const PaywallPreparation(
+    this.availability, {
+    this.offer,
+    this.message,
+    this.failureType,
+  });
 
   final PaywallAvailability availability;
   final PremiumOffer? offer;
   final String? message;
+  final PremiumFailureType? failureType;
 
   bool get canPresent =>
       availability == PaywallAvailability.ready && offer != null;
 
   @override
-  List<Object?> get props => [availability, offer, message];
+  List<Object?> get props => [availability, offer, message, failureType];
 }
 
 sealed class PaywallEvent extends Equatable {
@@ -121,10 +130,6 @@ final class PaywallRestoreCompleted extends PaywallEvent {
   List<Object?> get props => [hasPremium];
 }
 
-final class PaywallDismissed extends PaywallEvent {
-  const PaywallDismissed();
-}
-
 final class PaywallOperationFailed extends PaywallEvent {
   const PaywallOperationFailed(this.message);
 
@@ -137,9 +142,14 @@ final class PaywallOperationFailed extends PaywallEvent {
 enum PremiumFailureType {
   configuration,
   notReady,
-  unavailable,
-  purchase,
-  restore,
+  network,
+  paywallUnavailable,
+  productUnavailable,
+  purchaseCancelled,
+  purchasePending,
+  purchaseFailed,
+  restorationFailed,
+  invalidEntitlement,
   launch,
   unsupported,
   unknown,
@@ -161,6 +171,25 @@ final class RestorePurchasesResult extends Equatable {
 
   @override
   List<Object?> get props => [hasPremium];
+}
+
+sealed class PremiumPurchaseResult extends Equatable {
+  const PremiumPurchaseResult();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class PremiumPurchaseVerified extends PremiumPurchaseResult {
+  const PremiumPurchaseVerified();
+}
+
+final class PremiumPurchasePending extends PremiumPurchaseResult {
+  const PremiumPurchasePending();
+}
+
+final class PremiumPurchaseCancelled extends PremiumPurchaseResult {
+  const PremiumPurchaseCancelled();
 }
 
 final class PremiumSubscriptionConfiguration extends Equatable {
@@ -197,7 +226,7 @@ abstract interface class PremiumSubscriptionRepository {
 
   Future<PaywallPreparation> preparePaywall();
 
-  Future<void> presentPaywall();
+  Future<PremiumPurchaseResult> purchase();
 
   Future<RestorePurchasesResult> restorePurchases();
 
